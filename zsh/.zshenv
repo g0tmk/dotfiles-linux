@@ -11,10 +11,10 @@ if [[ "$SHLVL" -eq 1 && ! -o LOGIN && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
 fi
 
 # Nas
-export NAS=/mnt/nas
-export PUBLIC=$NAS/Public
-export MULTIMEDIA=$NAS/Multimedia
-export DOWNLOAD=$NAS/Download
-export NASHOME=$NAS/home
-export BACKUPS=$NAS/Backups
+#export NAS=/mnt/nas
+#export PUBLIC=$NAS/Public
+#export MULTIMEDIA=$NAS/Multimedia
+#export DOWNLOAD=$NAS/Download
+#export NASHOME=$NAS/home
+#export BACKUPS=$NAS/Backups
 

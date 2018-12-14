@@ -11,12 +11,12 @@ userDir = "/home/g0tmk/"
 bitmapDir = userDir ++ ".xmonad/xbm/"
 
 
-autoStart = userDir ++ ".xmonad/bin/autostart.sh"
+--autoStart = userDir ++ ".xmonad/bin/autostart.sh"
 
 main = do
     xmproc <- spawnPipe "/home/g0tmk/.cabal/bin/xmobar"
 
-    spawn $ "sh " ++ autoStart
+    --spawn $ "sh " ++ autoStart
 
     xmonad $ defaultConfig
         --{ manageHook = manageDocks <+> manageHook defaultConfig

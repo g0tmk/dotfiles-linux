@@ -1,0 +1,109 @@
+-- from http://beginners-guide-to-xmonad.readthedocs.io/configure_xmobar.html
+
+-- Config { font = "-*-Fixed-*-*-*-*-10-*-*-*-*-*-*-*"
+-- Config { font = "-*-Fixed-*-*-*-*-10-*-*-*-*-*-*-*"
+-- Config { font = "xft:Fiery Turk-6"
+-- Config { font = "-*-Fixed-Medium-R-Semicondensed-*-13-*-*-*-*-*-*-*"
+Config { font = "xft:Terminus:pixelsize=12:style=Regular"
+        , additionalFonts = ["xft:FontAwesome:size=8"]
+        , borderColor = "black"
+        , borderWidth = 0
+        , border = TopB
+        , bgColor = "black"
+        , alpha = 200
+        , fgColor = "grey"
+        , position = TopW L 100
+        , iconOffset = 6
+        , commands = 
+                --[ Run Weather "KEMT" ["-t","<tempC>C","-L","18","-H","25","--normal","green","--high","red","--low","lightblue"] 36000
+                [ Run Weather "KEMT" [ "--template", "<skyCondition>: <fc=#4682B4><tempF></fc>°F <fc=#4682B4><rh></fc>%"
+                                     ] 36000
+                , Run DynNetwork     [ "--template" , "<tx><rx>(<dev>)"
+                                     , "--Low"      , "1000000"       -- units: B/s
+                                     , "--High"     , "5000000"       -- units: B/s
+                                     , "--low"      , "lightgreen"
+                                     , "--normal"   , "#eeba44"
+                                     , "--high"     , "#ff7070"
+                                     , "-S"     , "True"
+                                     , "--width" , "8"
+                                     ] 10
+                --, Run Network "wlan0" ["-L","0","-H","32","--normal","green","--high","red"] 10
+                --, Run Network "eth0" ["-L","0","-H","32","--normal","green","--high","red"] 10
+                , Run Wireless "wlp2s0" ["-t"       ,"<fn=1>\xf1eb</fn> <essid>:<quality>"
+                                        ,"-L"       ,"0"
+                                        ,"-H"       ,"32"
+                                        ,"--low"    ,"#ff7070"
+                                        ,"--normal" ,"#eeba44"
+                                        ,"--high"   ,"lightgreen"
+                                        ] 30
+                , Run MultiCpu       [ "--template" ,"<total>%"
+                                     , "-L"         , "25"
+                                     , "-H"         , "50"
+                                     , "--low"      , "lightgreen"
+                                     , "--normal"   , "#eeba44"
+                                     , "--high"     , "#ff7070"
+                                     , "--width"    , "6"
+                                     ] 10
+                , Run ThermalZone 9  ["-t"          ,"<temp>C"
+                                     , "-L"         , "60"       -- units: degC
+                                     , "-H"         , "85"       -- units: degC
+                                     , "--low"      , "lightgreen"
+                                     , "--normal"   , "#eeba44"
+                                     , "--high"     , "#ff7070"
+                                     , "--width"    , "3"
+                                     ] 30
+                , Run Memory         [ "--template" ,"<usedratio>%"
+                                     , "-L"         , "50"
+                                     , "-H"         , "80"
+                                     , "--low"      , "lightgreen"
+                                     , "--normal"   , "#eeba44"
+                                     , "--high"     , "#ff7070"
+                                     , "--width" , "7"
+                                     ] 10
+                , Run Swap           [ "--template" , "<usedratio>%"
+                                     , "-L"         , "25"        -- units: %
+                                     , "-H"         , "70"        -- units: %
+                                     , "--low"      , "lightgreen"
+                                     , "--normal"   , "#eeba44"
+                                     , "--high"     , "#ff0000"
+                                     , "--width" , "7"
+                                     ] 10
+                , Run DiskIO         [("nvme0n1"    , "<total>")] 
+                                     [ "-L"         , "15000000"  --15M     -- units: b/s
+                                     , "-H"         , "30000000"  --30M     -- units: b/s
+                                     , "--low"      , "lightgreen"
+                                     , "--normal"   , "#eeba44"
+                                     , "--high"     , "#ff7070"
+                                     , "--width" , "7"
+                                     ] 10
+                , Run BatteryP ["BAT0"]
+                               ["-t"          , "<acstatus>"
+                               , "-L"         , "15"
+                               , "-H"         , "60"
+                               , "--low"      , "#ff7070"
+                               , "--normal"   , "#eeba44"
+                               , "--high"     , "lightgreen"
+                               , "--" -- battery specific options
+                                         -- discharging
+                                         , "-o", "<leftipat> <left>% (<timeleft>)"
+                                         -- charging
+                                         , "-O", "<leftipat> <left>% (<timeleft>)"
+                                         -- charged
+                                         , "-i", "<fc=lightgreen>100% </fc>"
+                                         --, "-i", ""  -- thumb (filled)
+                                         , "--off-icon-pattern", "<fn=1>\xf0e7</fn>"
+                                         , "--idle-icon-pattern", "<fc=#50aa55><fn=1>\xf0e7</fn></fc>"
+                                         , "--on-icon-pattern", "<fn=1>\xf1e6</fn>"
+                               ] 100
+                , Run Date "<fn=1>\xf133</fn> %m/%d/%y" "date" 10
+                , Run Date "<fn=1>\xf017</fn> <fc=#ee9a00>%H:%M:%S</fc>" "time" 10
+                , Run StdinReader
+                ]
+        , sepChar = "%"
+        , alignSep = "}{"
+        , template = "%StdinReader%} %multicpu%%thermal9%%memory%%swap% %dynnetwork%{%wlp2s0wi%   %date%   %time%   %battery%"
+--        , template = "%StdinReader%} %multicpu%%thermal9%%memory%%swap%%diskio% %dynnetwork%{%wlan0wi%   %date%   %time%   %battery%"
+--        , template = "%StdinReader%} %multicpu%  %memory% %swap%  %dynnetwork%{%wlan0wi%  %date%  %time%  %battery% | %KEMT% "
+--        , template = "%StdinReader% | %multicpu% | %memory% * %swap% | %wlan0% - %eth0% }{<fc=#ee9a00>%date%</fc> | %battery% | %KEMT% "
+--        , template = "%StdinReader% | %multicpu% | %memory% * %swap% | %wlan0% - %eth0% }{"
+        }

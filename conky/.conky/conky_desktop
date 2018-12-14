@@ -1,0 +1,239 @@
+conky.config = {
+    -- TODO: find out why alignment=top_right doesn't work with dual monitors
+    alignment='top_left',
+    background=false,
+    -- for left-side setup
+    --gap_x=2,
+    -- for right-side setup
+    --gap_x=1716,
+    -- custom positioning (about 50 px in from right side)
+    gap_x=1676,
+    --gap_y=18,
+    gap_y=20,
+    maximum_width=200,
+    -- minimum_size=1024,
+
+    update_interval=1,
+    update_interval_on_battery=5,
+    total_run_times=0,
+    double_buffer=true,
+    top_name_width=25,
+
+    cpu_avg_samples=2,
+    net_avg_samples=2,
+
+    default_bar_height=4,
+    default_bar_width=200,
+    default_graph_height=30,
+    default_graph_width=50,
+
+    use_xft=true,
+    font='Terminus:pixelsize=12:style=Regular',
+    override_utf8_locale=true,
+
+    own_window=true,
+    --own_window_type='override',
+    own_window_type='override',
+    own_window_class='conky',
+    own_window_transparent=true,
+    own_window_hints='below,undecorated,sticky,skip_taskbar,skip_pager',
+    draw_shades=false,
+    draw_outline=false,
+    draw_borders=false,
+    draw_graph_borders=true,
+    show_graph_scale=true,
+
+    use_spacer='left',
+    pad_percents=2,
+    short_units=true,
+
+    -- default color (labels, titles)
+    -- dark blue
+    --default_color='002a5e',
+    -- light orange
+    --default_color='ff5614',
+    -- dark grey
+    --default_color='666666',
+    -- black
+    default_color='000000',
+    -- white
+    --default_color='AADDFF',
+
+    -- important color (data points)
+    -- dark orange
+    --color0='dd3600',
+    -- darker orange
+    --color0='993600',
+    -- light blue
+    -- color0='2299bb',
+    -- black
+    color0='000022',
+    -- white
+    --color0='FFFFFF',
+
+    -- highlights
+    color1='dd3600',
+}
+conky.text = [[
+####
+#### header: hostname, [up]time, load avg
+####
+#
+#${font Terminus:pixelsize=15:style=Regular}#
+${alignc}#
+${color}${nodename_short} ${kernel}${color}#
+
+${font}#
+#
+${color0}${loadavg}#
+${alignr}#
+${utime %H:%M:%S} ${color}UTC#
+
+up${color0} $uptime#
+${alignr}#
+${color0}${tztime US/Eastern %H:%M:%S} ${color}EST#
+#
+
+####
+#### hw health: battery, temps, fans?
+####
+#
+${color}${battery_bar}#
+
+${color0}${hwmon 1 temp 1} ${hwmon 1 temp 2} ${hwmon 1 temp 3} ${hwmon 1 temp 4} ${hwmon 1 temp 5}#
+${alignr}#
+${color0}9999 ${color}RPM#
+
+
+# wifi connection strength graph
+${if_up wlan0}#
+${execigraph 10 "/sbin/iwconfig wlan0 | grep -Eo 'level\=-([0-9]+)'  | cut -d'-' -f2"}#
+${endif}#
+
+${if_existing /proc/net/route wlan0}
+${voffset -52}${offset 55}${alignr}${color0}${downspeed wlan0} ${color}down ${color0}${upspeed wlan0} ${color}up
+${offset 55}${color}IP:${alignr}${color0}${addr wlan0}
+${offset 55}${color}Gateway:${alignr}${color0}${gw_ip}
+${endif}#
+
+#
+####
+#### resource usage:
+####
+#
+${color}#
+${fs_bar 5,50 /}#
+$alignr#
+${color0}Root:${color} ${fs_used_perc /}% ${color0}(${fs_free /} free)#
+
+${color}#
+${fs_bar 5,50 /home}#
+$alignr#
+${color0}Home:${color} ${fs_used_perc /home}% ${color0}(${fs_free /home} free)#
+
+
+${color}#
+${membar 5,50}#
+$alignr#
+${color0}Mem:${color} ${memperc}% ${color0}(${memfree} free)#
+
+${color}#
+${swapbar 5,50}#
+$alignr#
+${color0}Swap:${color} ${swapperc}% ${color0}(${swapfree} free)#
+
+
+${alignr}${color}CPU#
+
+${font}${alignr}${cpu cpu0}%#
+
+${color0}${voffset -24}${cpugraph cpu0 17,170}#
+
+${goto 10}${color}Name${goto 125}CPU${goto 185}MEM${color0}#
+
+${voffset 5}#
+${goto 10}${top name 1}${goto 110}${top cpu 1}${goto 170}${top mem 1}
+${goto 10}${top name 2}${goto 110}${top cpu 2}${goto 170}${top mem 2}
+${goto 10}${top name 3}${goto 110}${top cpu 3}${goto 170}${top mem 3}
+${goto 10}${top name 4}${goto 110}${top cpu 4}${goto 170}${top mem 4}
+${goto 10}${top name 5}${goto 110}${top cpu 5}${goto 170}${top mem 5}
+${goto 10}${top name 6}${goto 110}${top cpu 6}${goto 170}${top mem 6}
+
+
+
+${color0}${cpugraph cpu0 15,200}
+${voffset -22}${goto 10}${color}${font Terminus:pixelsize=14}CPU${font}${goto 178}${voffset -2}${cpu cpu0} %${font}
+${voffset 10}${goto 10}${color}Name${goto 125}CPU${goto 185}MEM${color0}
+${voffset 5}#
+${goto 10}${top name 1}${goto 110}${top cpu 1}${goto 170}${top mem 1}
+${goto 10}${top name 2}${goto 110}${top cpu 2}${goto 170}${top mem 2}
+${goto 10}${top name 3}${goto 110}${top cpu 3}${goto 170}${top mem 3}
+${goto 10}${top name 4}${goto 110}${top cpu 4}${goto 170}${top mem 4}
+${goto 10}${top name 5}${goto 110}${top cpu 5}${goto 170}${top mem 5}
+${goto 10}${top name 6}${goto 110}${top cpu 6}${goto 170}${top mem 6}
+
+${color0}${memgraph 15,200}
+${voffset -22}${goto 10}${color}${font Terminus:pixelsize=14:style=Regular}MEM${font}${goto 178}${voffset -2}${memperc} %${font}
+${voffset 10}${goto 10}${color}Name${goto 125}CPU${goto 185}MEM${color0}
+${voffset 5}#
+${goto 10}${top_mem name 1}${goto 110}${top_mem cpu 1}${goto 170}${top_mem mem 1}
+${goto 10}${top_mem name 2}${goto 110}${top_mem cpu 2}${goto 170}${top_mem mem 2}
+${goto 10}${top_mem name 3}${goto 110}${top_mem cpu 3}${goto 170}${top_mem mem 3}
+${goto 10}${top_mem name 4}${goto 110}${top_mem cpu 4}${goto 170}${top_mem mem 4}
+${goto 10}${top_mem name 5}${goto 110}${top_mem cpu 5}${goto 170}${top_mem mem 5}
+${goto 10}${top_mem name 6}${goto 110}${top_mem cpu 6}${goto 170}${top_mem mem 6}
+
+${execi 60 python -c 'import calendar as c, datetime as d; now=d.datetime.now(); c.TextCalendar(c.SUNDAY).prmonth(now.year, now.month)'}
+
+sshd remote connections: ${tcp_portmon 22 22 count}
+sshd remote ip:          ${tcp_portmon 22 22 rip 0}#
+
+# internet tickers toggle
+${if_match 1 == 0}#
+#
+#${color}#
+#${execi 120 curl -s http://api.coindesk.com/v1/bpi/currentprice.json | grep -Po '"USD":{.+?}' | grep -Po '"rate":".+?"' | grep -Po '[0-9.]+'}
+
+#### 
+#### internet tickers: btc,ltc,eth
+####
+#
+${texeci 300 curl --retry 10 -s https://bitcoinwisdom.com/ > /tmp/bitcoinwisdom.com.html}#
+## BTC
+BTC       today   24h    7d   30d
+$$#
+${color}#
+${execi 10 cat /tmp/bitcoinwisdom.com.html | hxselect -s '\n' -c "#o_btcusd > td:nth-child(2)"}#
+${color0}${alignr}#
+${execi 10 cat /tmp/bitcoinwisdom.com.html | hxselect -s '\n' -c "#o_btcusd > td:nth-child(3) > span:nth-child(1)"} #
+${execi 10 cat /tmp/bitcoinwisdom.com.html | hxselect -s '\n' -c "#o_btcusd > td:nth-child(5) > span:nth-child(1)"} #
+${execi 10 cat /tmp/bitcoinwisdom.com.html | hxselect -s '\n' -c "#o_btcusd > td:nth-child(7) > span:nth-child(1)"} #
+${execi 10 cat /tmp/bitcoinwisdom.com.html | hxselect -s '\n' -c "#o_btcusd > td:nth-child(9) > span:nth-child(1)"}#
+
+## LTC
+LTC       today   24h    7d   30d
+$$#
+${color}#
+${execi 10 cat /tmp/bitcoinwisdom.com.html | hxselect -s '\n' -c "#o_ltcusd > td:nth-child(2)"}#
+${color0}${alignr}#
+${execi 10 cat /tmp/bitcoinwisdom.com.html | hxselect -s '\n' -c "#o_ltcusd > td:nth-child(3) > span:nth-child(1)"} #
+${execi 10 cat /tmp/bitcoinwisdom.com.html | hxselect -s '\n' -c "#o_ltcusd > td:nth-child(5) > span:nth-child(1)"} #
+${execi 10 cat /tmp/bitcoinwisdom.com.html | hxselect -s '\n' -c "#o_ltcusd > td:nth-child(7) > span:nth-child(1)"} #
+${execi 10 cat /tmp/bitcoinwisdom.com.html | hxselect -s '\n' -c "#o_ltcusd > td:nth-child(9) > span:nth-child(1)"}#
+
+
+
+${endif}
+
+#hack: newlines increase conky height which covers previously-drawn instances
+
+
+
+
+
+
+
+
+
+
+]]

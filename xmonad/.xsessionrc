@@ -1,1 +1,34 @@
+#!/bin/bash
+
+## STUFF THAT CAN START BEFORE XMONAD
+# set capslock = escape
 setxkbmap -option caps:escape
+# Set background image with feh
+sh ~/.fehbg &
+# set the cursor (get rid of weird X)
+xsetroot -cursor_name left_ptr
+
+# Set up an icon tray
+#stalonetray &  # TODO: uncomment
+
+# open dzen2 panels
+#sh ~/.xmonad/bin/conkybar.sh &
+#sh ~/.xmonad/bin/musicbar.sh &
+
+
+# Load resources  # TODO: remove when we're sure we don't need this
+#xrdb -merge .Xresources
+
+
+# Fire up apps
+#xfce4-power-manager &
+
+#if [ -x /usr/bin/nm-applet ] ; then
+#   nm-applet --sm-disable &
+#fi
+
+# open desktop panels (after 1s pause - may need to increase in future)
+conky -p 1 -c ~/.conky/conky_desktop &
+
+exec xmonad
+

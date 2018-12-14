@@ -1,0 +1,50 @@
+
+# better defaults
+alias ls='ls --color'
+
+# tmux
+alias tmux='tmux -2'
+alias tma='tmux attach -d -t'
+alias tmn='tmux new -s $(basename $(pwd))'
+alias tml='tmux list-sessions'
+
+# history
+alias h='history 0 | tail -n 100'
+alias hgrep='history 0 | egrep '
+
+# ssh connections
+#alias qnap=ssht\ admin@qnap
+#alias raspberry=ssht\ pi@raspberrypi
+#alias volumio=ssht\ volumio@volumio
+
+# mount a given windows share with a given hostname, mountname, and username
+mountsamba () {
+    echo "Hostname: $1"
+    echo "Mountname: $2"
+    echo "Username: $3"
+
+    sudo mkdir -p /mnt/"$2"
+    sudo mount.cifs //"$1"/"$2" -o username="$3" /mnt/"$2"
+}
+
+# non-permanent mountpoints
+
+# local
+alias mountwindows='sudo mount -o ro,umask=0,users,noexec /dev/nvme0n1p4 /mnt/windows'
+
+# shares on euler
+alias mountadmin='mountsamba 10.3.80.11 admin bivy'
+alias mountdocum='mountsamba 10.3.80.11 documents bivy'
+alias mountengin='mountsamba 10.3.80.11 engineering bivy'
+alias mountusers='mountsamba 10.3.80.11 users bivy'
+
+alias mountdocuments='mountdocum'
+alias mountengineering='mountengin'
+
+
+
+
+
+# typos
+alias cd..='cd ..'
+

@@ -27,13 +27,42 @@ color1: #E84F4F
 *color7:  #cccccc
 *color15: #ffffff
 
+
+
+
+
+
 *transparent: true
 *shading: 10
-*font: xft:Monospace:pixelsize=18
-*boldFont: xft:Monospace:bold:pixelsize=16
+!*font: xft:Monospace:pixelsize=12
+!*font: 7x14
+!*boldFont: xft:Monospace:bold:pixelsize=16
+
+
+! *font: -*-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1
+! *boldFont: -*-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1
+! *italicFont: -*-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1
+! *boldItalicFont: -*-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1
+
+*font: xft:Terminus:pixelsize=14:style=Regular
+*boldFont: xft:Terminus:pixelsize=14:style=Bold
+*italicFont: xft:Terminus:pixelsize=14:style=Bold
+*boldItalicFont: xft:Terminus:pixelsize=14:style=Bold
+
+! *font: xft:Inconsolata:pixelsize=12:style=Regular
+! *boldFont: xft:Inconsolata:pixelsize=12:style=Bold
+! *italicFont: xft:Inconsolata:pixelsize=12:style=Bold
+
+! *font: xft:Source Code Pro:pixelsize=11:style=Regular
+! *boldFont: xft:Source Code Pro:pixelsize=11:style=Bold
+! *italicFont: xft:Source Code Pro:pixelsize=11:style=Bold
+
+! *font: xft:DejaVu Sans Mono:pixelsize=11:style=Book:antialias=false
+! *boldFont: xft:DejaVu Sans Mono:pixelsize=11:style=Bold:antialias=false
+! *italicFont: xft:DejaVu Sans Mono:pixelsize=11:style=Oblique:antialias=false
+
 *tintColor: white
 *scrollBar: false
 *scrollBar_right: false
 *scrollstyle: rxvt
 
-URxvt*font: xft:Inconsolata\ for\ Powerline:pixelsize=18:antialias=true:hinting=true:hintstyle=hintfull

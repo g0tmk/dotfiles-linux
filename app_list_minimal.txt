@@ -1,5 +1,4 @@
 
-0ad
 ack
 binutils
 build-essential
@@ -7,11 +6,10 @@ conky
 coreutils
 curl
 debian-handbook
-dmenu
 dos2unix
 fcrackzip
 feh
-fortune
+fortune-mod
 gcc
 gdb
 git
@@ -31,15 +29,13 @@ ranger
 rsync
 rxvt-unicode-256color
 scrot
-slock
 speedtest-cli
 stalonetray
-sublime-text3
 suckless-tools
 syncthing
+tmux
 tree
 vim
-virtualbox
 watch
 wget
 wicd-curses
@@ -47,3 +43,5 @@ wireshark
 xclip
 xmobar
 xmonad
+zsh
+

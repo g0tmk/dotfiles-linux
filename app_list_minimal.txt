@@ -43,5 +43,6 @@ wireshark
 xclip
 xmobar
 xmonad
+xorg
 zsh
 

@@ -72,7 +72,7 @@
     ```bash
     sudo apt-get install -y python-pip
     sudo pip install git+git://github.com/Lokaltog/powerline
-    wget https://github.com/Lokaltog/powerline/raw/develop/font/PowerlineSymbols.otf 
+    wget https://github.com/Lokaltog/powerline/raw/develop/font/PowerlineSymbols.otf
     wget https://github.com/Lokaltog/powerline/raw/develop/font/10-powerline-symbols.conf
     sudo mv PowerlineSymbols.otf /usr/share/fonts/
     sudo fc-cache -vf
@@ -84,7 +84,6 @@
     ```bash
     git clone --recursive https://github.com/sorin-ionescu/prezto.git ~/.zprezto
     ```
-
 
 7. Install screenfetch #TODO: do later; skipped
 
@@ -114,19 +113,6 @@
     stack install ghc-mod hlint hasktags codex hscope pointfree pointful hoogle hindent apply-refact
     ```
 
-11. Set permissions
-
-    ```bash
-    chmod u+x ~/.xmonad/bin/*.sh
-    #chmod u+x ~/bin/*.sh
-    ```
-
-12. Set Wallpaper
-
-    ```bash
-    sh ~/.fehbg 
-    ```
-
     # TODO: manually download/install google-chrome .deb here
 
 
@@ -147,4 +133,19 @@
 - [Session Manager](https://addons.mozilla.org/en-us/firefox/addon/session-manager/)
 - [Send to XBMC/Kodi](https://addons.mozilla.org/en-US/firefox/addon/send-to-xbmc/)
 - [Stylus Blue](https://addons.mozilla.org/de/firefox/addon/stylus-blue/)
+
+#### Notes
+- Wired adapter names:
+  - x220: enp0s25
+  - xps9550:
+- Wireless adapter names:
+  - x220: wlp3s0
+  - xps9550:
+- Onboard display names (in xrandr):
+  - x220: LVDS-1
+  - xps9550:
+- External display names (in xrandr):
+  - x220: HDMI-1 (and probably also VGA-1)
+  - xps9550:
+
 

@@ -27,6 +27,7 @@ nmap
 p7zip
 pv
 ranger
+rdesktop
 rsync
 rxvt-unicode-256color
 scrot

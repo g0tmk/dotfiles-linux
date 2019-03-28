@@ -14,7 +14,8 @@ bitmapDir = userDir ++ ".xmonad/xbm/"
 --autoStart = userDir ++ ".xmonad/bin/autostart.sh"
 
 main = do
-    xmproc <- spawnPipe "/home/g0tmk/.cabal/bin/xmobar"
+    --xmproc <- spawnPipe "/home/g0tmk/.cabal/bin/xmobar"
+    xmproc <- spawnPipe "xmobar"
 
     --spawn $ "sh " ++ autoStart
 

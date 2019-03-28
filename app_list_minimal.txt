@@ -41,6 +41,7 @@ wget
 wicd-curses
 wireshark
 xclip
+xfonts-terminus
 xmobar
 xmonad
 xorg

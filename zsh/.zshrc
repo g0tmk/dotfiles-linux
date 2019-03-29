@@ -7,10 +7,14 @@
 
 export PATH=~/bin:$PATH
 
-# Source Prezto.
-if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
-  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
-fi
+## Source Prezto.
+#if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
+#  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
+#fi
+
+
+# Rebind / (search) to use default zsh search mode instead of vim one
+bindkey -M vicmd '/' history-incremental-pattern-search-backward
 
 
 # Aliases
@@ -39,9 +43,34 @@ autoload zmv
 #        fi
 #    fi
 #}
+
+
+##############################################################################
+# History Configuration
+##############################################################################
+HISTSIZE=5000                 # How many lines of history to keep in memory
+HISTFILE=~/.zsh_history       # Where to save history to disk
+SAVEHIST=5000                 # Number of history entries to save to disk
+HISTDUP=erase                 # Erase duplicates in the history file
+setopt extended_history       # Use ":start:elapsed;command" history format.
+setopt hist_expire_dups_first # Expire duplicates first when trimming history.
+setopt hist_ignore_dups       # Don't record an entry that was just recorded.
+setopt hist_ignore_all_dups   # Delete old entry if new entry is a duplicate.
+setopt hist_find_no_dups      # Do not display a line previously found.
+setopt hist_ignore_space      # Don't record an entry starting with a space.
+setopt hist_save_no_dups      # Don't write duplicate entries to disk.
+setopt hist_reduce_blanks     # Remove superfluous blanks before recording.
+setopt hist_verify            # Don't execute immediately upon hist expansion.
+#setopt hist_beep              # Beep when accessing nonexistent history.
+setopt appendhistory          # Append to the history file (no overwriting).
+setopt sharehistory           # Share history across terminals
+setopt incappendhistory       # Immediately append to file, not just on exit.
+
  
 #PROMPT='%F{59}[$HISTCMD] '$PROMPT
 #RPROMPT="\$(cabal_sandbox_info) $RPROMPT"
 
 # Always start with 256 colors
 export TERM=xterm-256color
+
+

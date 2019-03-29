@@ -1,5 +1,11 @@
 ## dotfiles
 
+
+#### TODO:
+- Xmobar config wifi adapter name only works with wifi on xps9550
+- Check hist file after a while to see if zsh's KEYBOARD_HACK option is needed
+- Figure out why xmobar is hidden by windows by default
+
 #### Install steps on a fresh Debian (Testing) machine
 
 0. Install Debian minimal system, install only "Standard System Utilities" and "Laptop" if needed.
@@ -148,4 +154,6 @@
   - x220: HDMI-1 (and probably also VGA-1)
   - xps9550:
 
+#### Attributions
+- https://gist.github.com/matthewmccullough/787142
 

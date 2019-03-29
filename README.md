@@ -3,9 +3,11 @@
 
 #### TODO:
 - Xmobar config wifi adapter name only works with wifi on xps9550
-- Check hist file after a while to see if zsh's KEYBOARD_HACK option is needed
+- Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed
 - Figure out why xmobar is hidden by windows by default
 - Remove prezto files/references
+- Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
+- tmux is throwing errors when started, check its config
 
 #### Install steps on a fresh Debian (Testing) machine
 

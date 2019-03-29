@@ -8,6 +8,8 @@
 - Remove prezto files/references
 - Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
 - tmux is throwing errors when started, check its config
+- check out fasd (and jetho's repo)
+
 
 #### Install steps on a fresh Debian (Testing) machine
 

@@ -9,6 +9,8 @@
 - Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
 - tmux is throwing errors when started, check its config
 - check out fasd (and jetho's repo)
+- add yeganesh
+- figure out where fieryturk comes from (.xmobarrc)
 
 
 #### Install steps on a fresh Debian (Testing) machine
@@ -37,7 +39,7 @@
     stow zsh/
     ```
 
-2. Install virtualbox
+2. Install virtualbox (from [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22))
 
     ```bash
     # install virtualbox using their apt source:
@@ -49,7 +51,7 @@
     # you can now run `virtualbox`
     ```
 
-3. Install sublime text & sublime merge
+3. Install sublime text & sublime merge (from [here](https://www.sublimetext.com/docs/3/linux_repositories.html))
 
     ```bash
     # install using their apt source:
@@ -60,7 +62,7 @@
     # you can now run `subl` and `smerge`
     ```
 
-4. Install firefox stable
+4. Install firefox stable (from [here](https://wiki.debian.org/Firefox#Firefox_Stable.2C_Beta_and_Nightly))
 
     ```bash
     # download firefox from website and extract to a directory in home:
@@ -151,13 +153,13 @@
   - xps9550:
 - Wireless adapter names:
   - x220: wlp3s0
-  - xps9550:
+  - xps9550: wlp2s0
 - Onboard display names (in xrandr):
   - x220: LVDS-1
-  - xps9550:
+  - xps9550: eDP1
 - External display names (in xrandr):
   - x220: HDMI-1 (and probably also VGA-1)
-  - xps9550:
+  - xps9550: HDMI1 and DP1
 
 #### Attributions
 - https://gist.github.com/matthewmccullough/787142

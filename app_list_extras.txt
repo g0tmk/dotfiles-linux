@@ -1,4 +1,5 @@
 
 0ad
 lutris
+openssh-server
 

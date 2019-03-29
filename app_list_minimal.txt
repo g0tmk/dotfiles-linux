@@ -24,7 +24,7 @@ lxappearance
 mercurial
 mtr
 nmap
-p7zip
+p7zip-full
 pv
 ranger
 rdesktop

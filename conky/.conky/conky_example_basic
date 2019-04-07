@@ -1,0 +1,64 @@
+
+background yes
+font Snap.se:size=8
+xftfont Snap.se:size=8
+use_xft yes
+xftalpha 0.1
+update_interval 1.0
+total_run_times 0
+own_window yes
+own_window_type override
+own_window_transparent yes
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+double_buffer yes
+draw_shades no
+draw_outline no
+draw_borders no
+draw_graph_borders no
+minimum_size 210 5
+maximum_width 210
+default_color ffffff
+default_shade_color 000000
+default_outline_color 000000
+alignment top_right
+gap_x 226
+gap_y 22
+no_buffers yes
+cpu_avg_samples 2
+override_utf8_locale no
+uppercase no # set to yes if you want all text to be in uppercase
+use_spacer no
+
+TEXT
+${font LCDDisplayCapsSSi:style=Bold:pixelsize=54}${alignc}${time %H:%M:%S}${font Snap.se:size=8}
+${alignr}${time %A, %e %B %G}
+
+${font Aerial:style=Bold:pixelsize=12}CALENDAR${font Snap.se:size=8}${hr 1}
+${font DejaVu Sans Mono :size=12}${exec cal}
+${font DejaVu Sans Mono :size=6}${exec cal -3 | cut -c23-44 --complement}
+${font Aerial:style=Bold:pixelsize=12}SYSTEM${font Snap.se:size=8} ${hr 1 }
+User: $alignr$user_names
+Computer: $alignr$nodename
+$alignc$sysname $kernel ($machine)
+Uptime: $alignr$uptime
+Process: ${alignr}$processes ($running_processes running)
+Load: ${alignr}$loadavg
+
+Battery ${alignr}(${battery BAT1})
+${battery_bar 4 BAT1}
+
+CPU       ${alignc} ${freq}MHz / ${acpitemp}C ${alignr}(${cpu cpu1}%)
+${cpubar 4 cpu1}
+${cpugraph 0000ff 00ec00}
+
+RAM ${alignr}$mem / $memmax ($memperc%)
+${membar 4}
+
+${font Aerial:style=Bold:pixelsize=12}FILE SYSTEM${font Snap.se:size=8}${hr 1}
+HDD: ${alignr}${fs_used /} / ${fs_size /}
+${fs_bar 4 /}
+
+${font Aerial:style=Bold:pixelsize=12}CONNECTION${font Snap.se:size=8}${hr 1}
+Down ${downspeed eth0} k/s ${alignr}Up ${upspeed eth0} k/s
+${downspeedgraph eth0 25,107 cccccc ffffff} ${alignr}${upspeedgraph eth0 25,107 cccccc ffffff}
+Total ${totaldown eth0} ${alignr}Total ${totalup eth0}

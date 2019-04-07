@@ -1,0 +1,9 @@
+
+
+# object files/build output
+*.hi
+*.o
+xmonad.errors
+
+# temporary files
+*.swp

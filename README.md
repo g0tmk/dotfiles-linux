@@ -9,6 +9,8 @@
 - Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
 - tmux is throwing errors when started, check its config
 - check out fasd (and jetho's repo)
+- login to firefox to sync maybe? its a pain to re-setup
+- figure out a good way to save some of fstab's contents (NASes etc). maybe have a file that you append to current fstab during setup?
 
 
 #### Install steps on a fresh Debian (Testing) machine
@@ -126,24 +128,38 @@
 
     # TODO: manually download/install google-chrome .deb here
 
+11. Install barrier
+
+    ```bash
+    sudo apt install flatpak
+    flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    flatpak remote-add --user --if-not-exists barrier https://debauchee.github.io/barrier/repo/barrier.flatpakrepo
+    flatpak install --user barrier com.github.debauchee.barrier
+    flatpak run com.github.debauchee.barrier
+    # follow in-gui instructions
+    ```
+
+12. Install discord
+
+    Download latest deb from https://discordapp.com/download
+    ```bash
+    wget https://dl.discordapp.net/apps/linux/0.0.9/discord-0.0.9.deb
+    sudo dpkg -i discord-0.0.9.deb
+    sudo apt install -f
+    ```
+
 
 #### Favorite Firefox Add-ons
 - [uBlock Origin](https://addons.mozilla.org/pt-br/firefox/addon/ublock-origin/)
 - [HTTPS Everywhere](https://www.eff.org/https-everywhere)
-- [Privacy Badger](https://addons.mozilla.org/pt-br/firefox/addon/privacy-badger-firefox/)
 - [Self Destruction Cookies](https://addons.mozilla.org/pt-br/firefox/addon/self-destructing-cookies/)
-- [NoScript](https://addons.mozilla.org/en-us/firefox/addon/noscript/)
 - [Random Agent Spoofer](https://addons.mozilla.org/pt-br/firefox/addon/random-agent-spoofer/)
 - [Tree Style Tab](https://addons.mozilla.org/pt-br/firefox/addon/tree-style-tab/)
 - [Vimperator](https://addons.mozilla.org/en-us/firefox/addon/vimperator/)
-- [NumberedTabs](https://addons.mozilla.org/En-us/firefox/addon/numberedtabs/)
-- [Omnibar](https://addons.mozilla.org/en-us/firefox/addon/omnibar/)
 - [Tile Tabs](https://addons.mozilla.org/en-us/firefox/addon/tile-tabs/)
-- [GreaseMonkey](https://addons.mozilla.org/en-us/firefox/addon/greasemonkey/)
 - [DownThemAll!](https://addons.mozilla.org/en-us/firefox/addon/downthemall/)
 - [Session Manager](https://addons.mozilla.org/en-us/firefox/addon/session-manager/)
 - [Send to XBMC/Kodi](https://addons.mozilla.org/en-US/firefox/addon/send-to-xbmc/)
-- [Stylus Blue](https://addons.mozilla.org/de/firefox/addon/stylus-blue/)
 
 #### Notes
 - Wired adapter names:
@@ -161,4 +177,5 @@
 
 #### Attributions
 - https://gist.github.com/matthewmccullough/787142
+- https://github.com/tpope/vim-sensible
 

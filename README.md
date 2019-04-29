@@ -11,6 +11,8 @@
 - check out fasd (and jetho's repo)
 - login to firefox to sync maybe? its a pain to re-setup
 - figure out a good way to save some of fstab's contents (NASes etc). maybe have a file that you append to current fstab during setup?
+- add yeganesh
+- figure out where fieryturk comes from (it is used in .xmobarrc)
 
 
 #### Install steps on a fresh Debian (Testing) machine
@@ -39,7 +41,7 @@
     stow zsh/
     ```
 
-2. Install virtualbox
+2. Install virtualbox (from [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22))
 
     ```bash
     # install virtualbox using their apt source:
@@ -51,7 +53,7 @@
     # you can now run `virtualbox`
     ```
 
-3. Install sublime text & sublime merge
+3. Install sublime text & sublime merge (from [here](https://www.sublimetext.com/docs/3/linux_repositories.html))
 
     ```bash
     # install using their apt source:
@@ -62,7 +64,7 @@
     # you can now run `subl` and `smerge`
     ```
 
-4. Install firefox stable
+4. Install firefox stable (from [here](https://wiki.debian.org/Firefox#Firefox_Stable.2C_Beta_and_Nightly))
 
     ```bash
     # download firefox from website and extract to a directory in home:
@@ -167,13 +169,13 @@
   - xps9550:
 - Wireless adapter names:
   - x220: wlp3s0
-  - xps9550:
+  - xps9550: wlp2s0
 - Onboard display names (in xrandr):
   - x220: LVDS-1
-  - xps9550:
+  - xps9550: eDP1
 - External display names (in xrandr):
   - x220: HDMI-1 (and probably also VGA-1)
-  - xps9550:
+  - xps9550: HDMI1 and DP1
 
 #### Attributions
 - https://gist.github.com/matthewmccullough/787142

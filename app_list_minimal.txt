@@ -10,6 +10,7 @@ debian-handbook
 dos2unix
 fcrackzip
 feh
+ffmpeg
 fonts-font-awesome
 fortune-mod
 gcc

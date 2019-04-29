@@ -1,5 +1,6 @@
 
 ack
+alsa-utils
 binutils
 build-essential
 conky

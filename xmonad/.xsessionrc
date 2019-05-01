@@ -8,8 +8,21 @@ sh ~/.fehbg &
 # set the cursor (get rid of weird X)
 xsetroot -cursor_name left_ptr
 
-# Set up an icon tray
-#stalonetray &  # TODO: uncomment
+# Set up an icon tray. Reads transparency from .xmobarrc to match it
+# NOTE: change --widthtype to "percent" to set a fixed tray width
+trayer --edge top --align right \
+    --margin 0 \
+    --widthtype request --width 5 \
+    --heighttype pixel --height 16 \
+    --SetDockType true --SetPartialStrut true \
+    --transparent true \
+    --alpha $(echo "`expr 255 - $(cat ~/.xmobarrc | grep alpha | cut -d "=" -f2 | cut -d " " -f2)`") \
+    --tint 0x000000 \
+    --expand false \
+    --padding 0 \
+
+
+
 
 # open dzen2 panels
 #sh ~/.xmonad/bin/conkybar.sh &

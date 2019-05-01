@@ -97,11 +97,12 @@ Config { font = "xft:Terminus:pixelsize=12:style=Regular"
                                ] 100
                 , Run Date "<fn=1>\xf133</fn> %m/%d/%y" "date" 10
                 , Run Date "<fn=1>\xf017</fn> <fc=#ee9a00>%H:%M:%S</fc>" "time" 10
+                , Run Com "generate-stalonetray-padding-for-xmobar.sh" [] "trayerpad" 10
                 , Run StdinReader
                 ]
         , sepChar = "%"
         , alignSep = "}{"
-        , template = "%StdinReader%} %multicpu%%thermal9%%memory%%swap% %dynnetwork%{%wlp2s0wi%   %date%   %time%   %battery%"
+        , template = "%StdinReader%} %multicpu%%thermal9%%memory%%swap% %dynnetwork%{%wlp2s0wi%   %date%   %time%   %battery%%trayerpad%"
 --        , template = "%StdinReader%} %multicpu%%thermal9%%memory%%swap%%diskio% %dynnetwork%{%wlan0wi%   %date%   %time%   %battery%"
 --        , template = "%StdinReader%} %multicpu%  %memory% %swap%  %dynnetwork%{%wlan0wi%  %date%  %time%  %battery% | %KEMT% "
 --        , template = "%StdinReader% | %multicpu% | %memory% * %swap% | %wlan0% - %eth0% }{<fc=#ee9a00>%date%</fc> | %battery% | %KEMT% "

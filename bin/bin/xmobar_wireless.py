@@ -1,6 +1,11 @@
 """Print wireless state. Interface is designed to mimic options passed to
-the Wireless plugin for Xmobar. """
+the Wireless plugin for Xmobar. 
 
+This should work more-or-less identically to the Wireless plugin. Its main
+feature is that it automatically detects the current wireless adapter and
+shows its information - the standard Wireless plugin must be configured for
+one specific adapter at a time. This script, however, is cross-system
+compatible so setups using it should require no config file modifications."""
 
 from __future__ import print_function
 

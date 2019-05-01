@@ -9,6 +9,7 @@
 - Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
 - tmux is throwing errors when started, check its config
 - check out fasd (and jetho's repo)
+- check out YouCompleteMe (https://github.com/Valloric/YouCompleteMe)
 - login to firefox to sync maybe? its a pain to re-setup
 - figure out a good way to save some of fstab's contents (NASes etc). maybe have a file that you append to current fstab during setup?
 - add yeganesh
@@ -138,6 +139,8 @@
     flatpak remote-add --user --if-not-exists barrier https://debauchee.github.io/barrier/repo/barrier.flatpakrepo
     flatpak install --user barrier com.github.debauchee.barrier
     flatpak run com.github.debauchee.barrier
+    echo -e '#!/bin/sh\nflatpak run com.github.debauchee.barrier' > ~/bin/barrier; chmod +x ~/bin/barrier
+    barrier
     # follow in-gui instructions
     ```
 

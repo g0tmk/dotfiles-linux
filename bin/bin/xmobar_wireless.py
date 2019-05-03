@@ -13,37 +13,91 @@ from __future__ import print_function
 _IWCONFIG_BINARY = "/sbin/iwconfig"
 
 
-class IWConfigNotFoundError():
+class IWConfigNotFoundError:
     pass
+
+
+def get_wireless_info():
+    """Returns wireless AP and quality (in percent) as a tuple."""
+    return "My Wifi AP", 88
 
 
 if __name__ == "__main__":
     import argparse
-    
+
     # Initialize arg parser. Note since we override -h, add_help must be false
-    p = argparse.ArgumentParser(description='Print wireless status for xmobar',
-                                add_help=False)
-    p.add_argument('-t', '--template',
-                   default="<essid>:<quality>", type=str, metavar='str',
-                   help=('Set template for output. Template definition is a '
-                         'subset of the standard xmobarr Wireless plugin. '
-                         'Allowed values: essid, quality, qualitybar, '
-                         'qualityvbar, qualityipat'))
-    p.add_argument('-H', '--High', default=66, type=int, metavar='number',
-                   help=('The high threshold. Values higher than number will '
-                         'be displayed with the color specified by -h'))
-    p.add_argument('-L', '--Low', default=33, type=int, metavar='number',
-                   help=('The low threshold. Values lower than number will '
-                         'be displayed with the color specified by -l'))
-    p.add_argument('-h', '--high', default=None, metavar='color',
-                   help='Color for showing values over the high threshold.')
-    p.add_argument('-n', '--normal', default=None, metavar='color',
-                   help=('Color for showing values greater than the low '
-                        'threshold but lower than the high one.'))
-    p.add_argument('-l', '--low', default=None, metavar='color',
-                   help='Color for showing values below the low threshold.')
-    p.add_argument('-S', '--suffix', default=False, action='store_true',
-                   help='When true show optional suffixes such as % or units')
+    p = argparse.ArgumentParser(
+        description="Print wireless status for xmobar", add_help=False
+    )
+    p.add_argument(
+        "-t",
+        "--template",
+        default="<essid>:<quality>",
+        type=str,
+        metavar="TEMPLATE",
+        help=(
+            "Output template. Definition is a subset of the standard xmobarr Wireless "
+            "plugin. Allowed values: essid, quality, qualitybar."
+        ),
+    )
+    p.add_argument(
+        "-H",
+        "--High",
+        default=66,
+        type=int,
+        metavar="NUMBER",
+        help=(
+            "The high threshold. Values higher than number will be displayed with the "
+            "color specified by -h"
+        ),
+    )
+    p.add_argument(
+        "-L",
+        "--Low",
+        default=33,
+        type=int,
+        metavar="NUMBER",
+        help=(
+            "The low threshold. Values lower than number will be displayed with the "
+            "color specified by -l"
+        ),
+    )
+    p.add_argument(
+        "-h",
+        "--high",
+        metavar="COLOR",
+        help="Color for showing values over the high threshold.",
+    )
+    p.add_argument(
+        "-n",
+        "--normal",
+        metavar="COLOR",
+        help=(
+            "Color for showing values greater than the low threshold but lower than "
+            "the high one."
+        ),
+    )
+    p.add_argument(
+        "-l",
+        "--low",
+        metavar="COLOR",
+        help="Color for showing values below the low threshold.",
+    )
+    p.add_argument(
+        "-S",
+        "--suffix",
+        default=False,
+        action="store_true",
+        help="When true show optional suffixes such as % or units",
+    )
+    p.add_argument(
+        "-W",
+        "--bwidth",
+        default=10,
+        type=int,
+        metavar="NUMBER",
+        help="Total number of characters used to draw bars.",
+    )
     # not implemented: -p --ppad
     # not implemented: -d --ddigits
     # not implemented: -m --minwidth
@@ -58,15 +112,47 @@ if __name__ == "__main__":
     # not implemented: -f --bfore
     # not implemented: -W --bwidth
     # not implemented: -x --nastring
-    p.add_argument('--quality-icon-pattern',
-                   help=('Dynamic string for connection quality in '
-                         'qualityipat. Not currently implemented.'))
+    p.add_argument(
+        "--quality-icon-pattern",
+        help=(
+            "Dynamic string for connection quality in "
+            "qualityipat. Not currently implemented."
+        ),
+    )
     # Add explicit --help arg, since -h arg is disabled.
     # TODO: figure out why this does not work
-    #p.add_argument('--help', action='help', help='show this help message and exit')
+    # p.add_argument('--help', action='help', help='show this help message and exit')
     args = p.parse_args()
-    
-    print('parsed args:')
     print(args)
 
+    essid, quality = get_wireless_info()
 
+    if quality < float(args.Low):
+        color = args.low
+    elif quality < float(args.High):
+        color = args.normal
+    else:
+        color = args.high
+
+    if quality > 100:
+        quality = 100
+    if quality < 0:
+        quality = 0
+
+    scale_val = 100 / args.bwidth
+    qualitybar = "#" * round(quality / scale_val) + ":" * round(
+        (100 - quality) / scale_val
+    )
+
+    quality = "{:.0f}".format(quality)
+    if color is not None:
+        quality = f"<fc={color}>{quality}</fc>"
+    if args.suffix:
+        quality += "%"
+
+    template = args.template
+    template = template.replace("<essid>", essid)
+    template = template.replace("<quality>", quality)
+    template = template.replace("<qualitybar>", qualitybar)
+
+    print(template)

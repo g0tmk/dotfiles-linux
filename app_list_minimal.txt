@@ -3,6 +3,7 @@ ack
 alsa-utils
 binutils
 build-essential
+cifs-utils
 conky
 coreutils
 curl
@@ -26,6 +27,7 @@ lxappearance
 mercurial
 mtr
 nmap
+openssh-server
 p7zip-full
 pv
 ranger

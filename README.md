@@ -7,7 +7,7 @@
 - Figure out why xmobar is hidden by windows by default
 - Remove prezto files/references
 - Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
-- tmux is throwing errors when started, check its config
+- modify tmux config to not show stats on bottom bar that are already in xmobar
 - check out fasd (and jetho's repo)
 - check out YouCompleteMe (https://github.com/Valloric/YouCompleteMe)
 - login to firefox to sync maybe? its a pain to re-setup

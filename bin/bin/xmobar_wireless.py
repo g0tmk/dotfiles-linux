@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Print wireless state. Interface is designed to mimic options passed to
 the Wireless plugin for Xmobar. 
 
@@ -8,6 +9,8 @@ one specific adapter at a time. This script, however, is cross-system
 compatible so setups using it should require no config file modifications."""
 
 from __future__ import print_function
+import subprocess
+import re
 
 # constant for now - it seems to always be in the same location
 _IWCONFIG_BINARY = "/sbin/iwconfig"
@@ -17,9 +20,27 @@ class IWConfigNotFoundError:
     pass
 
 
+def run_command(cmd):
+    """Run a command and return its stdout as a string. Command must be passed
+    as a list of parameters ie ['ls', '-la']"""
+    return subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL).stdout.decode('utf-8')
+
+
 def get_wireless_info():
     """Returns wireless AP and quality (in percent) as a tuple."""
-    return "My Wifi AP", 88
+    iwconfig_output = run_command(_IWCONFIG_BINARY)
+    for line in iwconfig_output.split("\n"):
+        # look for line containing essid, save if its a match
+        match = re.match('^[a-zA-Z0-9]+.+ESSID:"(.+)"', line)
+        if match:
+            essid = match.group(1)
+        # if we find the quality line, return
+        match = re.match('^\s+Link Quality=(\d+)/(\d+)', line)
+        if match:
+            quality = 100 * float(match.group(1)) / float(match.group(2))
+            return essid, quality
+        
+    return None, None
 
 
 if __name__ == "__main__":
@@ -123,9 +144,11 @@ if __name__ == "__main__":
     # TODO: figure out why this does not work
     # p.add_argument('--help', action='help', help='show this help message and exit')
     args = p.parse_args()
-    print(args)
 
     essid, quality = get_wireless_info()
+    if essid is None:
+        print("Not connected", end="")
+        sys.exit(0)
 
     if quality < float(args.Low):
         color = args.low
@@ -146,7 +169,7 @@ if __name__ == "__main__":
 
     quality = "{:.0f}".format(quality)
     if color is not None:
-        quality = f"<fc={color}>{quality}</fc>"
+        quality = "<fc={}>{}</fc>".format(color, quality)
     if args.suffix:
         quality += "%"
 
@@ -155,4 +178,6 @@ if __name__ == "__main__":
     template = template.replace("<quality>", quality)
     template = template.replace("<qualitybar>", qualitybar)
 
-    print(template)
+    print(template, end="")
+
+

@@ -14,6 +14,8 @@
 - figure out a good way to save some of fstab's contents (NASes etc). maybe have a file that you append to current fstab during setup?
 - add yeganesh
 - figure out where fieryturk comes from (it is used in .xmobarrc)
+- wicd-curses -> wifi name -> Preferences -> Check "Automatically reconnect on connection loss"
+  - see if this can be included in repo in some config file
 
 
 #### Install steps on a fresh Debian (Testing) machine

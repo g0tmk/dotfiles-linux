@@ -1,8 +1,11 @@
 
 ack
 alsa-utils
+apt-listbugs
+apt-listchanges
 binutils
 build-essential
+cifs-utils
 conky
 coreutils
 curl
@@ -26,6 +29,7 @@ lxappearance
 mercurial
 mtr
 nmap
+openssh-server
 p7zip-full
 pv
 ranger

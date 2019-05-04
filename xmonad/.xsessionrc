@@ -8,21 +8,6 @@ sh ~/.fehbg &
 # set the cursor (get rid of weird X)
 xsetroot -cursor_name left_ptr
 
-# Set up an icon tray. Reads transparency from .xmobarrc to match it
-# NOTE: change --widthtype to "percent" to set a fixed tray width
-trayer --edge top --align right \
-    --margin 0 \
-    --widthtype request --width 5 \
-    --heighttype pixel --height 16 \
-    --SetDockType true --SetPartialStrut true \
-    --transparent true \
-    --alpha $(echo "`expr 255 - $(cat ~/.xmobarrc | grep alpha | cut -d "=" -f2 | cut -d " " -f2)`") \
-    --tint 0x000000 \
-    --expand false \
-    --padding 0 \
-
-
-
 
 # open dzen2 panels
 #sh ~/.xmonad/bin/conkybar.sh &
@@ -42,6 +27,28 @@ trayer --edge top --align right \
 
 # open desktop panels (after 1s pause - may need to increase in future)
 conky -p 1 -c ~/.conky/conky_desktop &
+
+
+
+# Set up an icon tray. Reads transparency from .xmobarrc to match it
+# NOTE: change --widthtype to "percent" to set a fixed tray width
+# NOTE: needs to start _after_ xmobar, and only sleeps for 3 seconds,
+#       so xmonad/xmobar need to finish startup by then
+# TODO: above problem will be avoided if this wait is replaced with a
+#       smarter one ie "wait until xmobar binary is running, then wait
+#       500 milliseconds"
+sleep 3 && trayer --edge top --align right \
+    --margin 0 \
+    --widthtype request --width 5 \
+    --heighttype pixel --height 16 \
+    --SetDockType true --SetPartialStrut true \
+    --transparent true \
+    --alpha $(echo "`expr 255 - $(cat ~/.xmobarrc | grep alpha | cut -d "=" -f2 | cut -d " " -f2)`") \
+    --tint 0x000000 \
+    --expand false \
+    --padding 0 \
+    &
+
 
 exec xmonad
 

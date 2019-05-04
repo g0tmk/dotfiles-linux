@@ -5,6 +5,7 @@
 - Xmobar config wifi adapter name only works with wifi on xps9550
 - Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed
 - Figure out why xmobar is hidden by windows by default
+- reverse scroll direction
 - Remove prezto files/references
 - Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
 - tmux is throwing errors when started, check its config
@@ -14,6 +15,14 @@
 - figure out a good way to save some of fstab's contents (NASes etc). maybe have a file that you append to current fstab during setup?
 - add yeganesh
 - figure out where fieryturk comes from (it is used in .xmobarrc)
+- compare envypn font (from [here](https://bbs.archlinux.org/viewtopic.php?id=144462) with terminus font)
+- check out polybar [here](https://github.com/jaagr/polybar)
+  - https://old.reddit.com/r/unixporn/comments/bjq866/bspwm_first_time_posting_i_hope_you_guys_like_it_3/
+    - https://raw.githubusercontent.com/jaagr/dots/master/.local/etc/themer/themes/darkpx/polybar
+  - https://i.imgur.com/A6spiZZ.png
+  - https://i.imgur.com/xvlw9iH.png
+- eventually add gtk theme
+  - [Fantome](https://github.com/addy-dclxvi/gtk-theme-collections)
 
 
 #### Install steps on a fresh Debian (Testing) machine
@@ -27,13 +36,12 @@
     sudo apt install git stow apt-transport-https
     git clone git://github.com/g0tmk/dotfiles-linux.git ~/dotfiles
     cd ~/dotfiles
-    #sudo stow -t / etc # copy apt preferences: TODO: verify and uncomment
     sudo apt update
     sudo apt install -y $(< ~/dotfiles/app_list_minimal.txt)
     sudo apt install -y $(< ~/dotfiles/app_list_extras.txt) # optional
     ```
 
-6. Set zsh as default shell
+2. Set zsh as default shell
 
     ```bash
     chsh -s /bin/zsh
@@ -42,7 +50,7 @@
     stow zsh/
     ```
 
-2. Install virtualbox (from [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22))
+3. Install virtualbox (from [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22))
 
     ```bash
     # install virtualbox using their apt source:
@@ -54,7 +62,7 @@
     # you can now run `virtualbox`
     ```
 
-3. Install sublime text & sublime merge (from [here](https://www.sublimetext.com/docs/3/linux_repositories.html))
+4. Install sublime text & sublime merge (from [here](https://www.sublimetext.com/docs/3/linux_repositories.html))
 
     ```bash
     # install using their apt source:
@@ -65,7 +73,7 @@
     # you can now run `subl` and `smerge`
     ```
 
-4. Install firefox stable (from [here](https://wiki.debian.org/Firefox#Firefox_Stable.2C_Beta_and_Nightly))
+5. Install firefox stable (from [here](https://wiki.debian.org/Firefox#Firefox_Stable.2C_Beta_and_Nightly))
 
     ```bash
     # download firefox from website and extract to a directory in home:
@@ -76,14 +84,14 @@
     ln -s ~/.mozilla/firefox/firefox ~/bin/firefox
     ```
 
-3. Set rxvt-unicode as default terminal emulator #TODO: do later; skipped
+6. Set rxvt-unicode as default terminal emulator #TODO: do later; skipped
 
     ```bash
     # note: I did not need to run this. run '--display' instead of set to check
     sudo update-alternatives --set x-terminal-emulator /usr/bin/urxvt
     ```
 
-4. Install Powerline #TODO: do later; skipped
+7. Install Powerline #TODO: do later; skipped
 
     ```bash
     sudo apt-get install -y python-pip
@@ -95,21 +103,13 @@
     sudo mv 10-powerline-symbols.conf /etc/fonts/conf.d/
     ```
 
-5. Install prezto #TODO: do later; skipped
+8. Install prezto #TODO: do later; skipped
 
     ```bash
     git clone --recursive https://github.com/sorin-ionescu/prezto.git ~/.zprezto
     ```
 
-7. Install screenfetch #TODO: do later; skipped
-
-    ```bash
-    wget -O screenfetch 'https://raw.github.com/KittyKatt/screenFetch/master/screenfetch-dev'
-    chmod +x screenfetch
-    sudo mv screenfetch /usr/local/bin/
-    ```
-
-8. Install Tmuxinator #TODO: do later; skipped
+9. Install Tmuxinator #TODO: do later; skipped
 
     ```bash
     sudo gem install tmuxinator
@@ -122,7 +122,7 @@
     stow $(ls -d ^etc(/))
     ```
 
-10. Haskell Tools (optional) #TODO: do later; skipped
+9. Haskell Tools (optional) #TODO: do later; skipped
 
     ```bash
     curl -sSL https://get.haskellstack.org/ | sh
@@ -131,7 +131,7 @@
 
     # TODO: manually download/install google-chrome .deb here
 
-11. Install barrier
+9. Install barrier
 
     ```bash
     sudo apt install flatpak
@@ -144,7 +144,7 @@
     # follow in-gui instructions
     ```
 
-12. Install discord
+9. Install discord
 
     Download latest deb from https://discordapp.com/download
     ```bash

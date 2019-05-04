@@ -1,5 +1,6 @@
 
 0ad
 lutris
+neofetch
 openssh-server
 

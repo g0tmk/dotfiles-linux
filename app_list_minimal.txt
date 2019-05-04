@@ -34,10 +34,10 @@ rsync
 rxvt-unicode-256color
 scrot
 speedtest-cli
-stalonetray
 suckless-tools
 syncthing
 tmux
+trayer
 tree
 vim
 watch

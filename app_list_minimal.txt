@@ -1,6 +1,8 @@
 
 ack
 alsa-utils
+apt-listbugs
+apt-listchanges
 binutils
 build-essential
 cifs-utils

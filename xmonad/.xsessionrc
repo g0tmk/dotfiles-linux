@@ -26,7 +26,8 @@ xsetroot -cursor_name left_ptr
 #fi
 
 # open desktop panels (after 1s pause - may need to increase in future)
-conky -p 1 -c ~/.conky/conky_desktop &
+# TODO: re-enable, move down 2px, edit config 
+#conky -p 1 -c ~/.conky/conky_desktop &
 
 
 

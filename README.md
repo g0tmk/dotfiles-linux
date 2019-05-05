@@ -25,6 +25,7 @@
   - [Fantome](https://github.com/addy-dclxvi/gtk-theme-collections)
 - wicd-curses -> wifi name -> Preferences -> Check "Automatically reconnect on connection loss"
   - see if this can be included in repo in some config file
+- manually download/install google-chrome .deb?
 
 
 #### Install steps on a fresh Debian (Testing) machine
@@ -131,8 +132,6 @@
     stack install ghc-mod hlint hasktags codex hscope pointfree pointful hoogle hindent apply-refact
     ```
 
-    # TODO: manually download/install google-chrome .deb here
-
 9. Install barrier
 
     ```bash
@@ -155,6 +154,14 @@
     sudo apt install -f
     ```
 
+9. Install Parsec
+
+    Download latest 'parsec for ubuntu' from parsecs site
+    NOTE: it segfaulted the first (and maybe second) time I ran it - eventually it became stable /shrug
+    ```bash
+    sudo dpkg -i parsec-linux.deb
+    parsec
+    ```
 
 #### Favorite Firefox Add-ons
 - [uBlock Origin](https://addons.mozilla.org/pt-br/firefox/addon/ublock-origin/)

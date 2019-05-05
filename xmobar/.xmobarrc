@@ -18,7 +18,7 @@ Config { font = "xft:Terminus:pixelsize=12:style=Regular"
                 --[ Run Weather "KEMT" ["-t","<tempC>C","-L","18","-H","25","--normal","green","--high","red","--low","lightblue"] 36000
                 [ Run Weather "KEMT" [ "--template", "<skyCondition>: <fc=#4682B4><tempF></fc>°F <fc=#4682B4><rh></fc>%"
                                      ] 36000
-                , Run DynNetwork     [ "--template" , "<tx><rx>(<dev>)"
+                , Run DynNetwork     [ "--template" , " <tx> <rx>(<dev>)"
                                      , "--Low"      , "1000000"       -- units: B/s
                                      , "--High"     , "5000000"       -- units: B/s
                                      , "--low"      , "lightgreen"
@@ -26,7 +26,7 @@ Config { font = "xft:Terminus:pixelsize=12:style=Regular"
                                      , "--high"     , "#ff7070"
                                      , "-S"     , "True"
                                      , "--width" , "8"
-                                     ] 10
+                                     ] 20
                 , Run Com "xmobar_wireless.py"     
                                      ["-t",      "<fn=1>\xf1eb</fn> <essid>:<quality>"
                                      ,"-L"       ,"0"

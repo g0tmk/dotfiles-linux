@@ -163,6 +163,20 @@
     parsec
     ```
 
+9. Setup brightness control (only needed on xps 9550)
+
+    Add to /etc/sudoers with `sudo visudo`:
+    Cmnd_Alias    PLUS = /home/<your_username>/bin/brightness.py
+    <your_username> ALL = NOPASSWD: PLUS
+
+9. Setup yeganesh (not needed if yeganesh is included in ~/bin/):
+
+    Download latest from [here](dmwit.com/yeganesh)
+    `wget http://dmwit.com/yeganesh/yeganesh-2.5-bin.tar.gz`
+    `tar xf yeganesh*`
+    `cp yeganesh-2.5-bin/yeganesh ~/bin/`
+
+
 #### Favorite Firefox Add-ons
 - [uBlock Origin](https://addons.mozilla.org/pt-br/firefox/addon/ublock-origin/)
 - [HTTPS Everywhere](https://www.eff.org/https-everywhere)

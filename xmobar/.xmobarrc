@@ -27,15 +27,14 @@ Config { font = "xft:Terminus:pixelsize=12:style=Regular"
                                      , "-S"     , "True"
                                      , "--width" , "8"
                                      ] 10
-                --, Run Network "wlan0" ["-L","0","-H","32","--normal","green","--high","red"] 10
-                --, Run Network "eth0" ["-L","0","-H","32","--normal","green","--high","red"] 10
-                , Run Wireless "wlp2s0" ["-t"       ,"<fn=1>\xf1eb</fn> <essid>:<quality>"
-                                        ,"-L"       ,"0"
-                                        ,"-H"       ,"32"
-                                        ,"--low"    ,"#ff7070"
-                                        ,"--normal" ,"#eeba44"
-                                        ,"--high"   ,"lightgreen"
-                                        ] 30
+                , Run Com "xmobar_wireless.py"     
+                                     ["-t",      "<fn=1>\xf1eb</fn> <essid>:<quality>"
+                                     ,"-L"       ,"0"
+                                     ,"-H"       ,"32"
+                                     ,"--low"    ,"#ff7070"
+                                     ,"--normal" ,"#eeba44"
+                                     ,"--high"   ,"lightgreen"
+                                     ] "wirelessinfo" 20
                 , Run MultiCpu       [ "--template" ,"<total>%"
                                      , "-L"         , "25"
                                      , "-H"         , "50"
@@ -102,7 +101,7 @@ Config { font = "xft:Terminus:pixelsize=12:style=Regular"
                 ]
         , sepChar = "%"
         , alignSep = "}{"
-        , template = "%StdinReader%} %multicpu%%thermal9%%memory%%swap% %dynnetwork%{%wlp2s0wi%   %date%   %time%   %battery%%trayerpad%"
+        , template = "%StdinReader%} %multicpu%%thermal9%%memory%%swap% %dynnetwork%{%wirelessinfo%   %date%   %time%   %battery%%trayerpad%"
 --        , template = "%StdinReader%} %multicpu%%thermal9%%memory%%swap%%diskio% %dynnetwork%{%wlan0wi%   %date%   %time%   %battery%"
 --        , template = "%StdinReader%} %multicpu%  %memory% %swap%  %dynnetwork%{%wlan0wi%  %date%  %time%  %battery% | %KEMT% "
 --        , template = "%StdinReader% | %multicpu% | %memory% * %swap% | %wlan0% - %eth0% }{<fc=#ee9a00>%date%</fc> | %battery% | %KEMT% "

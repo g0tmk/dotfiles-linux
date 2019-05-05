@@ -106,13 +106,13 @@ ${color0}9999 ${color}RPM#
 
 
 # wifi connection strength graph
-${if_up wlan0}#
-${execigraph 10 "/sbin/iwconfig wlan0 | grep -Eo 'level\=-([0-9]+)'  | cut -d'-' -f2"}#
+${if_up wlp2s0}#
+${execigraph 10 "/sbin/iwconfig wlp2s0 | grep -Eo 'level\=-([0-9]+)'  | cut -d'-' -f2"}#
 ${endif}#
 
-${if_existing /proc/net/route wlan0}
-${voffset -52}${offset 55}${alignr}${color0}${downspeed wlan0} ${color}down ${color0}${upspeed wlan0} ${color}up
-${offset 55}${color}IP:${alignr}${color0}${addr wlan0}
+${if_existing /proc/net/route wlp2s0}
+${voffset -52}${offset 55}${alignr}${color0}${downspeed wlp2s0} ${color}down ${color0}${upspeed wlp2s0} ${color}up
+${offset 55}${color}IP:${alignr}${color0}${addr wlp2s0}
 ${offset 55}${color}Gateway:${alignr}${color0}${gw_ip}
 ${endif}#
 

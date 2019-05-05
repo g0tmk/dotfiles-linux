@@ -41,6 +41,8 @@ alias mountusers='mountsamba 10.3.80.11 users bivy'
 alias mountdocuments='mountdocum'
 alias mountengineering='mountengin'
 
+# wake on lan stuff
+alias wake_bpc='ssh 10.0.0.1 "./.wb"'
 
 
 

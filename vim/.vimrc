@@ -26,7 +26,9 @@ set autoindent
 " allow backspace in insert mode
 set backspace=indent,eol,start
 set complete-=i
+" insert 4 spaces as tabs / show tabs as 4 spaces wide
 set smarttab
+set tabstop=8 softtabstop=0 expandtab shiftwidth=4 smarttab
 
 set nrformats-=octal
 

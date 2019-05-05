@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -Ee          # exit immediately on command failure
+set -o pipefail  # treat failure within a pipe as failure
+set -u           # disallow unset variables
+
+PARSEC_URL="https://ui.parsecgaming.com/"
+PARSECD_LOG="/tmp/parsecd.log"
+
+if pgrep -x parsecd > /dev/null
+then
+    echo "Parsecd already running, no need to start"
+else
+    parsecd app_daemon=1 2>&1 > "$PARSECD_LOG" &
+    echo "Parsecd started and is logging to" "$PARSECD_LOG"
+fi
+
+xdg-open "$PARSEC_URL"
+echo "Opened" "$PARSEC_URL" "in browser"

@@ -6,7 +6,7 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.EZConfig(additionalKeys)
 import System.IO
---noBorders for fullscreen windows
+--noBorders for fullscreen windows (see https://bbs.archlinux.org/viewtopic.php?id=191565)
 import XMonad.Layout.ToggleLayouts
 import XMonad.Layout.NoBorders   ( noBorders, smartBorders)
 

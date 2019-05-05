@@ -6,6 +6,9 @@ import XMonad.Hooks.ManageDocks
 import XMonad.Util.Run(spawnPipe)
 import XMonad.Util.EZConfig(additionalKeys)
 import System.IO
+--noBorders for fullscreen windows
+import XMonad.Layout.ToggleLayouts
+import XMonad.Layout.NoBorders   ( noBorders, smartBorders)
 
 userDir = "/home/g0tmk/"
 bitmapDir = userDir ++ ".xmonad/xbm/"
@@ -22,7 +25,10 @@ main = do
     xmonad $ defaultConfig
         --{ manageHook = manageDocks <+> manageHook defaultConfig
         { manageHook = manageHook defaultConfig <+> manageDocks 
-        , layoutHook = avoidStruts  $  layoutHook defaultConfig
+        , layoutHook    = avoidStruts  
+                        $ toggleLayouts (noBorders Full)
+                        $ smartBorders
+                        $ layoutHook defaultConfig
         , logHook = dynamicLogWithPP xmobarPP
                         { ppOutput = hPutStrLn xmproc
                         , ppTitle = xmobarColor "lightgreen" "" . shorten 50

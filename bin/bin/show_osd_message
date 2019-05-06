@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Show a short message on-screen, ie volume percentage changes
+#
+# If no command line args are supplied, reads message from stdin. Otherwise
+# command line args will be used as the message.
+
+if [ $# -eq 0 ]
+then
+    str=`cat`
+    if [ -z "$str" ]
+    then
+        str="No message provided"
+    fi
+else
+    str="$*"
+fi
+
+SCREEN_WIDTH=`xrandr | grep -Eo 'primary [0-9]+x[0-9]+' | cut -d' ' -f2 | cut -dx -f1`
+
+(echo "$str"; sleep 1.5) \
+    | dzen2 -bg lightgrey \
+        -fg black \
+        -fn 'Terminus::pixelsize=12:antialias=0' \
+        -h 16 \
+        -w 400 \
+        -y 0 \
+        -x `expr $SCREEN_WIDTH / 2 - 400 / 2`
+

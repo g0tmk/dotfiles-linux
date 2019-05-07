@@ -3,6 +3,8 @@
 
 #### TODO:
 - ~~Xmobar config wifi adapter name only works with wifi on xps9550~~
+- add neofetch config and add instructions to README on how to add it to ~/bin
+- 
 - Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed
 - Figure out why xmobar is hidden by windows by default
 - reverse scroll direction
@@ -26,6 +28,8 @@
 - wicd-curses -> wifi name -> Preferences -> Check "Automatically reconnect on connection loss"
   - see if this can be included in repo in some config file
 - manually download/install google-chrome .deb?
+- maybe make a new games.md for the install instructions for games
+- make syncthing-browser binary that starts syncthing if needed then opens it in a browser
 
 
 #### Install steps on a fresh Debian (Testing) machine
@@ -147,34 +151,59 @@
 
 9. Install discord
 
-    Download latest deb from https://discordapp.com/download
     ```bash
+    # Download latest deb from https://discordapp.com/download
     wget https://dl.discordapp.net/apps/linux/0.0.9/discord-0.0.9.deb
     sudo dpkg -i discord-0.0.9.deb
     sudo apt install -f
+    discord
     ```
 
 9. Install Parsec
 
-    Download latest 'parsec for ubuntu' from parsecs site
-    NOTE: it segfaulted the first (and maybe second) time I ran it - eventually it became stable /shrug
     ```bash
+    # Download latest 'parsec for ubuntu' from parsecs site
+    # NOTE: it segfaulted the first (and maybe second) time I ran it - eventually it became stable /shrug
     sudo dpkg -i parsec-linux.deb
     parsec
     ```
 
-9. Setup brightness control (only needed on xps 9550)
+9. Setup brightness control (only needed on xps 9550). Add to /etc/sudoers with `sudo visudo`:
 
-    Add to /etc/sudoers with `sudo visudo`:
+    ```bash
     Cmnd_Alias    PLUS = /home/<your_username>/bin/brightness.py
     <your_username> ALL = NOPASSWD: PLUS
+    # try brightness controls (Fn+F11 on xps9550)
+    ```
 
 9. Setup yeganesh (not needed if yeganesh is included in ~/bin/):
 
-    Download latest from [here](dmwit.com/yeganesh)
-    `wget http://dmwit.com/yeganesh/yeganesh-2.5-bin.tar.gz`
-    `tar xf yeganesh*`
-    `cp yeganesh-2.5-bin/yeganesh ~/bin/`
+    ```bash
+    # Download latest from [here](dmwit.com/yeganesh)
+    wget http://dmwit.com/yeganesh/yeganesh-2.5-bin.tar.gz
+    tar xf yeganesh*
+    cp yeganesh-2.5-bin/yeganesh ~/bin/
+    # Try app selector (Super+P)
+    ```
+
+9. Setup dwarf fortress
+
+    ```bash`
+    # Install requirements (listed here http://dwarffortresswiki.org/index.php/DF2014:Installation)
+    sudo dpkg --add-architecture i386
+    sudo apt install libgtk2.0-0 libsdl1.2debian libsdl-image1.2 libglu1-mesa libopenal1 libsdl-ttf2.0-0
+    # Download latest version from [here](http://www.bay12games.com/dwarves/)
+    wget http://www.bay12games.com/dwarves/df_44_12_linux.tar.bz2
+    tar xf df_*
+    DF_PATH="$PWD/df_linux"
+    echo -e '#!/usr/bin/env bash\ncd' $DF_PATH '\n./df' > ~/bin/dwarf_fortress
+    chmod +x ~/bin/dwarf_fortress
+    dwarf_fortress
+    # TODO: include Cheepicus_12x12.png in repo
+    # TODO: symlink df_linux/data/saves into syncthing once syncthing setup is done
+    # TODO: include instructions for adding dfhack (download latest version, extract over df_linux)
+
+    ```
 
 
 #### Favorite Firefox Add-ons

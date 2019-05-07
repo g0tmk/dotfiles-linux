@@ -33,7 +33,8 @@ color1: #E84F4F
 
 
 *transparent: true
-*shading: 10
+!*shading: 10
+*shading: 5
 !*font: xft:Monospace:pixelsize=12
 !*font: 7x14
 !*boldFont: xft:Monospace:bold:pixelsize=16

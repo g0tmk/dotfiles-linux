@@ -10,7 +10,7 @@ Config { font = "xft:Terminus:pixelsize=12:style=Regular"
         , borderWidth = 0
         , border = TopB
         , bgColor = "black"
-        , alpha = 200
+        , alpha = 242
         , fgColor = "grey"
         , position = TopW L 100
         , iconOffset = 6

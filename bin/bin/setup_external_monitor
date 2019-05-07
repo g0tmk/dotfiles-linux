@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Automatically setup external monitor
+#  - resolution is set to default
+#  - HDMI1 and DP1 are enabled if they are detected and configured to the left of primary
+#
+# TODOS:
+#  - Modify to iterate over displays instead of repeating so much code
+
+xrandr_command="/usr/bin/xrandr"
+sed_command="/bin/sed"
+INTERNAL_DISPLAY_NAME="eDP1"
+
+extra_params=""
+
+if [ "$1" = "--rotate" ]; then
+    echo "Rotating external display(s) right"
+    extra_params+=" --rotate right"
+fi
+
+DISPLAY_TO_CHECK="HDMI1"
+is_display_connected=`DISPLAY=:0 $xrandr_command | $sed_command -n '/$DISPLAY_TO_CHECK connected/p'`
+if [ -n "$is_display_connected" ]; then
+    echo "Enabling display $DISPLAY_TO_CHECK"
+    DISPLAY=:0 $xrandr_command --output "$DISPLAY_TO_CHECK" --auto --left-of "$INTERNAL_DISPLAY_NAME" $extra_params
+else
+    DISPLAY=:0 $xrandr_command --output "$DISPLAY_TO_CHECK" --off
+fi
+
+DISPLAY_TO_CHECK="HDMI-1"
+is_display_connected=`DISPLAY=:0 $xrandr_command | $sed_command -n '/$DISPLAY_TO_CHECK connected/p'`
+if [ -n "$is_display_connected" ]; then
+    echo "Enabling display $DISPLAY_TO_CHECK"
+    DISPLAY=:0 $xrandr_command --output "$DISPLAY_TO_CHECK" --auto --left-of "$INTERNAL_DISPLAY_NAME" $extra_params
+else
+    DISPLAY=:0 $xrandr_command --output "$DISPLAY_TO_CHECK" --off
+fi
+
+DISPLAY_TO_CHECK="DP1"
+is_display_connected=`DISPLAY=:0 $xrandr_command | $sed_command -n '/$DISPLAY_TO_CHECK connected/p'`
+if [ -n "$is_display_connected" ]; then
+    echo "Enabling display $DISPLAY_TO_CHECK"
+    DISPLAY=:0 $xrandr_command --output "$DISPLAY_TO_CHECK" --auto --left-of "$INTERNAL_DISPLAY_NAME" $extra_params
+else
+    DISPLAY=:0 $xrandr_command --output "$DISPLAY_TO_CHECK" --off
+fi
+
+DISPLAY_TO_CHECK="VGA-1"
+is_display_connected=`DISPLAY=:0 $xrandr_command | $sed_command -n '/$DISPLAY_TO_CHECK connected/p'`
+if [ -n "$is_display_connected" ]; then
+    echo "Enabling display $DISPLAY_TO_CHECK"
+    DISPLAY=:0 $xrandr_command --output "$DISPLAY_TO_CHECK" --auto --left-of "$INTERNAL_DISPLAY_NAME" $extra_params
+else
+    DISPLAY=:0 $xrandr_command --output "$DISPLAY_TO_CHECK" --off
+fi
+
+
+
+# re-init some settings since changing monitor config breaks:
+#  wallpaper tiling
+#  conky location
+sleep 2
+sh ~/.fehbg &
+killall -SIGUSR1 conky
+

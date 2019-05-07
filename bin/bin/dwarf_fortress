@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+cd /home/g0tmk/Downloads/df_linux 
+
+# runs DFHack instead of df directly
+#./df
+./dfhack

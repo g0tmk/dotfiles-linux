@@ -14,7 +14,7 @@ NEW_TILESET="Cheepicus_12x12.png";
 #### Parse parameters
 if [ $# -eq 0 ]
 then
-    echo "Usage: $0 [--xsmall] [--small] [--large]"
+    echo "Usage: $0 [--xsmall] [--small] [--large] [--xlarge]"
     exit 1
 fi
 
@@ -32,6 +32,10 @@ do
         --large)
             NEW_TILESET="Cheepicus_12x12.png";
             echo "large selected ($NEW_TILESET)"
+            ;;
+        --xlarge)
+            NEW_TILESET="Anikki_square_16x16.png";
+            echo "xlarge selected ($NEW_TILESET)"
             ;;
         #--*) echo "bad option $1"
         #    ;;

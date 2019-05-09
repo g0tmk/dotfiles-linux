@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+# Clipboard wrapper that is easier to use than xclip
+# Based on https://www.linuxquestions.org/questions/linux-software-2/bash-scripting-pipe-input-to-script-vs-%241-570945/
+
+# Terminal -> clipboard:
+#  - echo "words" | clipboard
+#  - clipboard < file.txt
+#
+# Clipboard -> Terminal:
+#  - clipboard | less
+
+
+if readlink /proc/$$/fd/0 | grep -q "^pipe:"; then
+    # Pipe input (echo abc | myscript)
+    cat | xclip -sel clip
+elif readlink /proc/$$/fd/0 | grep -q "^/dev"; then
+    # Terminal input (keyboard) means no pipe/file input; so output clipboard
+    xclip -sel clip -o
+else
+    # File input (myscript < file.txt)
+    cat | xclip -sel clip
+fi
+
+

@@ -30,6 +30,8 @@
 - manually download/install google-chrome .deb?
 - maybe make a new games.md for the install instructions for games
 - make syncthing-browser binary that starts syncthing if needed then opens it in a browser
+- add `qrcode` binary that can accept from stdin (or filename arg maybe) and display qr in terminal
+  - bonus: use unicode to increase pixel resolution OR generate an image the terminal can understand (like ranger)
 
 
 #### Install steps on a fresh Debian (Testing) machine
@@ -141,8 +143,7 @@
     ```bash
     sudo apt install flatpak
     flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    flatpak remote-add --user --if-not-exists barrier https://debauchee.github.io/barrier/repo/barrier.flatpakrepo
-    flatpak install --user barrier com.github.debauchee.barrier
+    flatpak install --user flathub com.github.debauchee.barrier
     flatpak run com.github.debauchee.barrier
     echo -e '#!/bin/sh\nflatpak run com.github.debauchee.barrier' > ~/bin/barrier; chmod +x ~/bin/barrier
     barrier

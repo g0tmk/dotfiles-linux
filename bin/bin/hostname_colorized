@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# range of colors to use. 1-15 is basic color palatte minus black (0)
+MIN_COLOR_TO_USE=1
+MAX_COLOR_TO_USE=15
+
+
+colors_in_range=$(( 1 + $MAX_COLOR_TO_USE - $MIN_COLOR_TO_USE ))
+reset_color_code=$(tput sgr0)
+
+hash_command () {
+    # MD5 version
+    #md5sum | awk '{print $1}'
+    # SHA1 version
+    openssl sha1 | sed -e 's/(stdin)= //g'
+}
+
+hostname=$(cat /etc/hostname)
+
+hashed_hostname=$(echo $hostname | hash_command)
+
+# pull out first two hex characters and convert to a 0-255 int
+first_byte_of_hash=$((16#${hashed_hostname:0:2}))
+
+# use first_byte_of_hash (0-255 scale) and map it to color range (1-15 scale unless modified above)
+color_to_use=$(( $MIN_COLOR_TO_USE + ( $first_byte_of_hash / (256 / $colors_in_range) ) ))
+
+color_code=$(tput setaf $color_to_use)
+printf "%s" "${color_code}${hostname}${reset_color_code}"

@@ -7,6 +7,12 @@
 
 export PATH=~/bin:$PATH
 
+## Load pws prompt and add path to RPROMPT. TODO: get g0tmk prompt off bmbp
+autoload -U promptinit
+promptinit
+prompt pws
+RPROMPT="%F{green}%~%f"
+
 ## Source Prezto.
 #if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 #  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"

@@ -1,6 +1,57 @@
 #!/usr/bin/env bash
-cd /home/g0tmk/Downloads/df_linux 
 
-# runs DFHack instead of df directly
+# TODO: clearly this should be moved to a better place
+DF_PATH="$HOME/Downloads/df_linux"
+DF_CONFIG_PATH="./data/init/init.txt"
+DF_ART_PATH="./data/art"
+
+cd "$DF_PATH"
+
+#### Default options
+NEW_TILESET="Cheepicus_12x12.png";
+
+
+#### Parse parameters
+if [ $# -eq 0 ]
+then
+    echo "Usage: $0 [--xsmall] [--small] [--large]"
+    exit 1
+fi
+
+while test $# -gt 0
+do
+    case "$1" in
+        --xsmall)
+            NEW_TILESET="Anikki_square_8x8.png";
+            echo "xsmall selected ($NEW_TILESET)"
+            ;;
+        --small)
+            NEW_TILESET="Anikki_square_10x10.png";
+            echo "small selected ($NEW_TILESET)"
+            ;;
+        --large)
+            NEW_TILESET="Cheepicus_12x12.png";
+            echo "large selected ($NEW_TILESET)"
+            ;;
+        #--*) echo "bad option $1"
+        #    ;;
+        #*) echo "argument $1"
+        #    ;;
+    esac
+    shift
+done
+
+
+#### Change tileset if needed
+ALL_TILESETS=$DF_ART_PATH/*.png
+for f in $ALL_TILESETS
+do
+    # replace the GRAPHICS_FONT option only
+    f=$(basename $f)
+    sed -i "s/GRAPHICS_FONT:$f/GRAPHICS_FONT:$NEW_TILESET/g" $DF_CONFIG_PATH
+done
+
+
+##### Run DFHack
 #./df
 ./dfhack

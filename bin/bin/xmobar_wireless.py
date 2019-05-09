@@ -11,6 +11,7 @@ compatible so setups using it should require no config file modifications."""
 from __future__ import print_function
 import subprocess
 import re
+import sys
 
 # constant for now - it seems to always be in the same location
 _IWCONFIG_BINARY = "/sbin/iwconfig"
@@ -147,7 +148,7 @@ if __name__ == "__main__":
 
     essid, quality = get_wireless_info()
     if essid is None:
-        print("Not connected", end="")
+        print("Wifi not connected", end="")
         sys.exit(0)
 
     if quality < float(args.Low):

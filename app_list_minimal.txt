@@ -42,6 +42,7 @@ rsync
 rxvt-unicode-256color
 scrot
 speedtest-cli
+stow
 suckless-tools
 tmux
 trayer

@@ -36,27 +36,30 @@
 
 0. Install Debian minimal system, install only "Standard System Utilities" and "Laptop" if needed.
 
-1. Install base software
+0. Install base software
 
     ```bash
     sudo apt update
-    sudo apt install git stow apt-transport-https
+    sudo apt install git apt-transport-https
     git clone git://github.com/g0tmk/dotfiles-linux.git ~/dotfiles
     cd ~/dotfiles
-    sudo apt install -y $(< ~/dotfiles/app_list_minimal.txt)
-    sudo apt install -y $(< ~/dotfiles/app_list_extras.txt) # optional
+    ./install.sh
     ```
 
-2. Set zsh as default shell
+0. Set zsh as default shell
 
     ```bash
     chsh -s /bin/zsh
-    # unpack only the zsh dotfiles for now
-    cd ~/dotfiles
-    stow zsh/
     ```
 
-3. Install virtualbox (from [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22))
+0. Set rxvt-unicode as default terminal emulator #TODO: do later; skipped
+
+    ```bash
+    # note: I did not need to run this. run '--display' instead of set to check
+    sudo update-alternatives --set x-terminal-emulator /usr/bin/urxvt
+    ```
+
+0. Install virtualbox (from [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22))
 
     ```bash
     # install virtualbox using their apt source:
@@ -68,7 +71,7 @@
     # you can now run `virtualbox`
     ```
 
-4. Install sublime text & sublime merge (from [here](https://www.sublimetext.com/docs/3/linux_repositories.html))
+0. Install sublime text & sublime merge (from [here](https://www.sublimetext.com/docs/3/linux_repositories.html))
 
     ```bash
     # install using their apt source:
@@ -79,7 +82,7 @@
     # you can now run `subl` and `smerge`
     ```
 
-5. Install firefox stable (from [here](https://wiki.debian.org/Firefox#Firefox_Stable.2C_Beta_and_Nightly))
+0. Install firefox stable (from [here](https://wiki.debian.org/Firefox#Firefox_Stable.2C_Beta_and_Nightly))
 
     ```bash
     # download firefox from website and extract to a directory in home:
@@ -90,52 +93,7 @@
     ln -s ~/.mozilla/firefox/firefox ~/bin/firefox
     ```
 
-6. Set rxvt-unicode as default terminal emulator #TODO: do later; skipped
-
-    ```bash
-    # note: I did not need to run this. run '--display' instead of set to check
-    sudo update-alternatives --set x-terminal-emulator /usr/bin/urxvt
-    ```
-
-7. Install Powerline #TODO: do later; skipped
-
-    ```bash
-    sudo apt-get install -y python-pip
-    sudo pip install git+git://github.com/Lokaltog/powerline
-    wget https://github.com/Lokaltog/powerline/raw/develop/font/PowerlineSymbols.otf
-    wget https://github.com/Lokaltog/powerline/raw/develop/font/10-powerline-symbols.conf
-    sudo mv PowerlineSymbols.otf /usr/share/fonts/
-    sudo fc-cache -vf
-    sudo mv 10-powerline-symbols.conf /etc/fonts/conf.d/
-    ```
-
-8. Install prezto #TODO: do later; skipped
-
-    ```bash
-    git clone --recursive https://github.com/sorin-ionescu/prezto.git ~/.zprezto
-    ```
-
-9. Install Tmuxinator #TODO: do later; skipped
-
-    ```bash
-    sudo gem install tmuxinator
-    ```
-
-9. Stow dotfiles
-
-    ```bash
-    cd ~/dotfiles
-    stow $(ls -d ^etc(/))
-    ```
-
-9. Haskell Tools (optional) #TODO: do later; skipped
-
-    ```bash
-    curl -sSL https://get.haskellstack.org/ | sh
-    stack install ghc-mod hlint hasktags codex hscope pointfree pointful hoogle hindent apply-refact
-    ```
-
-9. Install barrier
+0. Install barrier
 
     ```bash
     sudo apt install flatpak
@@ -147,7 +105,7 @@
     # follow in-gui instructions
     ```
 
-9. Install discord
+0. Install discord
 
     ```bash
     # Download latest deb from https://discordapp.com/download
@@ -157,7 +115,7 @@
     discord
     ```
 
-9. Install Parsec
+0. Install Parsec
 
     ```bash
     # Download latest 'parsec for ubuntu' from parsecs site
@@ -166,7 +124,7 @@
     parsec
     ```
 
-9. Setup brightness control (only needed on xps 9550). Add to /etc/sudoers with `sudo visudo`:
+0. Setup brightness control (only needed on xps 9550). Add to /etc/sudoers with `sudo visudo`:
 
     ```bash
     Cmnd_Alias    PLUS = /home/<your_username>/bin/brightness.py
@@ -174,7 +132,7 @@
     # try brightness controls (Fn+F11 on xps9550)
     ```
 
-9. Setup yeganesh (not needed if yeganesh is included in ~/bin/):
+0. Setup yeganesh (not needed if yeganesh is included in ~/bin/):
 
     ```bash
     # Download latest from [here](dmwit.com/yeganesh)
@@ -184,7 +142,7 @@
     # Try app selector (Super+P)
     ```
 
-9. Setup dwarf fortress
+0. Setup dwarf fortress
 
     ```bash
     # Install requirements (listed here http://dwarffortresswiki.org/index.php/DF2014:Installation)
@@ -203,7 +161,7 @@
 
     ```
 
-9. Install syncthing [from guide here](https://apt.syncthing.net/)
+0. Install syncthing [from guide here](https://apt.syncthing.net/)
 
     ```bash
     # Add the release PGP keys:
@@ -215,6 +173,24 @@
     # Update and install syncthing:
     sudo apt-get update
     sudo apt-get install syncthing
+    ```
+
+0. Install Powerline #TODO: do later; skipped
+
+    ```bash
+    sudo apt-get install -y python-pip
+    sudo pip install git+git://github.com/Lokaltog/powerline
+    wget https://github.com/Lokaltog/powerline/raw/develop/font/PowerlineSymbols.otf
+    wget https://github.com/Lokaltog/powerline/raw/develop/font/10-powerline-symbols.conf
+    sudo mv PowerlineSymbols.otf /usr/share/fonts/
+    sudo fc-cache -vf
+    sudo mv 10-powerline-symbols.conf /etc/fonts/conf.d/
+    ```
+
+0. Install Tmuxinator #TODO: do later; skipped
+
+    ```bash
+    sudo gem install tmuxinator
     ```
 
 #### Favorite Firefox Add-ons

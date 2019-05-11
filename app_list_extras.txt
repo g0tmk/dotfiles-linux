@@ -1,6 +1,4 @@
 
-0ad
+gimp
 lutris
-neofetch
-openssh-server
 

@@ -3,6 +3,7 @@ ack
 alsa-utils
 apt-listbugs
 apt-listchanges
+bc
 binutils
 build-essential
 cifs-utils
@@ -11,6 +12,7 @@ coreutils
 curl
 debian-handbook
 dos2unix
+dzen2
 fcrackzip
 feh
 ffmpeg
@@ -23,12 +25,14 @@ grep
 htop
 iftop
 iotop
+less
 libreoffice
 lshw
 lxappearance
 mercurial
 mtr
 nmap
+openssh-client
 openssh-server
 p7zip-full
 pv
@@ -39,11 +43,13 @@ rxvt-unicode-256color
 scrot
 speedtest-cli
 suckless-tools
-syncthing
 tmux
 trayer
 tree
+ttf-mscorefonts-installer
+unzip
 vim
+vlc
 watch
 wget
 wicd-curses
@@ -53,5 +59,6 @@ xfonts-terminus
 xmobar
 xmonad
 xorg
+xpdf
 zsh
 

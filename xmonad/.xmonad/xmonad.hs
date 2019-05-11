@@ -53,7 +53,7 @@ main = do
                  -- Mod+p: yeganesh (w/ custom fonts and stuff) NOTE: "$()" syntax will execute the output (yeganesh only outputs the binary's name)
                  --, ((mod4Mask, xK_p), spawn "dmenu_run -fn -*-terminus-*-r-*-*-12-*-*-*-*-*-*-* -nb bisque3 -nf grey35 -sb bisque1 -sf grey10")
                  --, ((mod4Mask, xK_p), spawn "dmenu_run -fn 'Terminus::pixelsize=12:antialias=0'")
-                 , ((mod4Mask, xK_p), spawn "$(~/bin/yeganesh -x -- -fn 'Terminus::pixelsize=12:antialias=0')")
+                 , ((mod4Mask, xK_p), spawn "$(~/bin/yeganesh -x -- -nb #000000 -fn 'Terminus::pixelsize=12:antialias=0')")
                  -- Multimedia keys
                  -- XF86MonBrightnessUp
                  -- NOTE: x220 seems to do this automatically so we need a way to disable it there; for now, I did not add brightness.py to the sudoers file... its a workaround but should be fixed asap

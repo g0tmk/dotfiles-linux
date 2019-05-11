@@ -2,20 +2,17 @@
 
 
 #### TODO:
-- ~~Xmobar config wifi adapter name only works with wifi on xps9550~~
-- add neofetch config and add instructions to README on how to add it to ~/bin
-- 
 - Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed
 - Figure out why xmobar is hidden by windows by default
 - reverse scroll direction
-- Remove prezto files/references
+- ~~Remove prezto files/references~~
 - Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
 - modify tmux config to not show stats on bottom bar that are already in xmobar
 - check out fasd (and jetho's repo)
 - check out YouCompleteMe (https://github.com/Valloric/YouCompleteMe)
+- check out freerdp-x11
 - login to firefox to sync maybe? its a pain to re-setup
 - figure out a good way to save some of fstab's contents (NASes etc). maybe have a file that you append to current fstab during setup?
-- add yeganesh
 - figure out where fieryturk comes from (it is used in .xmobarrc)
 - compare envypn font (from [here](https://bbs.archlinux.org/viewtopic.php?id=144462) with terminus font)
 - check out polybar [here](https://github.com/jaagr/polybar)
@@ -26,12 +23,13 @@
 - eventually add gtk theme
   - [Fantome](https://github.com/addy-dclxvi/gtk-theme-collections)
 - wicd-curses -> wifi name -> Preferences -> Check "Automatically reconnect on connection loss"
-  - see if this can be included in repo in some config file
-- manually download/install google-chrome .deb?
+  - was set on x220, maybe is default option
+- ~~manually download/install google-chrome .deb?~~
 - maybe make a new games.md for the install instructions for games
 - make syncthing-browser binary that starts syncthing if needed then opens it in a browser
 - add `qrcode` binary that can accept from stdin (or filename arg maybe) and display qr in terminal
   - bonus: use unicode to increase pixel resolution OR generate an image the terminal can understand (like ranger)
+- check out [rofi](https://github.com/davatorium/rofi) (dmenu/yeganesh replacement)
 
 
 #### Install steps on a fresh Debian (Testing) machine
@@ -45,7 +43,6 @@
     sudo apt install git stow apt-transport-https
     git clone git://github.com/g0tmk/dotfiles-linux.git ~/dotfiles
     cd ~/dotfiles
-    sudo apt update
     sudo apt install -y $(< ~/dotfiles/app_list_minimal.txt)
     sudo apt install -y $(< ~/dotfiles/app_list_extras.txt) # optional
     ```
@@ -189,7 +186,7 @@
 
 9. Setup dwarf fortress
 
-    ```bash`
+    ```bash
     # Install requirements (listed here http://dwarffortresswiki.org/index.php/DF2014:Installation)
     sudo dpkg --add-architecture i386
     sudo apt install libgtk2.0-0 libsdl1.2debian libsdl-image1.2 libglu1-mesa libopenal1 libsdl-ttf2.0-0
@@ -206,6 +203,19 @@
 
     ```
 
+9. Install syncthing [from guide here](https://apt.syncthing.net/)
+
+    ```bash
+    # Add the release PGP keys:
+    curl -s https://syncthing.net/release-key.txt | sudo apt-key add -
+
+    # Add the "stable" channel to your APT sources:
+    echo "deb https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
+
+    # Update and install syncthing:
+    sudo apt-get update
+    sudo apt-get install syncthing
+    ```
 
 #### Favorite Firefox Add-ons
 - [uBlock Origin](https://addons.mozilla.org/pt-br/firefox/addon/ublock-origin/)
@@ -218,6 +228,7 @@
 - [DownThemAll!](https://addons.mozilla.org/en-us/firefox/addon/downthemall/)
 - [Session Manager](https://addons.mozilla.org/en-us/firefox/addon/session-manager/)
 - [Send to XBMC/Kodi](https://addons.mozilla.org/en-US/firefox/addon/send-to-xbmc/)
+- [Open in VLC media player](https://addons.mozilla.org/en-US/firefox/addon/open-in-vlc/)
 
 #### Notes
 - Wired adapter names:

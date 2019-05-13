@@ -101,7 +101,7 @@ Config { font = "xft:Terminus:pixelsize=12:style=Regular"
                 ]
         , sepChar = "%"
         , alignSep = "}{"
-        , template = "%StdinReader%} %multicpu%%thermal9%%memory%%swap% %dynnetwork%{%wirelessinfo%   %date%   %time%   %battery%%trayerpad%"
+        , template = "%StdinReader%} %multicpu%%thermal9%%memory% %dynnetwork%{%wirelessinfo%   %date%   %time%   %battery%%trayerpad%"
 --        , template = "%StdinReader%} %multicpu%%thermal9%%memory%%swap%%diskio% %dynnetwork%{%wlan0wi%   %date%   %time%   %battery%"
 --        , template = "%StdinReader%} %multicpu%  %memory% %swap%  %dynnetwork%{%wlan0wi%  %date%  %time%  %battery% | %KEMT% "
 --        , template = "%StdinReader% | %multicpu% | %memory% * %swap% | %wlan0% - %eth0% }{<fc=#ee9a00>%date%</fc> | %battery% | %KEMT% "

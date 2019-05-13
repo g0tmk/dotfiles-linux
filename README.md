@@ -2,6 +2,7 @@
 
 
 #### TODO:
+- get syncthing working and autostart it (maybe)
 - Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed
 - Figure out why xmobar is hidden by windows by default
 - reverse scroll direction

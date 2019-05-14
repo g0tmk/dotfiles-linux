@@ -1,7 +1,5 @@
 -- from http://beginners-guide-to-xmonad.readthedocs.io/configure_xmobar.html
 
--- Config { font = "-*-Fixed-*-*-*-*-10-*-*-*-*-*-*-*"
--- Config { font = "-*-Fixed-*-*-*-*-10-*-*-*-*-*-*-*"
 -- Config { font = "xft:Fiery Turk-6"
 -- Config { font = "-*-Fixed-Medium-R-Semicondensed-*-13-*-*-*-*-*-*-*"
 Config { font = "xft:Terminus:pixelsize=12:style=Regular"
@@ -27,14 +25,17 @@ Config { font = "xft:Terminus:pixelsize=12:style=Regular"
                                      , "-S"     , "True"
                                      , "--width" , "8"
                                      ] 20
-                , Run Com "xmobar_wireless.py"     
+                -- Run wireless python script that mimics xmobars wireless plugin. really only
+                -- needed for me because I use this config on multiple PCs and there is not
+                -- a DynWireless plugin
+                , Run Com "xmobar_wireless.py"
                                      ["-t",      "<fn=1>\xf1eb</fn> <essid>:<quality>"
                                      ,"-L"       ,"0"
                                      ,"-H"       ,"32"
                                      ,"--low"    ,"#ff7070"
                                      ,"--normal" ,"#eeba44"
                                      ,"--high"   ,"lightgreen"
-                                     ] "wirelessinfo" 20
+                                     ] "wirelessinfo" 30
                 , Run MultiCpu       [ "--template" ,"<total>%"
                                      , "-L"         , "25"
                                      , "-H"         , "50"
@@ -43,6 +44,7 @@ Config { font = "xft:Terminus:pixelsize=12:style=Regular"
                                      , "--high"     , "#ff7070"
                                      , "--width"    , "6"
                                      ] 10
+                -- TODO: writer a bash script to do this because it glitches after resume from suspend
                 , Run ThermalZone 9  ["-t"          ,"<temp>C"
                                      , "-L"         , "60"       -- units: degC
                                      , "-H"         , "85"       -- units: degC
@@ -58,23 +60,7 @@ Config { font = "xft:Terminus:pixelsize=12:style=Regular"
                                      , "--normal"   , "#eeba44"
                                      , "--high"     , "#ff7070"
                                      , "--width" , "7"
-                                     ] 10
-                , Run Swap           [ "--template" , "<usedratio>%"
-                                     , "-L"         , "25"        -- units: %
-                                     , "-H"         , "70"        -- units: %
-                                     , "--low"      , "lightgreen"
-                                     , "--normal"   , "#eeba44"
-                                     , "--high"     , "#ff0000"
-                                     , "--width" , "7"
-                                     ] 10
-                , Run DiskIO         [("nvme0n1"    , "<total>")] 
-                                     [ "-L"         , "15000000"  --15M     -- units: b/s
-                                     , "-H"         , "30000000"  --30M     -- units: b/s
-                                     , "--low"      , "lightgreen"
-                                     , "--normal"   , "#eeba44"
-                                     , "--high"     , "#ff7070"
-                                     , "--width" , "7"
-                                     ] 10
+                                     ] 30
                 , Run BatteryP ["BAT0"]
                                ["-t"          , "<acstatus>"
                                , "-L"         , "15"
@@ -94,9 +80,9 @@ Config { font = "xft:Terminus:pixelsize=12:style=Regular"
                                          , "--idle-icon-pattern", "<fc=#50aa55><fn=1>\xf0e7</fn></fc>"
                                          , "--on-icon-pattern", "<fn=1>\xf1e6</fn>"
                                ] 100
-                , Run Date "<fn=1>\xf133</fn> %m/%d/%y" "date" 10
+                , Run Date "<fn=1>\xf133</fn> %m/%d/%y" "date" 20
                 , Run Date "<fn=1>\xf017</fn> <fc=#ee9a00>%H:%M:%S</fc>" "time" 10
-                , Run Com "generate-stalonetray-padding-for-xmobar.sh" [] "trayerpad" 10
+                , Run Com "generate-stalonetray-padding-for-xmobar.sh" [] "trayerpad" 50
                 , Run StdinReader
                 ]
         , sepChar = "%"

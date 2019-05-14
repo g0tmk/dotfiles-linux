@@ -2,6 +2,11 @@
 
 
 #### TODO:
+- xmobar temperature readout glitches after wake from suspend
+- get something going that will run slock automatically after ~20 mins of inactivity
+- make a small wrapper around amixer that allows higher-level logic (ie if sound is
+  muted and you hit the 'volume down' key, set volume to minimum and unmute)
+  - make sure that the wrapper always applies voluem changes before unmuting
 - get syncthing working and autostart it (maybe)
 - Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed
 - Figure out why xmobar is hidden by windows by default
@@ -12,6 +17,7 @@
 - check out fasd (and jetho's repo)
 - check out YouCompleteMe (https://github.com/Valloric/YouCompleteMe)
 - check out freerdp-x11
+- check out nemo - it has a better compact mode than nautilus
 - login to firefox to sync maybe? its a pain to re-setup
 - figure out a good way to save some of fstab's contents (NASes etc). maybe have a file that you append to current fstab during setup?
 - figure out where fieryturk comes from (it is used in .xmobarrc)
@@ -25,7 +31,6 @@
   - [Fantome](https://github.com/addy-dclxvi/gtk-theme-collections)
 - wicd-curses -> wifi name -> Preferences -> Check "Automatically reconnect on connection loss"
   - was set on x220, maybe is default option
-- ~~manually download/install google-chrome .deb?~~
 - maybe make a new games.md for the install instructions for games
 - make syncthing-browser binary that starts syncthing if needed then opens it in a browser
 - add `qrcode` binary that can accept from stdin (or filename arg maybe) and display qr in terminal
@@ -174,6 +179,20 @@
     # Update and install syncthing:
     sudo apt-get update
     sudo apt-get install syncthing
+    ```
+
+0. Install Powertop (check for latest version [here](https://01.org/powertop)
+
+    ```bash
+    sudo apt install libnl-3-dev libnl-genl-3-dev gettext libgettextpo-dev autopoint libncurses5-dev libncursesw5-dev libtool-bin dh-autoreconf
+    wget https://01.org/sites/default/files/downloads//powertop-v2.10.tar.gz
+    tar xvf powertop-v2.10.tar.gz
+    cd powertop-v2.10
+    ./autogen.sh
+    ./configure
+    make
+    sudo make install
+
     ```
 
 0. Install Powerline #TODO: do later; skipped

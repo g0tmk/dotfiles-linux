@@ -9,8 +9,8 @@ HOST_UP_COMMAND="nc -w2 -z 10.0.0.232 3389"
 WAKE_COMMAND="wake_bpc"
 PARSEC_COMMAND="parsec"
 # give the host this many seconds to be 'up' after sending a wake command
-# NOTES: 8 seconds too short
-DELAY_AFTER_WAKE_SECS="10"
+# NOTES: 10 seconds too short
+DELAY_AFTER_WAKE_SECS="13"
 
 until $HOST_UP_COMMAND &> /dev/null
 do

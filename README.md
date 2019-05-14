@@ -2,19 +2,31 @@
 
 
 #### TODO:
-- xmobar temperature readout glitches after wake from suspend
+- maintenence
+  - xps9550 palmrest
+  - xps9550 repaste
+- check grub bootloader (colors not working)
+- push changes on xps
+- fix symlink to bin on x220 and add other binaries
+- push changes on x220
+- check barrier on xps
+- check start_syncthing on xps
+- edit start_syncthing
+  - needs a better name, too bad `syncthing` is taken by the default install
+  - if service running, opens a browser. otherwise it opens after ~4 seconds
 - get something going that will run slock automatically after ~20 mins of inactivity
+- reverse scroll direction
+- add more stuff to left side of xmobar
+- go through tmux conf - there are some weird settings in there
 - make a small wrapper around amixer that allows higher-level logic (ie if sound is
   muted and you hit the 'volume down' key, set volume to minimum and unmute)
   - make sure that the wrapper always applies voluem changes before unmuting
 - get syncthing working and autostart it (maybe)
 - Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed
-- Figure out why xmobar is hidden by windows by default
-- reverse scroll direction
-- ~~Remove prezto files/references~~
 - Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
 - modify tmux config to not show stats on bottom bar that are already in xmobar
 - check out fasd (and jetho's repo)
+- check out [rofi](https://github.com/davatorium/rofi) (dmenu/yeganesh replacement)
 - check out YouCompleteMe (https://github.com/Valloric/YouCompleteMe)
 - check out freerdp-x11
 - check out nemo - it has a better compact mode than nautilus
@@ -23,19 +35,22 @@
 - figure out where fieryturk comes from (it is used in .xmobarrc)
 - compare envypn font (from [here](https://bbs.archlinux.org/viewtopic.php?id=144462) with terminus font)
 - check out polybar [here](https://github.com/jaagr/polybar)
-  - https://old.reddit.com/r/unixporn/comments/bjq866/bspwm_first_time_posting_i_hope_you_guys_like_it_3/
-    - https://raw.githubusercontent.com/jaagr/dots/master/.local/etc/themer/themes/darkpx/polybar
-  - https://i.imgur.com/A6spiZZ.png
-  - https://i.imgur.com/xvlw9iH.png
+  - [screenshot](https://old.reddit.com/r/unixporn/comments/bjq866/bspwm_first_time_posting_i_hope_you_guys_like_it_3/) [dotfiles]( https://raw.githubusercontent.com/jaagr/dots/master/.local/etc/themer/themes/darkpx/polybar)
+  - [screenshot](https://i.imgur.com/A6spiZZ.png)
+  - [screenshot](https://i.imgur.com/xvlw9iH.png)
 - eventually add gtk theme
   - [Fantome](https://github.com/addy-dclxvi/gtk-theme-collections)
 - wicd-curses -> wifi name -> Preferences -> Check "Automatically reconnect on connection loss"
   - was set on x220, maybe is default option
+  - seems to work on xps after boot/wake from suspend
 - maybe make a new games.md for the install instructions for games
-- make syncthing-browser binary that starts syncthing if needed then opens it in a browser
 - add `qrcode` binary that can accept from stdin (or filename arg maybe) and display qr in terminal
   - bonus: use unicode to increase pixel resolution OR generate an image the terminal can understand (like ranger)
-- check out [rofi](https://github.com/davatorium/rofi) (dmenu/yeganesh replacement)
+
+
+#### BUGS
+- xmobar temperature readout glitches after wake from suspend
+- Figure out why xmobar is hidden by windows by default
 
 
 #### Install steps on a fresh Debian (Testing) machine
@@ -179,7 +194,24 @@
     # Update and install syncthing:
     sudo apt-get update
     sudo apt-get install syncthing
+    # run binary which then runs syncthing:
+    start_syncthing
     ```
+
+0. Set up grub:
+
+    - Edit /etc/default/grub:
+      - change GRUB_TIMEOUT to 2
+      - add these lines to set color:
+      
+    ```bash
+    # colors: https://help.ubuntu.com/community/Grub2/Displays#GRUB_2_Colors
+    # set normal text to light-blue on black background
+    GRUB_COLOR_NORMAL="light-blue/black"
+    # set highlighted text to light-cyan on blue background
+    GRUB_COLOR_HIGHLIGHT="light-cyan/blue"
+    ```
+    - Run `sudo update-grub` to commit changes
 
 0. Install Powertop (check for latest version [here](https://01.org/powertop)
 

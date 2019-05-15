@@ -83,6 +83,8 @@ fi
 #
 # auto-start x at login terminal. this will auto-start xmonad via .xsessionrc
 #
-if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
+if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]] && [[ $(tty) = /dev/tty1 ]]; then
     exec startx
 fi
+
+

@@ -10,7 +10,7 @@
 #
 
 if [[ "$OSTYPE" == darwin* ]]; then
-  export BROWSER='open'
+    export BROWSER='open'
 fi
 
 #
@@ -26,7 +26,7 @@ export PAGER='less'
 #
 
 if [[ -z "$LANG" ]]; then
-  export LANG='en_US.UTF-8'
+    export LANG='en_US.UTF-8'
 fi
 
 #
@@ -38,18 +38,18 @@ typeset -gU cdpath fpath mailpath path
 
 # Set the the list of directories that cd searches.
 cdpath=(
- $cdpath
- /mnt/nas
- /mnt/nas/home
+    $cdpath
+# /mnt/nas
+# /mnt/nas/home
 )
 
 # Set the list of directories that Zsh searches for programs.
 path=(
- /usr/local/{bin,sbin}
- $HOME/.cabal/bin
- $HOME/.xmonad/bin
- $HOME/bin
- $path
+    /usr/local/{bin,sbin}
+    $HOME/.cabal/bin
+    $HOME/.xmonad/bin
+    $HOME/bin
+    $path
 )
 
 #
@@ -63,7 +63,7 @@ export LESS='-g -i -M -R -S -w -z-4'
 
 # Set the Less input preprocessor.
 if (( $+commands[lesspipe.sh] )); then
-  export LESSOPEN='| /usr/bin/env lesspipe.sh %s 2>&-'
+    export LESSOPEN='| /usr/bin/env lesspipe.sh %s 2>&-'
 fi
 
 #
@@ -71,12 +71,18 @@ fi
 #
 
 if [[ ! -d "$TMPDIR" ]]; then
-  export TMPDIR="/tmp/$USER"
-  mkdir -p -m 700 "$TMPDIR"
+    export TMPDIR="/tmp/$USER"
+    mkdir -p -m 700 "$TMPDIR"
 fi
 
 TMPPREFIX="${TMPDIR%/}/zsh"
 if [[ ! -d "$TMPPREFIX" ]]; then
-  mkdir -p "$TMPPREFIX"
+    mkdir -p "$TMPPREFIX"
 fi
 
+#
+# auto-start x at login terminal. this will auto-start xmonad via .xsessionrc
+#
+if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then
+    exec startx
+fi

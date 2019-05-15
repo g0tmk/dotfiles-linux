@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+# Print hostname to stdout colored by hashing the hostname itself. This way
+# each hostname will get a (semi) different but repeatable color.
+
+# since this script will be run on every re-draw of PS1, cache the output
+
+# TODO:
+#  - modify this script to accept any stdin input, hash it, then print out
+#    what it got but coloried. That way you could do `cat /etc/hostname | colorize`
+
+# range of colors to use. 1-15 is basic color palatte minus black (0)
+MIN_COLOR_TO_USE=1
+MAX_COLOR_TO_USE=15
+
+# hash command to use. md5 is faster than sha1, but later md5 wont be supported
+hash_command () {
+    # MD5 version
+    #md5sum | awk '{print $1}'
+    # SHA1 version
+    openssl sha1 | sed -e 's/(stdin)= //g'
+}
+
+# if cached version exists, use that
+if [ -f /tmp/hostname_colorized.cache ]; then
+    printf '%s' "$(</tmp/hostname_colorized.cache)"
+    exit 0
+fi
+
+hostname=$(</etc/hostname)
+
+hashed_hostname=$(hash_command <<< "$hostname")
+
+# pull out first two hex characters and convert to a 0-255 int
+first_byte_of_hash=$((16#${hashed_hostname:0:2}))
+
+colors_in_range=$(( 1 + $MAX_COLOR_TO_USE - $MIN_COLOR_TO_USE ))
+# use first_byte_of_hash (0-255 scale) and map it to color range
+color_to_use=$(( $MIN_COLOR_TO_USE + ( $first_byte_of_hash % $colors_in_range ) ))
+
+reset_color_code=$(tput sgr0)
+color_code=$(tput setaf $color_to_use)
+
+output="${color_code}${hostname}${reset_color_code}"
+echo $output > /tmp/hostname_colorized.cache  # cache the output
+printf "%s" "$output"

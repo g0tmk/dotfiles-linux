@@ -2,64 +2,85 @@
 
 
 #### TODO:
-- ~~Xmobar config wifi adapter name only works with wifi on xps9550~~
-- add neofetch config and add instructions to README on how to add it to ~/bin
-- 
-- Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed
-- Figure out why xmobar is hidden by windows by default
+- maintenence
+  - xps9550 palmrest
+  - xps9550 repaste
+- check grub bootloader (colors not working)
+- push changes on xps
+- fix symlink to bin on x220 and add other binaries
+- push changes on x220
+- check barrier on xps
+- check start_syncthing on xps
+- edit start_syncthing
+  - needs a better name, too bad `syncthing` is taken by the default install
+  - if service running, opens a browser. otherwise it opens after ~4 seconds
+- get something going that will run slock automatically after ~20 mins of inactivity
 - reverse scroll direction
-- Remove prezto files/references
+- add more stuff to left side of xmobar
+- go through tmux conf - there are some weird settings in there
+- make a small wrapper around amixer that allows higher-level logic (ie if sound is
+  muted and you hit the 'volume down' key, set volume to minimum and unmute)
+  - make sure that the wrapper always applies voluem changes before unmuting
+- get syncthing working and autostart it (maybe)
+- Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed
 - Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
 - modify tmux config to not show stats on bottom bar that are already in xmobar
 - check out fasd (and jetho's repo)
+- check out [rofi](https://github.com/davatorium/rofi) (dmenu/yeganesh replacement)
 - check out YouCompleteMe (https://github.com/Valloric/YouCompleteMe)
+- check out freerdp-x11
+- check out nemo - it has a better compact mode than nautilus
 - login to firefox to sync maybe? its a pain to re-setup
 - figure out a good way to save some of fstab's contents (NASes etc). maybe have a file that you append to current fstab during setup?
-- add yeganesh
 - figure out where fieryturk comes from (it is used in .xmobarrc)
 - compare envypn font (from [here](https://bbs.archlinux.org/viewtopic.php?id=144462) with terminus font)
 - check out polybar [here](https://github.com/jaagr/polybar)
-  - https://old.reddit.com/r/unixporn/comments/bjq866/bspwm_first_time_posting_i_hope_you_guys_like_it_3/
-    - https://raw.githubusercontent.com/jaagr/dots/master/.local/etc/themer/themes/darkpx/polybar
-  - https://i.imgur.com/A6spiZZ.png
-  - https://i.imgur.com/xvlw9iH.png
+  - [screenshot](https://old.reddit.com/r/unixporn/comments/bjq866/bspwm_first_time_posting_i_hope_you_guys_like_it_3/) [dotfiles]( https://raw.githubusercontent.com/jaagr/dots/master/.local/etc/themer/themes/darkpx/polybar)
+  - [screenshot](https://i.imgur.com/A6spiZZ.png)
+  - [screenshot](https://i.imgur.com/xvlw9iH.png)
 - eventually add gtk theme
   - [Fantome](https://github.com/addy-dclxvi/gtk-theme-collections)
 - wicd-curses -> wifi name -> Preferences -> Check "Automatically reconnect on connection loss"
-  - see if this can be included in repo in some config file
-- manually download/install google-chrome .deb?
+  - was set on x220, maybe is default option
+  - seems to work on xps after boot/wake from suspend
 - maybe make a new games.md for the install instructions for games
-- make syncthing-browser binary that starts syncthing if needed then opens it in a browser
 - add `qrcode` binary that can accept from stdin (or filename arg maybe) and display qr in terminal
   - bonus: use unicode to increase pixel resolution OR generate an image the terminal can understand (like ranger)
+
+
+#### BUGS
+- xmobar temperature readout glitches after wake from suspend
+- Figure out why xmobar is hidden by windows by default
 
 
 #### Install steps on a fresh Debian (Testing) machine
 
 0. Install Debian minimal system, install only "Standard System Utilities" and "Laptop" if needed.
 
-1. Install base software
+0. Install base software
 
     ```bash
     sudo apt update
-    sudo apt install git stow apt-transport-https
+    sudo apt install git apt-transport-https
     git clone git://github.com/g0tmk/dotfiles-linux.git ~/dotfiles
     cd ~/dotfiles
-    sudo apt update
-    sudo apt install -y $(< ~/dotfiles/app_list_minimal.txt)
-    sudo apt install -y $(< ~/dotfiles/app_list_extras.txt) # optional
+    ./install.sh
     ```
 
-2. Set zsh as default shell
+0. Set zsh as default shell
 
     ```bash
     chsh -s /bin/zsh
-    # unpack only the zsh dotfiles for now
-    cd ~/dotfiles
-    stow zsh/
     ```
 
-3. Install virtualbox (from [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22))
+0. Set rxvt-unicode as default terminal emulator #TODO: do later; skipped
+
+    ```bash
+    # note: I did not need to run this. run '--display' instead of set to check
+    sudo update-alternatives --set x-terminal-emulator /usr/bin/urxvt
+    ```
+
+0. Install virtualbox (from [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22))
 
     ```bash
     # install virtualbox using their apt source:
@@ -71,7 +92,7 @@
     # you can now run `virtualbox`
     ```
 
-4. Install sublime text & sublime merge (from [here](https://www.sublimetext.com/docs/3/linux_repositories.html))
+0. Install sublime text & sublime merge (from [here](https://www.sublimetext.com/docs/3/linux_repositories.html))
 
     ```bash
     # install using their apt source:
@@ -82,7 +103,7 @@
     # you can now run `subl` and `smerge`
     ```
 
-5. Install firefox stable (from [here](https://wiki.debian.org/Firefox#Firefox_Stable.2C_Beta_and_Nightly))
+0. Install firefox stable (from [here](https://wiki.debian.org/Firefox#Firefox_Stable.2C_Beta_and_Nightly))
 
     ```bash
     # download firefox from website and extract to a directory in home:
@@ -93,52 +114,7 @@
     ln -s ~/.mozilla/firefox/firefox ~/bin/firefox
     ```
 
-6. Set rxvt-unicode as default terminal emulator #TODO: do later; skipped
-
-    ```bash
-    # note: I did not need to run this. run '--display' instead of set to check
-    sudo update-alternatives --set x-terminal-emulator /usr/bin/urxvt
-    ```
-
-7. Install Powerline #TODO: do later; skipped
-
-    ```bash
-    sudo apt-get install -y python-pip
-    sudo pip install git+git://github.com/Lokaltog/powerline
-    wget https://github.com/Lokaltog/powerline/raw/develop/font/PowerlineSymbols.otf
-    wget https://github.com/Lokaltog/powerline/raw/develop/font/10-powerline-symbols.conf
-    sudo mv PowerlineSymbols.otf /usr/share/fonts/
-    sudo fc-cache -vf
-    sudo mv 10-powerline-symbols.conf /etc/fonts/conf.d/
-    ```
-
-8. Install prezto #TODO: do later; skipped
-
-    ```bash
-    git clone --recursive https://github.com/sorin-ionescu/prezto.git ~/.zprezto
-    ```
-
-9. Install Tmuxinator #TODO: do later; skipped
-
-    ```bash
-    sudo gem install tmuxinator
-    ```
-
-9. Stow dotfiles
-
-    ```bash
-    cd ~/dotfiles
-    stow $(ls -d ^etc(/))
-    ```
-
-9. Haskell Tools (optional) #TODO: do later; skipped
-
-    ```bash
-    curl -sSL https://get.haskellstack.org/ | sh
-    stack install ghc-mod hlint hasktags codex hscope pointfree pointful hoogle hindent apply-refact
-    ```
-
-9. Install barrier
+0. Install barrier
 
     ```bash
     sudo apt install flatpak
@@ -150,7 +126,7 @@
     # follow in-gui instructions
     ```
 
-9. Install discord
+0. Install discord
 
     ```bash
     # Download latest deb from https://discordapp.com/download
@@ -160,7 +136,7 @@
     discord
     ```
 
-9. Install Parsec
+0. Install Parsec
 
     ```bash
     # Download latest 'parsec for ubuntu' from parsecs site
@@ -169,7 +145,7 @@
     parsec
     ```
 
-9. Setup brightness control (only needed on xps 9550). Add to /etc/sudoers with `sudo visudo`:
+0. Setup brightness control (only needed on xps 9550). Add to /etc/sudoers with `sudo visudo`:
 
     ```bash
     Cmnd_Alias    PLUS = /home/<your_username>/bin/brightness.py
@@ -177,7 +153,7 @@
     # try brightness controls (Fn+F11 on xps9550)
     ```
 
-9. Setup yeganesh (not needed if yeganesh is included in ~/bin/):
+0. Setup yeganesh (not needed if yeganesh is included in ~/bin/):
 
     ```bash
     # Download latest from [here](dmwit.com/yeganesh)
@@ -187,9 +163,9 @@
     # Try app selector (Super+P)
     ```
 
-9. Setup dwarf fortress
+0. Setup dwarf fortress
 
-    ```bash`
+    ```bash
     # Install requirements (listed here http://dwarffortresswiki.org/index.php/DF2014:Installation)
     sudo dpkg --add-architecture i386
     sudo apt install libgtk2.0-0 libsdl1.2debian libsdl-image1.2 libglu1-mesa libopenal1 libsdl-ttf2.0-0
@@ -206,6 +182,68 @@
 
     ```
 
+0. Install syncthing [from guide here](https://apt.syncthing.net/)
+
+    ```bash
+    # Add the release PGP keys:
+    curl -s https://syncthing.net/release-key.txt | sudo apt-key add -
+
+    # Add the "stable" channel to your APT sources:
+    echo "deb https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
+
+    # Update and install syncthing:
+    sudo apt-get update
+    sudo apt-get install syncthing
+    # run binary which then runs syncthing:
+    start_syncthing
+    ```
+
+0. Set up grub:
+
+    - Edit /etc/default/grub:
+      - change GRUB_TIMEOUT to 2
+      - add these lines to set color:
+      
+    ```bash
+    # colors: https://help.ubuntu.com/community/Grub2/Displays#GRUB_2_Colors
+    # set normal text to light-blue on black background
+    GRUB_COLOR_NORMAL="light-blue/black"
+    # set highlighted text to light-cyan on blue background
+    GRUB_COLOR_HIGHLIGHT="light-cyan/blue"
+    ```
+    - Run `sudo update-grub` to commit changes
+
+0. Install Powertop (check for latest version [here](https://01.org/powertop)
+
+    ```bash
+    sudo apt install libnl-3-dev libnl-genl-3-dev gettext libgettextpo-dev autopoint libncurses5-dev libncursesw5-dev libtool-bin dh-autoreconf
+    wget https://01.org/sites/default/files/downloads//powertop-v2.10.tar.gz
+    tar xvf powertop-v2.10.tar.gz
+    cd powertop-v2.10
+    ./autogen.sh
+    ./configure
+    make
+    sudo make install
+
+    ```
+
+0. Install Powerline #TODO: do later; skipped
+
+    ```bash
+    sudo apt-get install -y python-pip
+    sudo pip install git+git://github.com/Lokaltog/powerline
+    wget https://github.com/Lokaltog/powerline/raw/develop/font/PowerlineSymbols.otf
+    wget https://github.com/Lokaltog/powerline/raw/develop/font/10-powerline-symbols.conf
+    sudo mv PowerlineSymbols.otf /usr/share/fonts/
+    sudo fc-cache -vf
+    sudo mv 10-powerline-symbols.conf /etc/fonts/conf.d/
+    ```
+
+0. Install Tmuxinator #TODO: do later; skipped
+
+    ```bash
+    sudo gem install tmuxinator
+    ```
 
 #### Favorite Firefox Add-ons
 - [uBlock Origin](https://addons.mozilla.org/pt-br/firefox/addon/ublock-origin/)
@@ -218,6 +256,7 @@
 - [DownThemAll!](https://addons.mozilla.org/en-us/firefox/addon/downthemall/)
 - [Session Manager](https://addons.mozilla.org/en-us/firefox/addon/session-manager/)
 - [Send to XBMC/Kodi](https://addons.mozilla.org/en-US/firefox/addon/send-to-xbmc/)
+- [Open in VLC media player](https://addons.mozilla.org/en-US/firefox/addon/open-in-vlc/)
 
 #### Notes
 - Wired adapter names:

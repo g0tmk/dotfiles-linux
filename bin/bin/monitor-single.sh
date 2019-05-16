@@ -1,4 +1,4 @@
-# configure displays for the single built-in display (1366x768
+# configure displays for the single built-in display (1366x768)
 
 xrandr --output HDMI-1 --off
 sleep 1

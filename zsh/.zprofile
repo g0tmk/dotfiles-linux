@@ -82,6 +82,10 @@ fi
 
 #
 # auto-start x at login terminal. this will auto-start xmonad via .xsessionrc
+# $DISPLAY is the name of the X display when inside an X server (NOTE: unset over ssh)
+# $XDG_VTNR is the virtual terminal number
+# NOTE: check for tty1 is needed or else new conky windows over SSH will try to call
+# startx (XDG_VTNR is 1 but tty is not 1)
 #
 if [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]] && [[ $(tty) = /dev/tty1 ]]; then
     exec startx

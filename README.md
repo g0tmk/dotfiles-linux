@@ -7,7 +7,7 @@
   - xps9550 repaste
 - check grub bootloader (colors not working)
 - fix symlink to bin on x220 and add other binaries
-- push changes on x220
+- add aliases to yeganesh with [this](https://github.com/8carlosf/dotfiles/blob/master/bin/dmenui)
 - check barrier on xps
 - edit start_syncthing
   - needs a better name, too bad `syncthing` is taken by the default install
@@ -44,6 +44,10 @@
 - maybe make a new games.md for the install instructions for games
 - add `qrcode` binary that can accept from stdin (or filename arg maybe) and display qr in terminal
   - bonus: use unicode to increase pixel resolution OR generate an image the terminal can understand (like ranger)
+- setup auto install for redshift; two manual steps needed after installing via apt:
+  - add `Environment=DISPLAY=:0` to `/usr/lib/systemd/user/redshift.service` under 
+    the [Service] header
+  - run `systemctl --user enable redshift` then `systemctl --user start redshift`
 
 
 #### BUGS

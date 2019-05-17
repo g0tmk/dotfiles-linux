@@ -5,7 +5,11 @@
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
 #
 
+# add custom bin folder
 export PATH=~/bin:$PATH
+
+# add python binaries folder (executables installed by pip are stored here)
+export PATH=~/.local/bin:$PATH
 
 ## Load pws prompt and add path to RPROMPT. TODO: get g0tmk prompt off bmbp
 autoload -U promptinit

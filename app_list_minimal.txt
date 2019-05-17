@@ -38,6 +38,7 @@ p7zip-full
 pv
 ranger
 rdesktop
+redshift
 rsync
 rxvt-unicode-256color
 scrot

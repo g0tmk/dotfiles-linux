@@ -32,6 +32,7 @@ fi
 
 stow_dotfiles () {
     # loop through all folders (except etc) and run stow to install them
+    echo -n "Stowing... "
     for folder in ./*/
     do
         # trim leading ./ and trailing / from the folder (ie "./bin/" to "bin")
@@ -42,9 +43,14 @@ stow_dotfiles () {
             continue
         fi
 
-        echo "Stowing $folder..."
+        echo -n "$folder "
         stow "$folder"
     done
+    echo
+}
+
+install_app_list () {
+    sudo apt install -y $(< "$1")
 }
 
 install_minimal_apps () {
@@ -62,13 +68,12 @@ ask () {
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         $2
-        echo
     fi
+    echo
 }
 
-
-ask "Install minimal apps?" install_minimal_apps
-ask "Install extra apps (games, etc)?" install_extra_apps
+f(){ install_app_list "./app_list_minimal.txt"; }; ask "Install minimal apps?" f
+f(){ install_app_list "./app_list_extras.txt"; }; ask "Install extra apps (games, etc)?" f
 ask "Install dotfiles?" stow_dotfiles
 echo "Done!"
 

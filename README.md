@@ -76,9 +76,9 @@
 - Figure out why xmobar is hidden by windows by default
 
 
-#### Install steps on a fresh Debian (Testing) machine
+#### Install steps on a fresh Debian (Stable) machine
 
-0. Install Debian minimal system, install only "Standard System Utilities" and "Laptop" if needed.
+0. Install Debian minimal system, install only "Standard System Utilities"
 
 0. Install base software
 
@@ -91,10 +91,12 @@
     ./install.sh
     ```
 
-0. Set zsh as default shell
+0. Setup brightness control (only needed on xps 9550). Add to /etc/sudoers with `sudo visudo`:
 
     ```bash
-    chsh -s /bin/zsh
+    Cmnd_Alias    PLUS = /home/<your_username>/bin/brightness.py
+    <your_username> ALL = NOPASSWD: PLUS
+    # try brightness controls (Fn+F11 on xps9550)
     ```
 
 0. Install virtualbox (from [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22))
@@ -163,24 +165,6 @@
     parsec
     ```
 
-0. Setup brightness control (only needed on xps 9550). Add to /etc/sudoers with `sudo visudo`:
-
-    ```bash
-    Cmnd_Alias    PLUS = /home/<your_username>/bin/brightness.py
-    <your_username> ALL = NOPASSWD: PLUS
-    # try brightness controls (Fn+F11 on xps9550)
-    ```
-
-0. Setup yeganesh (not needed if yeganesh is included in ~/bin/):
-
-    ```bash
-    # Download latest from [here](dmwit.com/yeganesh)
-    wget http://dmwit.com/yeganesh/yeganesh-2.5-bin.tar.gz
-    tar xf yeganesh*
-    cp yeganesh-2.5-bin/yeganesh ~/bin/
-    # Try app selector (Super+P)
-    ```
-
 0. Setup dwarf fortress
 
     ```bash
@@ -190,14 +174,10 @@
     # Download latest version from [here](http://www.bay12games.com/dwarves/)
     wget http://www.bay12games.com/dwarves/df_44_12_linux.tar.bz2
     tar xf df_*
-    DF_PATH="$PWD/df_linux"
-    echo -e '#!/usr/bin/env bash\ncd' $DF_PATH '\n./df' > ~/bin/dwarf_fortress
-    chmod +x ~/bin/dwarf_fortress
-    dwarf_fortress
-    # TODO: include Cheepicus_12x12.png in repo
-    # TODO: symlink df_linux/data/saves into syncthing once syncthing setup is done
+    dwarf_fortress --large
+    # TODO: include tilesets in repo
+    # TODO: symlink df_linux/data/saves into syncthing
     # TODO: include instructions for adding dfhack (download latest version, extract over df_linux)
-
     ```
 
 0. Install syncthing [from guide here](https://apt.syncthing.net/)
@@ -229,6 +209,7 @@
     # set highlighted text to light-cyan on blue background
     GRUB_COLOR_HIGHLIGHT="light-cyan/blue"
     ```
+
     - Run `sudo update-grub` to commit changes
 
 0. Install Powertop (check for latest version [here](https://01.org/powertop)
@@ -244,6 +225,7 @@
     sudo make install
 
     ```
+
 0. Install tlp (laptop only) from guide [here](https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#installation)
 
  - Option 1: install from backports. This is the easiest way to get a fairly recent
@@ -286,14 +268,17 @@
     sudo tlp-stat -s
     ```
 
-0. Set rxvt-unicode as default terminal emulator #TODO: do later; skipped
+0. ~~Setup yeganesh:~~ Yeganesh is included in ~/bin/.
 
     ```bash
-    # note: I did not need to run this. run '--display' instead of set to check
-    sudo update-alternatives --set x-terminal-emulator /usr/bin/urxvt
+    # Download latest from [here](dmwit.com/yeganesh)
+    wget http://dmwit.com/yeganesh/yeganesh-2.5-bin.tar.gz
+    tar xf yeganesh*
+    cp yeganesh-2.5-bin/yeganesh ~/bin/
+    # Try app selector (Super+P)
     ```
 
-0. Install Powerline #TODO: do later; skipped
+0. ~~Install Powerline:~~ skipped
 
     ```bash
     sudo apt-get install -y python-pip
@@ -305,7 +290,7 @@
     sudo mv 10-powerline-symbols.conf /etc/fonts/conf.d/
     ```
 
-0. Install Tmuxinator #TODO: do later; skipped
+0. ~~Install Tmuxinator:~~ skipped
 
     ```bash
     sudo gem install tmuxinator

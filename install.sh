@@ -2,6 +2,7 @@
 
 set -eEuo pipefail
 
+
 ######## PRE-INSTALL CHECKS
 
 # verifies we are running this from the right place (dotfiles dir) by checking
@@ -28,7 +29,23 @@ if [ $(apt list --upgradeable 2>/dev/null | wc -l) != "1" ]; then
     exit 1
 fi
 
-######## INSTALLER FUNCTIONS - ONE PER CATEGORY
+
+######## INSTALLER FUNCTIONS
+
+ask () {
+    # asks for confirmation. param1 is question, param2 is function to run if yes
+    read -p "$1 [y/n]" -n 1 -r
+    echo    # (optional) move to a new line
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        $2
+    fi
+    echo
+}
+
+install_apps () {
+    #sudo apt install -y $(< "$1")
+    sudo apt install $(< "$1")
+}
 
 stow_dotfiles () {
     # loop through all folders (except etc) and run stow to install them
@@ -49,31 +66,18 @@ stow_dotfiles () {
     echo
 }
 
-install_app_list () {
-    sudo apt install -y $(< "$1")
+change_settings () {
+    echo "Changing shell to zsh..."
+    chsh -s /bin/zsh
+    echo "Changing terminal to urxvt..."
+    update-alternatives --set x-terminal-emulator /usr/bin/urxvt
 }
 
-install_minimal_apps () {
-    sudo apt install -y $(< ./app_list_minimal.txt)
-}
 
-install_extra_apps () {
-    sudo apt install -y $(< ./app_list_extras.txt)
-}
-
-ask () {
-    # asks for confirmation. param1 is question, param2 is function to run if yes
-    read -p "$1 [y/n]" -n 1 -r
-    echo    # (optional) move to a new line
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        $2
-    fi
-    echo
-}
-
-f(){ install_app_list "./app_list_minimal.txt"; }; ask "Install minimal apps?" f
-f(){ install_app_list "./app_list_extras.txt"; }; ask "Install extra apps (games, etc)?" f
+f(){ install_apps "./app_list_minimal.txt"; }; ask "Install minimal apps?" f
+f(){ install_apps "./app_list_extras.txt"; }; ask "Install extra apps (games, etc)?" f
 ask "Install dotfiles?" stow_dotfiles
+ask "Change settings (shell, alternatives)?" change_settings
 echo "Done!"
+
 

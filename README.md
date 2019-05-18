@@ -246,12 +246,44 @@
     ```
 0. Install tlp (laptop only) from guide [here](https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#installation)
 
+ - Option 1: install from backports. This is the easiest way to get a fairly recent
+   version.
+
     ```bash
     sudo bash -c "echo 'deb https://deb.debian.org/debian stretch-backports main' >> /etc/apt/sources.list"
     sudo apt update
     sudo apt-get install -t stretch-backports tlp tlp-rdw 
     sudo vi /etc/default/tlp
     sudo tlp start
+    ```
+
+ - Option 2: install latest tarball from github. Necessary for XPS9550/60 since it has
+   a BIOS bug that was worked-around in TLP 1.2 (<3 you linrunner) see [here](https://github.com/linrunner/TLP/issues/362)
+
+    ```bash
+    # notes here https://linrunner.de/en/tlp/docs/tlp-faq.html#install-config
+    # and more here https://linrunner.de/en/tlp/docs/tlp-developer-documentation.html
+
+    sudo apt install smartmontools network-manager
+    cd /tmp
+    # check for the latest version first
+    wget https://github.com/linrunner/TLP/archive/1.2.2.tar.gz
+    tar xvf 1.2.2.tar.gz
+    cd TLP-1.2.2/
+
+    # install (as root)
+    sudo make install TLP_WITH_SYSTEMD=1
+    sudo make install-man
+    sudo make install-man-rdw
+
+    # Enable the services, i.e. (as root)
+    sudo systemctl enable tlp.service
+    sudo systemctl enable tlp-sleep.service 
+    sudo systemctl mask systemd-rfkill.service
+    sudo systemctl mask systemd-rfkill.socket
+    sudo tlp start
+    # make sure tlp is running
+    sudo tlp-stat -s
     ```
 
 0. Set rxvt-unicode as default terminal emulator #TODO: do later; skipped

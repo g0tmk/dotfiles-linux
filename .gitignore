@@ -1,3 +1,8 @@
+
+# binaries created as part of the install process
+/bin/bin/firefox
+
+# auto-generated files
 xmonad.hi
 xmonad.o
 xmonad.errors

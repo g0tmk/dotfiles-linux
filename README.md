@@ -23,6 +23,28 @@
 - Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed
 - Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
 - modify tmux config to not show stats on bottom bar that are already in xmobar
+- check out dell command | configure; there are builds for linux
+  - NOTE: these links are for dcc 3.3 - use 4.2 instead
+  - [link to download](https://www.dell.com/support/article/us/en/04/sln311302/dell-command-configure?lang=en)
+  - [link to documentation](https://www.dell.com/support/manuals/us/en/04/command-configure-v3.3/dellcommandconfigure-cli-3.3/-primarybatterycfg?guid=guid-681d4efe-eed0-4d0f-b290-afdd74e81765&lang=en-us)
+  - then run `sudo /opt/dell/dcc/cctk` to show usage (and show which options are valid
+    on this system
+  - then configure with `sudo /opt/dell/dcc/cctk --primarybatterycfg=custom:70-90`
+  - NOTE: there are other useful options that may work also:
+    - `--biosver`: show bios version
+    - `--fullscreenlogo`: hide/show logo at post
+    - `--splashscreen` enable or disable, maybe similar to above
+    - `--kbdbacklighttimeoutac` and `--kbdbacklighttimeoutbatt` allow adjusting kbd backlight timeouts
+    - `--keyboardillumination` allow adjusting kbd backlight brightness
+    - `--mfgdate` shows manufacturing date
+    - `--fanspeed` auto, high, medium, medium_high, medium_low, low
+    - `--fanspeedctrllevel` 0-100
+      - 0=auto; higher number provides larger cooling boost
+    - `--sysfanspeed` fullspeed, noisereduce
+    - `--sysname` show system name?
+    - `--thunderboltsecuritylevel` can be used to disable thunderbolt port
+      - nosecurity (thunderbolt enabled), userauthorization, secureconnect, displayport (thunderbolt disabled)
+
 - check out fasd (and jetho's repo)
 - check out [rofi](https://github.com/davatorium/rofi) (dmenu/yeganesh replacement)
 - check out YouCompleteMe (https://github.com/Valloric/YouCompleteMe)
@@ -64,6 +86,7 @@
     ```bash
     sudo apt update
     sudo apt install git apt-transport-https
+    sudo sed -i 's/http:/https:/g' /etc/apt/sources.list
     git clone git://github.com/g0tmk/dotfiles-linux.git ~/dotfiles
     cd ~/dotfiles
     ./install.sh
@@ -110,10 +133,11 @@
     ```bash
     # download firefox from website and extract to a directory in home:
     # TODO: this doesn't work but should: wget https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64&lang=en-US
-    wget https://download-installer.cdn.mozilla.net/pub/firefox/releases/66.0.1/linux-x86_64/en-US/firefox-66.0.1.tar.bz2
+    wget https://download-installer.cdn.mozilla.net/pub/firefox/releases/66.0.5/linux-x86_64/en-US/firefox-66.0.5.tar.bz2
     mkdir ~/bin ~/.mozilla
     tar -xf ./firefox* -C ~/.mozilla
     ln -s ~/.mozilla/firefox/firefox ~/bin/firefox
+    sudo update-alternatives --install /usr/bin/x-www-browser x-www-browser ~/bin/firefox 200
     ```
 
 0. Install barrier
@@ -227,6 +251,15 @@
     make
     sudo make install
 
+    ```
+0. Install tlp (laptop only) from guide [here](https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#installation)
+
+    ```bash
+    sudo bash -c "echo 'deb https://deb.debian.org/debian stretch-backports main' >> /etc/apt/sources.list"
+    sudo apt update
+    sudo apt-get install -t stretch-backports tlp tlp-rdw 
+    sudo vi /etc/default/tlp
+    sudo tlp start
     ```
 
 0. Install Powerline #TODO: do later; skipped

@@ -1,6 +1,5 @@
 ## dotfiles
 
-
 #### TODO:
 - maintenence
   - xps9550 palmrest
@@ -98,13 +97,6 @@
     chsh -s /bin/zsh
     ```
 
-0. Set rxvt-unicode as default terminal emulator #TODO: do later; skipped
-
-    ```bash
-    # note: I did not need to run this. run '--display' instead of set to check
-    sudo update-alternatives --set x-terminal-emulator /usr/bin/urxvt
-    ```
-
 0. Install virtualbox (from [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22))
 
     ```bash
@@ -140,7 +132,7 @@
     sudo update-alternatives --install /usr/bin/x-www-browser x-www-browser ~/bin/firefox 200
     ```
 
-0. Install barrier
+0. Install barrier (instructions from [here](https://github.com/debauchee/barrier/releases/tag/v2.1.2)
 
     ```bash
     sudo apt install flatpak
@@ -262,6 +254,13 @@
     sudo tlp start
     ```
 
+0. Set rxvt-unicode as default terminal emulator #TODO: do later; skipped
+
+    ```bash
+    # note: I did not need to run this. run '--display' instead of set to check
+    sudo update-alternatives --set x-terminal-emulator /usr/bin/urxvt
+    ```
+
 0. Install Powerline #TODO: do later; skipped
 
     ```bash
@@ -306,8 +305,4 @@
 - External display names (in xrandr):
   - x220: HDMI-1 (and probably also VGA-1)
   - xps9550: HDMI1 and DP1
-
-#### Attributions
-- https://gist.github.com/matthewmccullough/787142
-- https://github.com/tpope/vim-sensible
 

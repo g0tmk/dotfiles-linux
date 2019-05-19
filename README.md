@@ -198,14 +198,21 @@
 
     - Edit /etc/default/grub:
       - change GRUB_TIMEOUT to 2
-      - add these lines to set color:
-      
+    - Edit boot/grub/custom.cfg and add the following lines:
+
     ```bash
     # colors: https://help.ubuntu.com/community/Grub2/Displays#GRUB_2_Colors
-    # set normal text to light-blue on black background
-    GRUB_COLOR_NORMAL="light-blue/black"
-    # set highlighted text to light-cyan on blue background
-    GRUB_COLOR_HIGHLIGHT="light-cyan/blue"
+    # normal foreground and background terminal colors
+    set color_normal=light-gray/black
+
+    # highlight foreground and background terminal colors
+    set color_highlight=light-blue/black
+
+    # the foreground and background colors to be used for non-highlighted menu entries
+    set menu_color_normal=light-gray/black
+
+    # the foreground and background colors to be used for the highlighted menu entry
+    set menu_color_highlight=yellow/black
     ```
 
     - Run `sudo update-grub` to commit changes

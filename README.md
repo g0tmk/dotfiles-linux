@@ -5,9 +5,7 @@
   - xps9550 palmrest
   - xps9550 repaste
 - check grub bootloader (colors not working)
-- fix symlink to bin on x220 and add other binaries
 - add aliases to yeganesh with [this](https://github.com/8carlosf/dotfiles/blob/master/bin/dmenui)
-- check barrier on xps
 - edit start_syncthing
   - needs a better name, too bad `syncthing` is taken by the default install
   - if service running, opens a browser. otherwise it opens after ~4 seconds
@@ -17,7 +15,7 @@
 - go through tmux conf - there are some weird settings in there
 - make a small wrapper around amixer that allows higher-level logic (ie if sound is
   muted and you hit the 'volume down' key, set volume to minimum and unmute)
-  - make sure that the wrapper always applies voluem changes before unmuting
+  - make sure that the wrapper always applies volume changes before unmuting
 - get syncthing working and autostart it (maybe)
 - Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed
 - Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
@@ -266,6 +264,24 @@
     sudo tlp start
     # make sure tlp is running
     sudo tlp-stat -s
+    ```
+
+0. Setup Thermald
+
+    ```bash
+    # Check for the latest version in github releases first
+    # Uses install instructions for ubuntu in README.txt in release:
+    cd /tmp
+    wget https://github.com/intel/thermal_daemon/archive/v1.8.tar.gz
+    tar xvf v1.8.tar.gz
+    cd thermal_daemon-1.8
+    sudo apt install autoconf g++ libglib2.0-dev libdbus-1-dev libdbus-glib-1-dev libxml2-dev
+    ./autogen.sh
+    ./configure prefix=/usr
+    make
+    sudo make install
+    sudo systemctl start thermald.service
+    sudo systemctl status thermald.service
     ```
 
 0. ~~Setup yeganesh:~~ Yeganesh is included in ~/bin/.

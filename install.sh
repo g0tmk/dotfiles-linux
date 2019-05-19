@@ -71,6 +71,8 @@ change_settings () {
     chsh -s /bin/zsh
     echo "Changing terminal to urxvt..."
     update-alternatives --set x-terminal-emulator /usr/bin/urxvt
+    echo "Detecting hardware sensors..."
+    sudo sensors-detect
 }
 
 

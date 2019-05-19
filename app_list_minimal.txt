@@ -27,6 +27,7 @@ iftop
 iotop
 less
 libreoffice
+lm-sensors
 lshw
 lxappearance
 mercurial

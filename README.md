@@ -89,12 +89,73 @@
     ./install.sh
     ```
 
-0. Setup brightness control (only needed on xps 9550). Add to /etc/sudoers with `sudo visudo`:
+0. Reverse touchpad scroll direction + enable tap-to-click
+
+    - First, check if this is needed for you. Scroll with your touchpad and if the
+      direction is fine (and you don't care about tapping), skip this section.
+    - Run `xinput --list` to see all input devices. On the xps9550 I saw two touchpads,
+      "DLL06E4:01 06CB:7A13 Touchpad" and "SynPS/2 Synaptics TouchPad". I just ignored
+      the synaptics one. 
+    - Run `xinput --list-props "<device name>"`, you should see many lines starting
+      with "libinput". If they start with "Synaptics" instead, run this to switch to
+      libinput:
+
+    ```bash
+    sudo mkdir /etc/X11/xorg.conf.d
+    # force libinput instead of synaptics by copying the default config to /etc
+    # not sure why this is needed, but on the xps9550 it used synaptics occasionally
+    sudo cp /usr/share/X11/xorg.conf.d/40-libinput.conf /etc/X11/xorg.conf.d/40-libinput.conf
+    ```
+
+    - Run these commands to configure libinput:
+
+    ```bash
+    sudo mkdir /etc/X11/xorg.conf.d
+    sudo vi /etc/X11/xorg.conf.d/50-touchpad-custom.conf
+    # add the following:
+    ```
+
+    ```
+    Section "InputClass"
+        Identifier "libinput touchpad catchall"
+        MatchIsTouchpad "on"
+        MatchDevicePath "/dev/input/event*"
+        Driver "libinput"
+
+        Option "Tapping" "True"
+        Option "TappingDrag" "True"
+        Option "Natural Scrolling" "True"
+    EndSection
+    ```
+
+0. Setup brightness control (not needed on x220). Add to /etc/sudoers with `sudo visudo`:
 
     ```bash
     Cmnd_Alias    PLUS = /home/<your_username>/bin/brightness.py
     <your_username> ALL = NOPASSWD: PLUS
     # try brightness controls (Fn+F11 on xps9550)
+    ```
+
+0. Enable sensors (xps9550 only)
+
+    ```bash
+    # verify dell kernel module is present:
+    modinfo dell-smm-hwmon | grep '^description'
+    # temporarily enable module; ignore_dmi because xps9550 is not a supported system (works anyways)
+    modprobe dell-smm-hwmon ignore_dmi=1
+    # verify module is running (you should see "dell_smm_hwmon: vendor=Dell Inc., ..."
+    sudo dmesg | grep dell_smm_hwmon
+    # verify new sensors are visible (you should see fan RPMs now)
+    sudo sensors
+    # make ignore_dmi=1 permanent:
+    sudo bash -c "echo 'options dell-smm-hwmon ignore_dmi=1' >> /etc/modprobe.d/dell.conf"
+    # configure module to load at boot:
+    sudo bash -c "echo 'dell_smm_hwmon' >> /etc/modules-load.d/dell_smm_hwmon.conf"
+    # tell lm_sensors to load the new module
+    sudo mkdir -p /etc/lm_sensors/conf.d
+    sudo bash -c "echo 'HWMON_MODULES=\"coretemp dell-smm-hwmon\"' >> /etc/lm_sensors/conf.d/dell"
+    # probably a good idea to reboot and verify `sudo sensors` still shows fan RPMs
+    # probably ALSO a good idea to run sensors-detect afterwards, not sure if it is necessary
     ```
 
 0. Install virtualbox (from [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22))
@@ -107,6 +168,9 @@
     sudo apt search virtualbox | grep ^virtualbox  # install the newest available
     sudo apt install virtualbox-6.x
     # you can now run `virtualbox`
+    # NOTE: On first run it will prompt to install an extension pack. This will probably
+    #       fail unless you run virtualbox with sudo. Once installed, you can run it
+    #       normally again (without sudo).
     ```
 
 0. Install sublime text & sublime merge (from [here](https://www.sublimetext.com/docs/3/linux_repositories.html))

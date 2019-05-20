@@ -233,11 +233,26 @@
     sudo apt install flatpak
     flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
     flatpak install --user flathub com.github.debauchee.barrier
-    flatpak run com.github.debauchee.barrier
-    echo -e '#!/bin/sh\nflatpak run com.github.debauchee.barrier' > ~/bin/barrier; chmod +x ~/bin/barrier
     barrier
-    # follow in-gui instructions
     ```
+
+    - In GUI:
+      - Barrier > Change Settings > Set Screen Name
+      - Barrier > Change Settings > Check "Minimize to System Tray"
+      - Barrier > Change Settings > Check "Hide on Startup"
+      - Barrier > Change Settings > Port: 25827
+      - Barrier > Change Settings > Check "Enable SSL"
+      - In main window, Client section, Check "Client" mode
+      - In main window, Client section, type Server IP
+      - Barrier > Save Configuration
+    - For some reason, barrier hangs for me when I run "Save Configuration", so if that
+      happens run `sudo killall barrier` here. Otherwise just close it normally.
+    - Add server IP to config manually because it doesn't stick when set in GUI:
+      - `vi ~/.var/app/com.github.debauchee.barrier/config/Debauchee/Barrier.conf`
+      - Add IP of server after "serverHostname="
+      - Save and exit
+    - Run `barrier` again - this time, the window will not appear but it should
+      immediately connect to the server and the icon will show up in the taskbar.
 
 0. Install discord
 

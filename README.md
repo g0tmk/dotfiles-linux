@@ -1,74 +1,4 @@
-## dotfiles
-
-#### TODO:
-- finish copying info from documents/xps/debian_notes.txt to this repo
-- maintenence
-  - xps9550 palmrest
-  - xps9550 repaste
-- check grub bootloader (colors not working)
-- add aliases to yeganesh with [this](https://github.com/8carlosf/dotfiles/blob/master/bin/dmenui)
-- edit start_syncthing
-  - needs a better name, too bad `syncthing` is taken by the default install
-  - if service running, opens a browser. otherwise it opens after ~4 seconds
-- get something going that will run slock automatically after ~20 mins of inactivity
-- add more stuff to left side of xmobar
-- go through tmux conf - there are some weird settings in there
-- make a small wrapper around amixer that allows higher-level logic (ie if sound is
-  muted and you hit the 'volume down' key, set volume to minimum and unmute)
-  - make sure that the wrapper always applies volume changes before unmuting
-- get syncthing working and autostart it (maybe)
-- Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed
-- Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
-- modify tmux config to not show stats on bottom bar that are already in xmobar
-- check out dell command | configure; there are builds for linux
-  - NOTE: these links are for dcc 3.3 - use 4.2 instead
-  - [link to download](https://www.dell.com/support/article/us/en/04/sln311302/dell-command-configure?lang=en)
-  - [link to documentation](https://www.dell.com/support/manuals/us/en/04/command-configure-v3.3/dellcommandconfigure-cli-3.3/-primarybatterycfg?guid=guid-681d4efe-eed0-4d0f-b290-afdd74e81765&lang=en-us)
-  - then run `sudo /opt/dell/dcc/cctk` to show usage (and show which options are valid
-    on this system
-  - then configure with `sudo /opt/dell/dcc/cctk --primarybatterycfg=custom:70-90`
-  - NOTE: there are other useful options that may work also:
-    - `--biosver`: show bios version
-    - `--fullscreenlogo`: hide/show logo at post
-    - `--splashscreen` enable or disable, maybe similar to above
-    - `--kbdbacklighttimeoutac` and `--kbdbacklighttimeoutbatt` allow adjusting kbd backlight timeouts
-    - `--keyboardillumination` allow adjusting kbd backlight brightness
-    - `--mfgdate` shows manufacturing date
-    - `--fanspeed` auto, high, medium, medium_high, medium_low, low
-    - `--fanspeedctrllevel` 0-100
-      - 0=auto; higher number provides larger cooling boost
-    - `--sysfanspeed` fullspeed, noisereduce
-    - `--sysname` show system name?
-    - `--thunderboltsecuritylevel` can be used to disable thunderbolt port
-      - nosecurity (thunderbolt enabled), userauthorization, secureconnect, displayport (thunderbolt disabled)
-- check out fasd (and jetho's repo)
-- check out [rofi](https://github.com/davatorium/rofi) (dmenu/yeganesh replacement)
-- check out YouCompleteMe (https://github.com/Valloric/YouCompleteMe)
-- check out freerdp-x11
-- check out nemo - it has a better compact mode than nautilus
-- login to firefox to sync maybe? its a pain to re-setup
-- figure out a good way to save some of fstab's contents (NASes etc). maybe have a file that you append to current fstab during setup?
-- figure out where fieryturk comes from (it is used in .xmobarrc)
-- compare envypn font (from [here](https://bbs.archlinux.org/viewtopic.php?id=144462) with terminus font)
-- check out polybar [here](https://github.com/jaagr/polybar)
-  - [screenshot](https://old.reddit.com/r/unixporn/comments/bjq866/bspwm_first_time_posting_i_hope_you_guys_like_it_3/) [dotfiles]( https://raw.githubusercontent.com/jaagr/dots/master/.local/etc/themer/themes/darkpx/polybar)
-  - [screenshot](https://i.imgur.com/A6spiZZ.png)
-  - [screenshot](https://i.imgur.com/xvlw9iH.png)
-- eventually add gtk theme
-  - [Fantome](https://github.com/addy-dclxvi/gtk-theme-collections)
-- maybe make a new games.md for the install instructions for games
-- add `qrcode` binary that can accept from stdin (or filename arg maybe) and display qr in terminal
-  - bonus: use unicode to increase pixel resolution OR generate an image the terminal can understand (like ranger)
-- setup auto install for redshift; two manual steps needed after installing via apt:
-  - add `Environment=DISPLAY=:0` to `/usr/lib/systemd/user/redshift.service` under 
-    the [Service] header
-  - run `systemctl --user enable redshift` then `systemctl --user start redshift`
-
-
-#### BUGS
-- xmobar temperature readout glitches after wake from suspend
-- Figure out why xmobar is hidden by windows by default
-
+## g0tmk's dotfiles
 
 #### Install steps on a fresh Debian (Stable) machine
 
@@ -413,6 +343,7 @@
     sudo gem install tmuxinator
     ```
 
+
 #### Favorite Firefox Add-ons
 - [uBlock Origin](https://addons.mozilla.org/pt-br/firefox/addon/ublock-origin/)
 - [HTTPS Everywhere](https://www.eff.org/https-everywhere)
@@ -425,6 +356,77 @@
 - [Session Manager](https://addons.mozilla.org/en-us/firefox/addon/session-manager/)
 - [Send to XBMC/Kodi](https://addons.mozilla.org/en-US/firefox/addon/send-to-xbmc/)
 - [Open in VLC media player](https://addons.mozilla.org/en-US/firefox/addon/open-in-vlc/)
+
+
+#### TODO:
+- finish copying info from documents/xps/debian_notes.txt to this repo
+- maintenence
+  - xps9550 palmrest
+  - xps9550 repaste
+- check grub bootloader (colors not working)
+- add aliases to yeganesh with [this](https://github.com/8carlosf/dotfiles/blob/master/bin/dmenui)
+- edit start_syncthing
+  - needs a better name, too bad `syncthing` is taken by the default install
+  - if service running, opens a browser. otherwise it opens after ~4 seconds
+- get something going that will run slock automatically after ~20 mins of inactivity
+- add more stuff to left side of xmobar
+- go through tmux conf - there are some weird settings in there
+- make a small wrapper around amixer that allows higher-level logic (ie if sound is
+  muted and you hit the 'volume down' key, set volume to minimum and unmute)
+  - make sure that the wrapper always applies volume changes before unmuting
+- get syncthing working and autostart it (maybe)
+- Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed
+- Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
+- modify tmux config to not show stats on bottom bar that are already in xmobar
+- check out dell command | configure; there are builds for linux
+  - NOTE: these links are for dcc 3.3 - use 4.2 instead
+  - [link to download](https://www.dell.com/support/article/us/en/04/sln311302/dell-command-configure?lang=en)
+  - [link to documentation](https://www.dell.com/support/manuals/us/en/04/command-configure-v3.3/dellcommandconfigure-cli-3.3/-primarybatterycfg?guid=guid-681d4efe-eed0-4d0f-b290-afdd74e81765&lang=en-us)
+  - then run `sudo /opt/dell/dcc/cctk` to show usage (and show which options are valid
+    on this system
+  - then configure with `sudo /opt/dell/dcc/cctk --primarybatterycfg=custom:70-90`
+  - NOTE: there are other useful options that may work also:
+    - `--biosver`: show bios version
+    - `--fullscreenlogo`: hide/show logo at post
+    - `--splashscreen` enable or disable, maybe similar to above
+    - `--kbdbacklighttimeoutac` and `--kbdbacklighttimeoutbatt` allow adjusting kbd backlight timeouts
+    - `--keyboardillumination` allow adjusting kbd backlight brightness
+    - `--mfgdate` shows manufacturing date
+    - `--fanspeed` auto, high, medium, medium_high, medium_low, low
+    - `--fanspeedctrllevel` 0-100
+      - 0=auto; higher number provides larger cooling boost
+    - `--sysfanspeed` fullspeed, noisereduce
+    - `--sysname` show system name?
+    - `--thunderboltsecuritylevel` can be used to disable thunderbolt port
+      - nosecurity (thunderbolt enabled), userauthorization, secureconnect, displayport (thunderbolt disabled)
+- check out fasd (and jetho's repo)
+- check out [rofi](https://github.com/davatorium/rofi) (dmenu/yeganesh replacement)
+- check out YouCompleteMe (https://github.com/Valloric/YouCompleteMe)
+- check out freerdp-x11
+- check out nemo - it has a better compact mode than nautilus
+- login to firefox to sync maybe? its a pain to re-setup
+- figure out a good way to save some of fstab's contents (NASes etc). maybe have a file that you append to current fstab during setup?
+- figure out where fieryturk comes from (it is used in .xmobarrc)
+- compare envypn font (from [here](https://bbs.archlinux.org/viewtopic.php?id=144462) with terminus font)
+- check out polybar [here](https://github.com/jaagr/polybar)
+  - [screenshot](https://old.reddit.com/r/unixporn/comments/bjq866/bspwm_first_time_posting_i_hope_you_guys_like_it_3/) [dotfiles]( https://raw.githubusercontent.com/jaagr/dots/master/.local/etc/themer/themes/darkpx/polybar)
+  - [screenshot](https://i.imgur.com/A6spiZZ.png)
+  - [screenshot](https://i.imgur.com/xvlw9iH.png)
+- eventually add gtk theme
+  - [Fantome](https://github.com/addy-dclxvi/gtk-theme-collections)
+- maybe make a new games.md for the install instructions for games
+- add `qrcode` binary that can accept from stdin (or filename arg maybe) and display qr in terminal
+  - bonus: use unicode to increase pixel resolution OR generate an image the terminal can understand (like ranger)
+- setup auto install for redshift; two manual steps needed after installing via apt:
+  - add `Environment=DISPLAY=:0` to `/usr/lib/systemd/user/redshift.service` under 
+    the [Service] header
+  - run `systemctl --user enable redshift` then `systemctl --user start redshift`
+
+
+#### BUGS
+- xmobar temperature readout glitches after wake from suspend
+- Figure out why xmobar is hidden by windows by default
+
 
 #### Notes
 - Wired adapter names:
@@ -439,4 +441,5 @@
 - External display names (in xrandr):
   - x220: HDMI-1 (and probably also VGA-1)
   - xps9550: HDMI1 and DP1
+
 

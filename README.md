@@ -359,6 +359,32 @@
     sudo systemctl status thermald.service
     ```
 
+0. [Not working yet] Setup Dell Command | Configure (Dell hardware only)
+
+    - This allows for control over some BIOS settings from the OS, ie keyboard
+      backlight timeout.
+    - Check for latest version [here](https://www.dell.com/support/article/us/en/04/sln311302/dell-command-configure?lang=en)
+
+    ```bash
+    cd /tmp
+    wget https://downloads.dell.com/FOLDER05519670M/1/command-configure_4.2.0-553.ubuntu16_amd64.tar.gz
+    tar xvf command-configure_4.2.0-553.ubuntu16_amd64.tar.gz
+    sudo dpkg -i srvadmin-hapi_9.3.0_amd64.deb
+    sudo dpkg -i command-configure_4.2.0-553.ubuntu16_amd64.deb
+    sudo /opt/dell/dcc/cctk
+
+    >>> Error communicating with BIOS : Unable to get DMI Structures by Context
+    >>> Unable to get BIOS tables or Unknown type encountered!!.
+    ```
+
+    - Working on this error...:
+      - no solution: https://www.reddit.com/r/archlinux/comments/ab0krp/dell_command_configure_on_arch_linux/
+      - no solution: https://www.reddit.com/r/Dell/comments/ab05tw/command_configure_on_arch_linux/
+      - potential:   https://bbs.archlinux.org/viewtopic.php?pid=1846628#p1846628
+        - this link has someone posting about this error and someone else fixing it by
+          making pacman install it in some special way. Pkg build script:
+        - https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=dell-command-configure
+
 0. ~~Setup yeganesh:~~ Yeganesh is included in ~/bin/.
 
     ```bash

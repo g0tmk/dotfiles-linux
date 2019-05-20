@@ -1,6 +1,7 @@
 ## dotfiles
 
 #### TODO:
+- finish copying info from documents/xps/debian_notes.txt to this repo
 - maintenence
   - xps9550 palmrest
   - xps9550 repaste

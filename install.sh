@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+#
+# g0tmk's dotfiles install script
+#
+# what this does:
+#  - install apps via apt
+#  - link all dotfiles into home
+#  - change shell 
+#  - detect sensors
+#
+
 set -eEuo pipefail
 
 

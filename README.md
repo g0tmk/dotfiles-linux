@@ -77,9 +77,12 @@
 0. Install base software
 
     ```bash
+    # Install the absolute minimum manually
     sudo apt update
     sudo apt install git apt-transport-https
     sudo sed -i 's/http:/https:/g' /etc/apt/sources.list
+
+    # Install apps and link dotfiles. See install.sh for details.
     git clone git://github.com/g0tmk/dotfiles-linux.git ~/dotfiles
     cd ~/dotfiles
     ./install.sh
@@ -126,6 +129,8 @@
 
 0. Setup brightness control (not needed on x220). Add to /etc/sudoers with `sudo visudo`:
 
+    - First try brightness controls (Fn+F11 on xps9550). If it works, skip this section.
+
     ```bash
     Cmnd_Alias    PLUS = /home/<your_username>/bin/brightness.py
     <your_username> ALL = NOPASSWD: PLUS
@@ -133,6 +138,8 @@
     ```
 
 0. Enable sensors (xps9550 only)
+
+    - First run `sensors`. If you see fan RPMs, skip this section.
 
     ```bash
     # verify dell kernel module is present:
@@ -181,6 +188,9 @@
     ```
 
 0. Install firefox stable (from [here](https://wiki.debian.org/Firefox#Firefox_Stable.2C_Beta_and_Nightly))
+
+    - Note: If you don't care about having the most modern firefox, skip all this and
+      run `sudo apt install firefox-esr` instead.
 
     ```bash
     # download firefox from website and extract to a directory in home:
@@ -254,7 +264,7 @@
     start_syncthing
     ```
 
-0. Set up grub:
+0. Set grub for short (2 second) timeout and less blinding colorscheme
 
     - Edit /etc/default/grub:
       - change GRUB_TIMEOUT to 2

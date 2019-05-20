@@ -10,7 +10,6 @@
   - needs a better name, too bad `syncthing` is taken by the default install
   - if service running, opens a browser. otherwise it opens after ~4 seconds
 - get something going that will run slock automatically after ~20 mins of inactivity
-- reverse scroll direction
 - add more stuff to left side of xmobar
 - go through tmux conf - there are some weird settings in there
 - make a small wrapper around amixer that allows higher-level logic (ie if sound is
@@ -41,7 +40,6 @@
     - `--sysname` show system name?
     - `--thunderboltsecuritylevel` can be used to disable thunderbolt port
       - nosecurity (thunderbolt enabled), userauthorization, secureconnect, displayport (thunderbolt disabled)
-
 - check out fasd (and jetho's repo)
 - check out [rofi](https://github.com/davatorium/rofi) (dmenu/yeganesh replacement)
 - check out YouCompleteMe (https://github.com/Valloric/YouCompleteMe)
@@ -57,9 +55,6 @@
   - [screenshot](https://i.imgur.com/xvlw9iH.png)
 - eventually add gtk theme
   - [Fantome](https://github.com/addy-dclxvi/gtk-theme-collections)
-- wicd-curses -> wifi name -> Preferences -> Check "Automatically reconnect on connection loss"
-  - was set on x220, maybe is default option
-  - seems to work on xps after boot/wake from suspend
 - maybe make a new games.md for the install instructions for games
 - add `qrcode` binary that can accept from stdin (or filename arg maybe) and display qr in terminal
   - bonus: use unicode to increase pixel resolution OR generate an image the terminal can understand (like ranger)
@@ -268,13 +263,10 @@
     # colors: https://help.ubuntu.com/community/Grub2/Displays#GRUB_2_Colors
     # normal foreground and background terminal colors
     set color_normal=light-gray/black
-
     # highlight foreground and background terminal colors
     set color_highlight=light-blue/black
-
     # the foreground and background colors to be used for non-highlighted menu entries
     set menu_color_normal=light-gray/black
-
     # the foreground and background colors to be used for the highlighted menu entry
     set menu_color_highlight=yellow/black
     ```
@@ -351,6 +343,7 @@
     ./configure prefix=/usr
     make
     sudo make install
+    sudo systemctl enable thermald.service
     sudo systemctl start thermald.service
     sudo systemctl status thermald.service
     ```

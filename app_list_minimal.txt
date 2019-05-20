@@ -20,6 +20,7 @@ fonts-font-awesome
 fortune-mod
 gcc
 gdb
+gddrescue
 git
 grep
 htop

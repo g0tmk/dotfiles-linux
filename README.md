@@ -91,6 +91,101 @@
     # probably ALSO a good idea to run sensors-detect afterwards, not sure if it is necessary
     ```
 
+0. Set grub for short (2 second) timeout and less blinding colorscheme
+
+    - Edit /etc/default/grub:
+      - change GRUB_TIMEOUT to 2
+    - Edit /boot/grub/custom.cfg and add the following lines:
+
+    ```bash
+    # colors: https://help.ubuntu.com/community/Grub2/Displays#GRUB_2_Colors
+    # normal foreground and background terminal colors
+    set color_normal=light-gray/black
+    # highlight foreground and background terminal colors
+    set color_highlight=light-blue/black
+    # the foreground and background colors to be used for non-highlighted menu entries
+    set menu_color_normal=light-gray/black
+    # the foreground and background colors to be used for the highlighted menu entry
+    set menu_color_highlight=yellow/black
+    ```
+
+    - Run `sudo update-grub` to commit changes
+
+0. Install Powertop to monitor/maximize battery life (laptop only) (check for latest version [here](https://01.org/powertop))
+
+    ```bash
+    sudo apt install libnl-3-dev libnl-genl-3-dev gettext libgettextpo-dev autopoint libncurses5-dev libncursesw5-dev libtool-bin dh-autoreconf
+    wget https://01.org/sites/default/files/downloads//powertop-v2.10.tar.gz
+    tar xvf powertop-v2.10.tar.gz
+    cd powertop-v2.10
+    ./autogen.sh
+    ./configure
+    make
+    sudo make install
+    # you can now run `sudo powertop`
+    ```
+
+0. Install tlp for decent power management (laptop only) from guide [here](https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#installation)
+
+    - Option 1: install from backports. This is the easiest way to get a fairly recent
+      version - but see option 2 for xps9550.
+
+    ```bash
+    sudo bash -c "echo 'deb https://deb.debian.org/debian stretch-backports main' >> /etc/apt/sources.list"
+    sudo apt update
+    sudo apt-get install -t stretch-backports tlp tlp-rdw 
+    sudo vi /etc/default/tlp
+    sudo tlp start
+    ```
+
+    - Option 2: install latest tarball from github. Necessary for XPS9550/60 since it has
+      a BIOS bug that was worked-around in TLP 1.2 (<3 you linrunner) see [here](https://github.com/linrunner/TLP/issues/362)
+
+    ```bash
+    # notes here https://linrunner.de/en/tlp/docs/tlp-faq.html#install-config
+    # and more here https://linrunner.de/en/tlp/docs/tlp-developer-documentation.html
+
+    sudo apt install smartmontools network-manager
+    cd /tmp
+    # check for the latest version first
+    wget https://github.com/linrunner/TLP/archive/1.2.2.tar.gz
+    tar xvf 1.2.2.tar.gz
+    cd TLP-1.2.2/
+
+    # install (as root)
+    sudo make install TLP_WITH_SYSTEMD=1
+    sudo make install-man
+    sudo make install-man-rdw
+
+    # Enable the services, i.e. (as root)
+    sudo systemctl enable tlp.service
+    sudo systemctl enable tlp-sleep.service 
+    sudo systemctl mask systemd-rfkill.service
+    sudo systemctl mask systemd-rfkill.socket
+    sudo tlp start
+    # make sure tlp is running
+    sudo tlp-stat -s
+    ```
+
+0. Setup Thermald to help with thermals (Intel only, probably only useful on laptops)
+
+    ```bash
+    # Check for the latest version in github releases first
+    # Uses install instructions for ubuntu in README.txt in release:
+    cd /tmp
+    wget https://github.com/intel/thermal_daemon/archive/v1.8.tar.gz
+    tar xvf v1.8.tar.gz
+    cd thermal_daemon-1.8
+    sudo apt install autoconf g++ libglib2.0-dev libdbus-1-dev libdbus-glib-1-dev libxml2-dev
+    ./autogen.sh
+    ./configure prefix=/usr
+    make
+    sudo make install
+    sudo systemctl enable thermald.service
+    sudo systemctl start thermald.service
+    sudo systemctl status thermald.service
+    ```
+
 0. Install virtualbox (from [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22))
 
     ```bash
@@ -132,7 +227,7 @@
     sudo update-alternatives --install /usr/bin/x-www-browser x-www-browser ~/bin/firefox 200
     ```
 
-0. Install barrier (instructions from [here](https://github.com/debauchee/barrier/releases/tag/v2.1.2)
+0. Install barrier (instructions from [here](https://github.com/debauchee/barrier/releases/tag/v2.1.2))
 
     ```bash
     sudo apt install flatpak
@@ -192,101 +287,6 @@
     sudo apt-get install syncthing
     # run binary which then runs syncthing:
     start_syncthing
-    ```
-
-0. Set grub for short (2 second) timeout and less blinding colorscheme
-
-    - Edit /etc/default/grub:
-      - change GRUB_TIMEOUT to 2
-    - Edit boot/grub/custom.cfg and add the following lines:
-
-    ```bash
-    # colors: https://help.ubuntu.com/community/Grub2/Displays#GRUB_2_Colors
-    # normal foreground and background terminal colors
-    set color_normal=light-gray/black
-    # highlight foreground and background terminal colors
-    set color_highlight=light-blue/black
-    # the foreground and background colors to be used for non-highlighted menu entries
-    set menu_color_normal=light-gray/black
-    # the foreground and background colors to be used for the highlighted menu entry
-    set menu_color_highlight=yellow/black
-    ```
-
-    - Run `sudo update-grub` to commit changes
-
-0. Install Powertop (check for latest version [here](https://01.org/powertop)
-
-    ```bash
-    sudo apt install libnl-3-dev libnl-genl-3-dev gettext libgettextpo-dev autopoint libncurses5-dev libncursesw5-dev libtool-bin dh-autoreconf
-    wget https://01.org/sites/default/files/downloads//powertop-v2.10.tar.gz
-    tar xvf powertop-v2.10.tar.gz
-    cd powertop-v2.10
-    ./autogen.sh
-    ./configure
-    make
-    sudo make install
-
-    ```
-
-0. Install tlp (laptop only) from guide [here](https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#installation)
-
- - Option 1: install from backports. This is the easiest way to get a fairly recent
-   version.
-
-    ```bash
-    sudo bash -c "echo 'deb https://deb.debian.org/debian stretch-backports main' >> /etc/apt/sources.list"
-    sudo apt update
-    sudo apt-get install -t stretch-backports tlp tlp-rdw 
-    sudo vi /etc/default/tlp
-    sudo tlp start
-    ```
-
- - Option 2: install latest tarball from github. Necessary for XPS9550/60 since it has
-   a BIOS bug that was worked-around in TLP 1.2 (<3 you linrunner) see [here](https://github.com/linrunner/TLP/issues/362)
-
-    ```bash
-    # notes here https://linrunner.de/en/tlp/docs/tlp-faq.html#install-config
-    # and more here https://linrunner.de/en/tlp/docs/tlp-developer-documentation.html
-
-    sudo apt install smartmontools network-manager
-    cd /tmp
-    # check for the latest version first
-    wget https://github.com/linrunner/TLP/archive/1.2.2.tar.gz
-    tar xvf 1.2.2.tar.gz
-    cd TLP-1.2.2/
-
-    # install (as root)
-    sudo make install TLP_WITH_SYSTEMD=1
-    sudo make install-man
-    sudo make install-man-rdw
-
-    # Enable the services, i.e. (as root)
-    sudo systemctl enable tlp.service
-    sudo systemctl enable tlp-sleep.service 
-    sudo systemctl mask systemd-rfkill.service
-    sudo systemctl mask systemd-rfkill.socket
-    sudo tlp start
-    # make sure tlp is running
-    sudo tlp-stat -s
-    ```
-
-0. Setup Thermald
-
-    ```bash
-    # Check for the latest version in github releases first
-    # Uses install instructions for ubuntu in README.txt in release:
-    cd /tmp
-    wget https://github.com/intel/thermal_daemon/archive/v1.8.tar.gz
-    tar xvf v1.8.tar.gz
-    cd thermal_daemon-1.8
-    sudo apt install autoconf g++ libglib2.0-dev libdbus-1-dev libdbus-glib-1-dev libxml2-dev
-    ./autogen.sh
-    ./configure prefix=/usr
-    make
-    sudo make install
-    sudo systemctl enable thermald.service
-    sudo systemctl start thermald.service
-    sudo systemctl status thermald.service
     ```
 
 0. [Not working yet] Setup Dell Command | Configure (Dell hardware only)

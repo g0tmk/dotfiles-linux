@@ -44,6 +44,9 @@ fi
 
 ask () {
     # asks for confirmation. param1 is question, param2 is function to run if yes
+    # flush stdin
+    read -t 0.1 -n 10000 discard || true
+    # read one char
     read -p "$1 [y/n]" -n 1 -r
     echo    # (optional) move to a new line
     if [[ $REPLY =~ ^[Yy]$ ]]; then

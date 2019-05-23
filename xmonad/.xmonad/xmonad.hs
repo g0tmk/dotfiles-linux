@@ -17,13 +17,11 @@ bitmapDir = userDir ++ ".xmonad/xbm/"
 --autoStart = userDir ++ ".xmonad/bin/autostart.sh"
 
 main = do
-    --xmproc <- spawnPipe "/home/g0tmk/.cabal/bin/xmobar"
     xmproc <- spawnPipe "xmobar"
 
     --spawn $ "sh " ++ autoStart
 
     xmonad $ defaultConfig
-        --{ manageHook = manageDocks <+> manageHook defaultConfig
         { manageHook = manageHook defaultConfig <+> manageDocks 
         , layoutHook    = avoidStruts  
                         $ toggleLayouts (noBorders Full)
@@ -46,12 +44,11 @@ main = do
                  [ ((mod4Mask .|. shiftMask, xK_z), spawn "slock")
                  -- screenshot 1 NOTE: hotkey not working - check xK_Print
                  , ((controlMask, xK_Print), spawn "sleep 0.2; scrot -s &; echo 'Select area' | show_osd_message")
-                 -- screenshot 2
-                 , ((0, xK_Print), spawn "scrot")
+                 -- screenshot 2: works fine; why doesn't above work?
+                 , ((0, xK_Print), spawn "scrot; echo 'Took screenshot!' | show_osd_message")
                  -- Mod+b: toggle fullscreen
                  , ((mod4Mask, xK_b     ), sendMessage ToggleStruts)
-                 -- Mod+p: yeganesh (w/ custom fonts and stuff) NOTE: "$()" syntax will execute the output (yeganesh only outputs the binary's name)
-                 --, ((mod4Mask, xK_p), spawn "dmenu_run -fn -*-terminus-*-r-*-*-12-*-*-*-*-*-*-* -nb bisque3 -nf grey35 -sb bisque1 -sf grey10")
+                 -- Mod+p: yeganesh NOTE: "$()" syntax will execute the output (yeganesh only outputs the binary's name)
                  --, ((mod4Mask, xK_p), spawn "dmenu_run -fn 'Terminus::pixelsize=12:antialias=0'")
                  , ((mod4Mask, xK_p), spawn "$(~/bin/yeganesh -x -- -nb \"#000000\" -fn \"Terminus::pixelsize=12:antialias=0\")")
                  -- Multimedia keys

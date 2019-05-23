@@ -1,5 +1,17 @@
 ## g0tmk's dotfiles
 
+
+#### Useful resources
+ - Dell XPS 15 (9550)
+   - [XPS 15 Service Manual](http://topics-cdn.dell.com/pdf/xps-15-9550-laptop_Service-Manual_en-us.pdf)
+   - [Notes about installing a Debian Stretch on a Dell XPS 15](http://wiki.yobi.be/wiki/Laptop_Dell_XPS_15)
+   - [Dell XPS 15 - ArchWiki](https://wiki.archlinux.org/index.php/Dell_XPS_15)
+   - [Dell XPS 15 9550 - ArchWiki](https://wiki.archlinux.org/index.php/Dell_XPS_15_(9550))
+   - 2016-01-13 [Arch on XPS 15 (late 2015)](https://bbs.archlinux.org/viewtopic.php?id=204739)
+   - [Ubuntu 15.10 on Dell XPS 15 9550](https://ubuntuforums.org/showthread.php?t=2301071&p=13382949#post13382949)
+   - 2016-05-16 [Ubuntu 16.04 on Dell XPS 15 9550](https://ubuntuforums.org/showthread.php?t=2317843)
+   - 2017-12-01 [Installing Kali Linux on a Dell XPS 9550](https://www.rafaelhart.com/2017/12/installing-kali-linux-on-a-dell-xps-9550/)
+
 #### Install steps on a fresh Debian (Stable) machine
 
 0. Install Debian minimal system, install only "Standard System Utilities"
@@ -315,7 +327,7 @@
     start_syncthing
     ```
 
-0. [Not working yet] Setup Dell Command | Configure (Dell hardware only)
+0. Setup Dell Command | Configure (Dell hardware only)
 
     - This allows for control over some BIOS settings from the OS, ie keyboard
       backlight timeout.
@@ -331,11 +343,11 @@
     #       you get a "Error communicating with BIOS..." error, reboot and try again.
     sudo /opt/dell/dcc/cctk
     
-    # configure some better defaults (customize to your preferences)
+    # configure some settings (customize to your preferences)
 
     # set battery to sit between 50-70%
     sudo /opt/dell/dcc/cctk --PrimaryBattChargeCfg=Custom:50-70
-    sudo /opt/dell/dcc/cctk --Camera=Enabled
+    sudo /opt/dell/dcc/cctk --Camera=Disabled
 
     # how to remove:
     sudo apt remove command-configure srvadmin-hapi
@@ -349,6 +361,20 @@
     --Microphone [Enabled,Disabled]
     --PrimaryBattChargeCfg [Standard, Express, PrimAcUse, Adaptive, Custom:<percent>-<percent>]
             Default: Adaptive
+    ```
+
+0. Firmware update manager [not working yet]
+
+    ```bash
+    sudo apt install fwupd
+    # show candidate devices
+    fwupdmgr get-devices
+    # pull latest metadata from lvfs
+    fwupdmgr refresh
+    >>> Failed to download
+    sudo apt remove fwupd
+
+    # need to try latest version
     ```
 
 0. ~~Setup yeganesh:~~ Yeganesh is included in ~/bin/.
@@ -460,8 +486,11 @@
 
 
 #### BUGS
-- xmobar temperature readout glitches after wake from suspend
+- capslock->escape remapping doesn't stay bound always? maybe after wake from sleep?
 - Figure out why xmobar is hidden by windows by default
+- xmobar temperature readout glitches after wake from suspend
+  - happened twice in a row within two days, but hasen't happened in > 2 weeks. will
+    make temp script if the bug happens again.
 
 
 #### Notes

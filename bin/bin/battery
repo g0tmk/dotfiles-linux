@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+# if battery current is higher than this many milliamps, consider it discharging
+DISCHARGE_MODE_THRESHOLD_MA=5
+
+battery_charge_percent=$(< /sys/class/power_supply/BAT0/capacity)
+battery_current_ua=$(< /sys/class/power_supply/BAT0/current_now)
+battery_current_ma=$(echo "$battery_current_ua / 1000" | bc)
+battery_brand=$(< /sys/class/power_supply/BAT0/manufacturer)
+battery_model=$(< /sys/class/power_supply/BAT0/model_name)
+
+echo "Battery brand: $battery_brand  model: $battery_model"
+echo "Battery at $battery_charge_percent%"
+echo "Battery draw: $battery_current_ma mA"
+
+if [ $battery_current_ma -gt $DISCHARGE_MODE_THRESHOLD_MA ]; then
+    echo "State: Discharging"
+else
+    echo "State: AC_Charging OR AC_Idle"
+fi

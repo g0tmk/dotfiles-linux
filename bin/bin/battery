@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+set -Ee          # exit immediately on command failure
+set -o pipefail  # treat failure within a pipe as failure
+set -u           # disallow unset variables
+
 # if battery current is higher than this many milliamps, consider it discharging
 DISCHARGE_MODE_THRESHOLD_MA=5
 
@@ -18,24 +22,41 @@ battery_status=$(< /sys/class/power_supply/BAT0/status)
 battery_brand=$(< /sys/class/power_supply/BAT0/manufacturer)
 battery_model=$(< /sys/class/power_supply/BAT0/model_name)
 
+# call acpi | look for "HH:MM:SS remaining" | keep text before space | trim whitespace
+battery_time_left=$(acpi -b | egrep -o "[0-9:]+ remaining" | cut -d " " -f 1 | awk '{$1=$1};1')
+
+if [ "$battery_time_left" != "" ]; then
+    battery_time_left_string=$(echo ", $battery_time_left left")
+else
+    batterry_time_left_string=""
+fi
+
+if type tlp-stat > /dev/null; then
+    # call tlp-stat | keep only Mode= line | keep text after = | trim whitespace
+    tlp_power_mode=$(tlp-stat -s | egrep "Mode\W+= " | cut -d "=" -f 2 | awk '{$1=$1};1')
+else
+    tlp_power_mode="TLP Not Installed"
+fi
+
 echo "Battery brand: $battery_brand  model: $battery_model"
 echo "Battery at $battery_charge_percent%"
 echo "Battery draw: $battery_current_ma mA"
 echo "Battery health: $battery_charge_full / $battery_charge_full_design ($battery_health_percent%)"
 echo "Battery Status: $battery_status"
+echo "TLP Power Mode: $tlp_power_mode"
 
 if [ $battery_current_ma -gt $DISCHARGE_MODE_THRESHOLD_MA ]; then
     # battery current > threshold so charging or discharging
 
     case $battery_status in
     Charging)
-        echo "State: AC_Charging"
+        echo "State: AC_Charging$battery_time_left_string"
         ;;
     Unknown)
-        echo "State: Discharging"
+        echo "State: Discharging$battery_time_left_string"
         ;;
     *)
-        echo "State: Discharging"
+        echo "State: Discharging$battery_time_left_string"
         ;;
     esac
 

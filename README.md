@@ -111,6 +111,18 @@
 
     - Run `sudo update-grub` to commit changes
 
+0. Quiet boot errors. Probably only useful on xps955 since it has such buggy bios firmware (AE_NOT_FOUND errors)
+    - Might want to run the system for a week or so before doing this so you have a chance to see intermittent errors.
+    - Note you can always run `journalctl -b -p warning` and `journalctl -b -p err` to check for issues
+
+    ```bash
+    sudo vi /etc/default/grub
+    # edit GRUB_CMDLINE_LINUX_DEFAULT and add `loglevel=3` to the end
+    # ie         GRUB_CMDLINE_LINUX_DEFAULT="quiet loglevel=3"
+    ```
+
+    - Run `sudo update-grub` to commit changes
+
 0. Install Powertop to monitor/maximize battery life (laptop only) (check for latest version [here](https://01.org/powertop))
 
     ```bash
@@ -181,8 +193,7 @@
     ./configure prefix=/usr
     make
     sudo make install
-    sudo systemctl enable thermald.service
-    sudo systemctl start thermald.service
+    sudo systemctl enable --now thermald.service
     sudo systemctl status thermald.service
     ```
 
@@ -316,19 +327,29 @@
     tar xvf command-configure_4.2.0-553.ubuntu16_amd64.tar.gz
     sudo dpkg -i srvadmin-hapi_9.3.0_amd64.deb
     sudo dpkg -i command-configure_4.2.0-553.ubuntu16_amd64.deb
+    # NOTE: the cctk application only works after a fresh boot, not wake-from-sleep. If
+    #       you get a "Error communicating with BIOS..." error, reboot and try again.
     sudo /opt/dell/dcc/cctk
+    
+    # configure some better defaults (customize to your preferences)
 
-    >>> Error communicating with BIOS : Unable to get DMI Structures by Context
-    >>> Unable to get BIOS tables or Unknown type encountered!!.
+    # set battery to sit between 50-70%
+    sudo /opt/dell/dcc/cctk --PrimaryBattChargeCfg=Custom:50-70
+    sudo /opt/dell/dcc/cctk --Camera=Enabled
+
+    # how to remove:
+    sudo apt remove command-configure srvadmin-hapi
     ```
 
-    - Working on this error...:
-      - no solution: https://www.reddit.com/r/archlinux/comments/ab0krp/dell_command_configure_on_arch_linux/
-      - no solution: https://www.reddit.com/r/Dell/comments/ab05tw/command_configure_on_arch_linux/
-      - potential:   https://bbs.archlinux.org/viewtopic.php?pid=1846628#p1846628
-        - this link has someone posting about this error and someone else fixing it by
-          making pacman install it in some special way. Pkg build script:
-        - https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=dell-command-configure
+    - Options which work on the xps9550:
+
+    ```bash
+    --AdvBatteryChargeCfg
+    --Camera [Enabled,Disabled]
+    --Microphone [Enabled,Disabled]
+    --PrimaryBattChargeCfg [Standard, Express, PrimAcUse, Adaptive, Custom:<percent>-<percent>]
+            Default: Adaptive
+    ```
 
 0. ~~Setup yeganesh:~~ Yeganesh is included in ~/bin/.
 

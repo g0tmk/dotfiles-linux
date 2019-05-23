@@ -18,8 +18,8 @@ do
   $WAKE_COMMAND
   sleep "$DELAY_AFTER_WAKE_SECS"
 done
+echo "Host up!"
 
 # run parsec
-echo "Host up!"
 $PARSEC_COMMAND
 

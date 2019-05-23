@@ -4,14 +4,23 @@
 DISCHARGE_MODE_THRESHOLD_MA=5
 
 battery_charge_percent=$(< /sys/class/power_supply/BAT0/capacity)
+
 battery_current_ua=$(< /sys/class/power_supply/BAT0/current_now)
 battery_current_ma=$(echo "$battery_current_ua / 1000" | bc)
+
+battery_charge_now=$(< /sys/class/power_supply/BAT0/charge_now)
+battery_charge_full=$(< /sys/class/power_supply/BAT0/charge_full)
+battery_charge_full_design=$(< /sys/class/power_supply/BAT0/charge_full_design)
+battery_health_percent=$(echo "100.0 * $battery_charge_full / $battery_charge_full_design" | bc)
+
+
 battery_brand=$(< /sys/class/power_supply/BAT0/manufacturer)
 battery_model=$(< /sys/class/power_supply/BAT0/model_name)
 
 echo "Battery brand: $battery_brand  model: $battery_model"
 echo "Battery at $battery_charge_percent%"
 echo "Battery draw: $battery_current_ma mA"
+echo "Battery health: $battery_charge_full / $battery_charge_full_design ($battery_health_percent%)"
 
 if [ $battery_current_ma -gt $DISCHARGE_MODE_THRESHOLD_MA ]; then
     echo "State: Discharging"

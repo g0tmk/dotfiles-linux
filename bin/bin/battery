@@ -31,7 +31,7 @@ else
     batterry_time_left_string=""
 fi
 
-if type tlp-stat > /dev/null; then
+if $(type tlp-stat >&- 2>&-); then
     # call tlp-stat | keep only Mode= line | keep text after = | trim whitespace
     tlp_power_mode=$(tlp-stat -s | egrep "Mode\W+= " | cut -d "=" -f 2 | awk '{$1=$1};1')
 else

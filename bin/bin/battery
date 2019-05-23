@@ -13,6 +13,7 @@ battery_charge_full=$(< /sys/class/power_supply/BAT0/charge_full)
 battery_charge_full_design=$(< /sys/class/power_supply/BAT0/charge_full_design)
 battery_health_percent=$(echo "100.0 * $battery_charge_full / $battery_charge_full_design" | bc)
 
+battery_status=$(< /sys/class/power_supply/BAT0/status)
 
 battery_brand=$(< /sys/class/power_supply/BAT0/manufacturer)
 battery_model=$(< /sys/class/power_supply/BAT0/model_name)
@@ -21,9 +22,24 @@ echo "Battery brand: $battery_brand  model: $battery_model"
 echo "Battery at $battery_charge_percent%"
 echo "Battery draw: $battery_current_ma mA"
 echo "Battery health: $battery_charge_full / $battery_charge_full_design ($battery_health_percent%)"
+echo "Battery Status: $battery_status"
 
 if [ $battery_current_ma -gt $DISCHARGE_MODE_THRESHOLD_MA ]; then
-    echo "State: Discharging"
+    # battery current > threshold so charging or discharging
+
+    case $battery_status in
+    Charging)
+        echo "State: AC_Charging"
+        ;;
+    Unknown)
+        echo "State: Discharging"
+        ;;
+    *)
+        echo "State: Discharging"
+        ;;
+    esac
+
+
 else
-    echo "State: AC_Charging OR AC_Idle"
+    echo "State: AC_Idle"
 fi

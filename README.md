@@ -12,6 +12,30 @@
    - 2016-05-16 [Ubuntu 16.04 on Dell XPS 15 9550](https://ubuntuforums.org/showthread.php?t=2317843)
    - 2017-12-01 [Installing Kali Linux on a Dell XPS 9550](https://www.rafaelhart.com/2017/12/installing-kali-linux-on-a-dell-xps-9550/)
 
+#### Custom commands
+ - `barrier` starts barrier to allow control from another computer's keyboard/mouse
+ - `battery` shows battery stats
+ - `brightness [set | increase | decrease] percent` to set backlight levels
+ - `clipboard` to handle terminal io (`ls | clipboard` or `clipboard > pasted.txt`
+ - `colortable` shows all terminal color text/background combinations and their codes
+ - `colortable256` shows all 256 terminal colors
+ - `remap` applies keyboard remappings. sometimes needed after a wake from suspend
+ - `setup_external_monitor` to handle enabling/disabling of secondary monitors
+ - `show_osd_message "message"` shows a message onscreen. Used for shortcut feedback
+ - `ssht` to connect to ssh clients and auto-tmux
+ - `start_syncthing` starts the syncthing user service
+ - `time_shell_command` runs a shell command 1000 times and shows its average runtime
+ - some more niche ones
+   - `dwarf_fortress` to launch dwarf fortress with some basic command line options
+   - `game_on_bpc` to wake up my desktop and log in remotely via parsec once it is up
+   - `wake_bpc` tells the router to send a WoL packet to my desktop. used by game_on_bpc
+   - `parsec` starts parsecd correctly (killing it first if running). used by game_on_bpc
+   - `parsec-browser` is the same as above, but also opens a browser to config if needed
+   - `garbage` shows files in home directory that I can probably delete
+   - `generate-stalonetray-padding-for-xmobar.sh` is used by xmobar to detect trayer size
+   - `hostname_colorized` generates a different colored name per-host. used in terminal PS1
+   - `xmobar_wireless.py` is used by xmobar to show wireless info
+
 #### Install steps on a fresh Debian (Stable) machine
 
 0. Install Debian minimal system, install only "Standard System Utilities"
@@ -29,6 +53,13 @@
     cd ~/dotfiles
     ./install.sh
     ```
+
+0. Configure sound (optional)
+
+    - Run `alsamixer` 
+    - Hit F6 and select sound card (probably "HDA Intel PCH")
+    - set all channels to 0db. Unmute channels with 'm'. I left all muted except
+      "Master" and "Speaker". ("OO" is enabled, "MM" is muted).
 
 0. Reverse touchpad scroll direction + enable tap-to-click
 
@@ -74,7 +105,7 @@
     - First try brightness controls (Fn+F11 on xps9550). If it works, skip this section.
 
     ```bash
-    Cmnd_Alias    PLUS = /home/<your_username>/bin/brightness.py
+    Cmnd_Alias    PLUS = /home/<your_username>/bin/brightness
     <your_username> ALL = NOPASSWD: PLUS
     # try brightness controls (Fn+F11 on xps9550)
     ```
@@ -327,6 +358,87 @@
     start_syncthing
     ```
 
+0. Install yshui's compton fork [github](https://github.com/yshui/compton)
+
+    - NOTE: This branch of compton is much newer, and actually maintained, but may have
+      bugs. If you are not interested in helping develop compton, simply run
+      `sudo apt install compton` to get the (4+yr old) mainstream version. If you use
+      the mainstream version you will likely need to modify .xsessionrc and compton.conf.
+      Another option is to install a recent release from yshui's github (v6.2 when this
+      was written).
+
+    ```bash
+    # from guide in README.md
+    sudo apt install meson ninja-build libx11-dev libx11-xcb-dev libxext-dev x11proto-core-dev xcb libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-xinerama0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libxdg-basedir-dev libpcre2-dev libev-dev uthash-dev
+    cd ~/repos
+    git clone https://github.com/yshui/compton.git compton-yshui
+    cd compton-yshui
+    git submodule update --init --recursive
+    meson --buildtype=release . build
+    ninja -C build
+    sudo ninja -C build install
+    ```
+
+0. ~~Install tizonia~~
+
+    - *NOTE: Latest (0.18.0) not good for soundcloud. Loads at most 10 songs with --soundcloud-user-stream, maybe a soundcloud API limitation. It also misses some tracks, but not as many as mopidy-soundcloud. Check again after some major version updates*
+
+    - guide from [here](http://tizonia.org/docs/debian/)
+    - NOTE: I disagree with some of the actions take in the standard install script.
+      Since I don't want to hose my system by running this, download the script and
+      make the following changes:
+      - Modify the two calls to tee /etc/apt/sources.list: The new sources should
+        be added to /etc/apt/sources.list.d/mopidy.list and tizonia.list
+      - Remove --force-yes from the apt install call
+
+    ```bash
+    curl 'https://bintray.com/user/downloadSubjectPublicKey?username=tizonia' | sudo apt-key add - 
+    echo "deb https://dl.bintray.com/tizonia/debian stretch main" | sudo tee /etc/apt/sources.list.d/tizonia.list
+    curl 'http://apt.mopidy.com/mopidy.gpg' | sudo apt-key add -
+    echo "deb http://apt.mopidy.com/ stable main contrib non-free" | sudo tee -a /etc/apt/sources.list.d/mopidy.list
+
+    cd /tmp
+    wget https://github.com/tizonia/tizonia-openmax-il/raw/master/tools/install.sh
+    vi install.sh
+    # make changes listed above
+    ./install-edited.sh
+    tizonia --soundcloud-user-stream
+    ```
+
+    - Removing:
+
+    ```bash
+    sudo apt remove tizonia-all
+    sudo apt remove libspotify12
+    sudo rm /etc/apt/sources.list.d/tizonia.list
+    sudo rm /etc/apt/sources.list.d/mopidy.list
+    sudo apt update
+    sudo apt autoremove
+    ```
+
+0. ~~Install mopidy~~
+
+    - *NOTE: Latest (mopidy-soundcloud 2.1.0) not good for soundcloud. Pulls _up to_ the 10 most recent songs and many don't pull at all (those with unicode?) Check again if/when this has moved to python 3.*
+
+    ```bash
+    # you may need these, but skip if you don't `sudo apt install gir1.2-gst-plugins-base-1.0 gir1.2-gstreamer-1.0 python-gst-1.0 python-pykka`
+
+    sudo apt install python-gst-1.0 gir1.2-gstreamer-1.0 gir1.2-gst-plugins-base-1.0 gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly gstreamer1.0-tools
+
+    sudo pip install -U mopidy
+    sudo pip install -U mopidy-soundcloud
+
+    mopidy
+    ncmpcpp
+    ```
+
+    - Removing:
+
+    ```bash
+    sudo pip uninstall mopidy-soundcloud
+    sudo pip uninstall mopidy
+    ```
+
 0. Setup Dell Command | Configure (Dell hardware only)
 
     - This allows for control over some BIOS settings from the OS, ie keyboard
@@ -348,6 +460,9 @@
     # set battery to sit between 50-70%
     sudo /opt/dell/dcc/cctk --PrimaryBattChargeCfg=Custom:50-70
     sudo /opt/dell/dcc/cctk --Camera=Disabled
+
+    # charge up battery if you want 100% capacity for something
+    sudo /opt/dell/dcc/cctk --PrimaryBattChargeCfg=Express
 
     # how to remove:
     sudo apt remove command-configure srvadmin-hapi
@@ -421,6 +536,9 @@
 
 
 #### TODO:
+
+- use hostname_colorized in PS1 and remove its TODO in binary section above
+- colorscheme update: dark blue is too dark
 - finish copying info from documents/xps/debian_notes.txt to this repo
 - maintenence
   - xps9550 palmrest
@@ -487,6 +605,10 @@
 
 #### BUGS
 - capslock->escape remapping doesn't stay bound always? maybe after wake from sleep?
+  - appears to affect other remappings also (ie win/alt swap)
+  - seems to be a known bug, one of the comments has a workaround that may work
+    - [comment](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=633849#92)
+    - [workaround script](https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=633849;filename=40xkb-save-restore;msg=92)
 - Figure out why xmobar is hidden by windows by default
 - xmobar temperature readout glitches after wake from suspend
   - happened twice in a row within two days, but hasen't happened in > 2 weeks. will

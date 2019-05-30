@@ -9,12 +9,13 @@ cd "$DF_PATH"
 
 #### Default options
 NEW_TILESET="Cheepicus_12x12.png";
+MUTE=true
 
 
 #### Parse parameters
 if [ $# -eq 0 ]
 then
-    echo "Usage: $0 [--xsmall] [--small] [--large] [--xlarge]"
+    echo "Usage: $0 [--xsmall, --small, --large, --xlarge) [--unmute]"
     exit 1
 fi
 
@@ -37,6 +38,10 @@ do
             NEW_TILESET="Anikki_square_16x16.png";
             echo "xlarge selected ($NEW_TILESET)"
             ;;
+        --mute)
+            MUTE=false
+            echo "sound unmuted"
+            ;;
         #--*) echo "bad option $1"
         #    ;;
         #*) echo "argument $1"
@@ -55,6 +60,12 @@ do
     sed -i "s/GRAPHICS_FONT:$f/GRAPHICS_FONT:$NEW_TILESET/g" $DF_CONFIG_PATH
 done
 
+#### Mute/unmute sound
+if $MUTE; then
+    sed -i "s/\[SOUND:.*\]/\[SOUND:NO\]/g" $DF_CONFIG_PATH
+else
+    sed -i "s/\[SOUND:.*\]/\[SOUND:YES\]/g" $DF_CONFIG_PATH
+fi
 
 ##### Run DFHack
 #./df

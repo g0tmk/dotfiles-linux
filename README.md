@@ -16,7 +16,7 @@
  - `barrier` starts barrier to allow control from another computer's keyboard/mouse
  - `battery` shows battery stats
  - `brightness [set | increase | decrease] percent` to set backlight levels
- - `clipboard` to handle terminal io (`ls | clipboard` or `clipboard > pasted.txt`
+ - `clipboard` to handle terminal I/O (`ls | clipboard` or `clipboard > pasted.txt`)
  - `colortable` shows all terminal color text/background combinations and their codes
  - `colortable256` shows all 256 terminal colors
  - `remap` applies keyboard remappings. sometimes needed after a wake from suspend
@@ -191,6 +191,8 @@
     sudo apt-get install -t stretch-backports tlp tlp-rdw 
     sudo vi /etc/default/tlp
     sudo tlp start
+    # make sure tlp is running
+    sudo tlp-stat -s
     ```
 
     - Option 2: install latest tarball from github. Necessary for XPS9550/60 since it has
@@ -279,6 +281,7 @@
     tar -xf ./firefox* -C ~/.mozilla
     ln -s ~/.mozilla/firefox/firefox ~/bin/firefox
     sudo update-alternatives --install /usr/bin/x-www-browser x-www-browser ~/bin/firefox 200
+    # you can now run `firefox`
     ```
 
 0. Install barrier (instructions from [here](https://github.com/debauchee/barrier/releases/tag/v2.1.2))
@@ -315,7 +318,7 @@
     wget https://dl.discordapp.net/apps/linux/0.0.9/discord-0.0.9.deb
     sudo dpkg -i discord-0.0.9.deb
     sudo apt install -f
-    discord
+    # you can now run `discord`
     ```
 
 0. Install Parsec
@@ -324,7 +327,7 @@
     # Download latest 'parsec for ubuntu' from parsecs site
     # NOTE: it segfaulted the first (and maybe second) time I ran it - eventually it became stable /shrug
     sudo dpkg -i parsec-linux.deb
-    parsec
+    # you can now run `parsec` (a launcher in ~/bin/)
     ```
 
 0. Setup dwarf fortress
@@ -336,7 +339,7 @@
     # Download latest version from [here](http://www.bay12games.com/dwarves/)
     wget http://www.bay12games.com/dwarves/df_44_12_linux.tar.bz2
     tar xf df_*
-    dwarf_fortress --large
+    # you can now run `dwarf_fortress --large` (a launcher in ~/bin/)
     # TODO: include tilesets in repo
     # TODO: symlink df_linux/data/saves into syncthing
     # TODO: include instructions for adding dfhack (download latest version, extract over df_linux)
@@ -354,8 +357,7 @@
     # Update and install syncthing:
     sudo apt-get update
     sudo apt-get install syncthing
-    # run binary which then runs syncthing:
-    start_syncthing
+    # you can now run `start_syncthing` (a launcher in ~/bin/)
     ```
 
 0. Install yshui's compton fork [github](https://github.com/yshui/compton)
@@ -363,7 +365,7 @@
     - NOTE: This branch of compton is much newer, and actually maintained, but may have
       bugs. If you are not interested in helping develop compton, simply run
       `sudo apt install compton` to get the (4+yr old) mainstream version. If you use
-      the mainstream version you will likely need to modify .xsessionrc and compton.conf.
+      the mainstream version you will likely need to modify .xsessionrc.
       Another option is to install a recent release from yshui's github (v6.2 when this
       was written).
 

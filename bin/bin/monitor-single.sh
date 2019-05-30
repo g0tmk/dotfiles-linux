@@ -1,5 +1,7 @@
 # configure displays for the single built-in display (1366x768)
 
+echo "use setup_external_monitor instead"
+
 xrandr --output HDMI-1 --off
 sleep 1
 

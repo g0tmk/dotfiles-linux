@@ -1,4 +1,6 @@
-# configure displays for a dual monitor setup with a rotated 1440x900 secondary
+# configure displays for a dual monitor setup with a rotated (portrait) secondary
+
+echo "use setup_external_monitor instead"
 
 xrandr --output HDMI-1 --auto --rotate right --left-of LVDS-1
 sleep 1

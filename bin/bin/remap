@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+
+# set capslock = escape
+setxkbmap -option caps:escape
+
+# swap alt key with win key. this way xmonad mappings can use win key so there are
+# no collisions, but we get to press the alt key which is in a much better spot
+setxkbmap -option 'altwin:swap_alt_win'
+

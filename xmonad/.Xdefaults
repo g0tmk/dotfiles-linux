@@ -1,44 +1,44 @@
-! tangoesque scheme
-*background: #111111
-*foreground: #babdb6
-! Black (not tango) + DarkGrey
-*color0:  #000000
-*color8:  #555753
-! DarkRed + Red
-color1: #E84F4F
-*color9: #D23D3D
-! DarkGreen + Green
-*color2:  #93d44f
-*color10: #c8e7a8
-! DarkYellow + Yellow
-*color3:  #eab93d
-*color11: #ffc123
-! DarkBlue + Blue
-*color4:  #204a87
-*color12: #3465a4
-! DarkMangenta + Mangenta
-*color5:  #ce5c00
-*color13: #f57900
-!DarkCyan + Cyan (both not tango)
-*color6:  #89b6e2
-*color14: #46a4ff
-! LightGrey + White
-*color7:  #cccccc
-*color15: #ffffff
+
+! Google Material Design Colorscheme
+*.foreground:   #eceff1
+!*.background : #263238
+*.background:   #111111
+*.cursorColor:  #eceff1
+
+! black
+*.color0:       #263238
+*.color8:       #37474f
+
+! red
+*.color1:       #ff9800
+*.color9:       #ffa74d
+
+! green
+*.color2:       #8bc34a
+*.color10:      #9ccc65
+
+! yellow
+*.color3:       #ffc107
+*.color11:      #ffa000
+
+! blue
+*.color4:       #03a9f4
+*.color12:      #81d4fa
+
+! magenta
+*.color5:       #e91e63
+*.color13:      #ad1457
+
+! cyan
+*.color6:       #009688
+*.color14:      #26a69a
+
+! white
+*.color7:       #cfd8dc
+*.color15:      #eceff1
 
 
-
-
-
-
-*transparent: true
-!*shading: 10
-*shading: 5
-!*font: xft:Monospace:pixelsize=12
-!*font: 7x14
-!*boldFont: xft:Monospace:bold:pixelsize=16
-
-
+! font settings
 ! *font: -*-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1
 ! *boldFont: -*-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1
 ! *italicFont: -*-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1
@@ -61,10 +61,68 @@ color1: #E84F4F
 ! *boldFont: xft:DejaVu Sans Mono:pixelsize=11:style=Bold:antialias=false
 ! *italicFont: xft:DejaVu Sans Mono:pixelsize=11:style=Oblique:antialias=false
 
-*tintColor: white
 *scrollBar: false
 *scrollBar_right: false
 *scrollstyle: rxvt
 
-! terminal padding
-URxvt.internalBorder: 8
+
+! URxvt specific settings
+! most defaults (and descriptions) copied from https://www.askapache.com/linux/rxvt-xresources/#background
+
+! transparency for urxvt. only psuedo-transparency so no compositing needed
+*transparent: true
+*shading: 6
+! Tint the transparent background with the given colour. Note that a black tint yields a completely black image while a white tint yields the image unchanged.
+*tintColor: white
+
+! terminal padding. with 1080px high screen, 14px characters, and 16px high xmobar:
+!
+!   1080
+!  -1050 (75*14)
+!    -16 (xmobar)
+!     -2 (2x 1px window borders)
+!    ---
+!     12 / 2 = 6
+! 
+URxvt.internalBorder: 6
+
+! use a black background
+!URxvt*background:  Black
+
+! Use the specified colour as the windows foreground colour [default Black]. see above.
+!URxvt*foreground:  White
+
+! Use the specified colour to disp1ay underlined characters when the foreground colour is the default. Makes it easier to notice, rxvt-unicode authors choice as well.
+URxvt*colorUL:  yellow
+
+! If set, use the specified colour as the colour for the underline itself. If unset, use the foreground colour
+!URxvt*underlineColor:  yellow
+
+! Specifies the terminal type name to be set in the TERM environment variable. I use tmux so this is helpful.
+URxvt*termName:  screen-256color
+
+! True: scroll to bottom when a non-special key pressed.
+URxvt*scrollTtyKeypress:  true
+
+! Do not scroll to bottom when tty receives output
+URxvt*scrollTtyOutput:  false
+
+! For speed. When receiving lots of lines, urxvt will only scroll once in a while (around 60x/sec), resulting in fewer updates. This can result in urxvt not ever displaying some of the lines it receives
+URxvt*skipScroll:  true
+
+! Fade the text by the given percentage when focus is lost. This is neat, when I switch to a different window, or switch to a different machine ala synergy, it will fade the screen slightly.
+URxvt*fading:  10
+
+! Use visual bell on receipt of a bell character. Helpful to be used with inputrc and tmux.
+!URxvt*visualBell:  true
+
+! Specify a command pipe for vt100 printer [default lpr]. Use Print to initiate a screen dump to the printer and Ctrl-Print or Shift-Print to include the scrollback
+URxvt*print-pipe:  cat > $HOME/$(echo urxvt.dump.$(date +'%Y%M%d%H%m%S'))
+
+! Comma-separated list(s) of perl extension scripts (default: "default") to use in this terminal instance, blank disables. By setting these both to blank, it completely disables perl from being initialized, thus much faster and smaller footprint. Plus it is more secure.
+URxvt*perl-ext:
+URxvt*perl-ext-common:
+
+
+
+

@@ -2,13 +2,19 @@
 
 
 ## STUFF THAT CAN START BEFORE XMONAD
-# set capslock = escape
-setxkbmap -option caps:escape
+
+# remap keybindings. settings handled by a `remap` command since sometimes the settings
+# are lost after suspend
+remap
 # Set background image with feh
 sh ~/.fehbg &
 # set the cursor (get rid of weird X)
 xsetroot -cursor_name left_ptr
 
+# fix screen tear with compton (yshui's fork required for experimental-backends)
+# NOTE: needs to start _after_ xmonad, and only sleeps for 4 seconds,
+#       so xmonad/xmobar needs to finish startup by then
+sleep 4 && compton -CG --vsync --experimental-backends --backend=glx &
 
 # open dzen2 panels
 #sh ~/.xmonad/bin/conkybar.sh &
@@ -16,7 +22,7 @@ xsetroot -cursor_name left_ptr
 
 # open desktop panels (after 1s pause - may need to increase in future)
 # TODO: re-enable, move down 2px, edit config 
-#conky -p 1 -c ~/.conky/conky_desktop &
+# conky -p 1 -c ~/.conky/conky_desktop &
 
 
 # Set up an icon tray. Reads transparency from .xmobarrc to match it

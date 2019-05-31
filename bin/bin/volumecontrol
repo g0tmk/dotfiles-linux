@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+
+# Control volume of current pulseaudio sink
+# TODO: do this in python
+
+
+getdefaultsinkname() {
+    pacmd stat | awk -F": " '/^Default sink name: /{print $2}'
+}
+
+getdefaultsinkvol() {
+    pacmd list-sinks |
+        awk '/^\s+name: /{indefault = $2 == "<'$(getdefaultsinkname)'>"}
+            /^\s+volume: / && indefault {print $5; exit}' |
+        awk -F"%" '{print $1}'
+}
+
+setdefaulsinkvol() {
+    if ! [[ $1 =~ ^[-0-9]+$ ]]; then
+        echo "Volume must be a number"
+        exit 1
+    fi
+    
+    if [[ $1 -gt 100 ]]; then
+        NEW_VOL=100
+    elif [[ $1 -lt 0 ]]; then
+        NEW_VOL=0
+    else
+        NEW_VOL=$1
+    fi
+    
+    pactl set-sink-volume $(getdefaultsinkname) $NEW_VOL%
+}
+
+toggledefaultsink() {
+    pactl set-sink-mute $(getdefaultsinkname) toggle
+}
+
+isdefaultsinkmuted() {
+    pacmd list-sinks |
+        awk '/^\s+name: /{indefault = $2 == "<'$(getdefaultsinkname)'>"}
+            /^\s+muted: / && indefault {print $2; exit}' | grep yes > /dev/null
+}
+
+
+#### Parse parameters
+if [ $# -eq 0 ]
+then
+    echo "Usage: $0 ( set | increase | decrease ) percent"
+    echo "       $0 toggle"
+    exit 1
+fi
+
+case "$1" in
+    set)
+        setdefaulsinkvol $2
+        ;;
+    increase)
+        if isdefaultsinkmuted; then
+            toggledefaultsink
+        fi
+        NEW_VOL=$(($(getdefaultsinkvol) + $2))
+        setdefaulsinkvol $NEW_VOL
+        ;;
+    decrease)
+        NEW_VOL=$(($(getdefaultsinkvol) - $2))
+        setdefaulsinkvol $NEW_VOL
+        ;;
+    toggle)
+        toggledefaultsink
+        ;;
+    *) echo "bad option $1"
+        ;;
+esac
+
+if isdefaultsinkmuted; then
+    echo "Muted"
+else
+    echo "Volume: $(getdefaultsinkvol)%"
+fi
+
+

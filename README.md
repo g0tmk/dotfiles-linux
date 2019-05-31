@@ -480,6 +480,26 @@
             Default: Adaptive
     ```
 
+0. Install pptp client to connect to pptp VPNs
+
+    - [Debian setup guide](http://pptpclient.sourceforge.net/howto-debian.phtml)
+    - [Arch setup guide](https://wiki.archlinux.org/index.php/PPTP_Client)
+
+    ```bash
+    sudo apt install pptp-linux
+    sudo pptpsetup --create my_tunnel --server vpn.example.com --username alice --password foo --encrypt
+    # test the new connection - it will not exit. If there are no errors, great! To
+    # fully test, you will also need to run the route command that follows.
+    sudo pon my_tunnel debug dump logfd 2 nodetach
+    # add a route to access devices on the VPN network (change the IP to match)
+    sudo ip route add 192.168.10.0/24 dev ppp0
+    # start the connection normally
+    sudo pon my_tunnel
+
+    # later, if you want to delete the connection:
+    sudo pptpsetup --delete my_tunnel
+    ```
+
 0. Firmware update manager [not working yet]
 
     ```bash
@@ -607,11 +627,15 @@
 
 #### BUGS
 - capslock->escape remapping doesn't stay bound always? maybe after wake from sleep?
+  - workaround for now is run `remap` when this happens
   - appears to affect other remappings also (ie win/alt swap)
   - seems to be a known bug, one of the comments has a workaround that may work
     - [comment](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=633849#92)
     - [workaround script](https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=633849;filename=40xkb-save-restore;msg=92)
-- Figure out why xmobar is hidden by windows by default
+- ~~Figure out why xmobar is hidden by windows by default~~
+  - It is hidden by windows, but trayer is not. Opening a window after 4 
+    seconds (trayer startup delay) has no issue. So this could be solved
+    by improving trayer startup delay (a different todo)
 - xmobar temperature readout glitches after wake from suspend
   - happened twice in a row within two days, but hasen't happened in > 2 weeks. will
     make temp script if the bug happens again.

@@ -54,15 +54,15 @@ main = do
                  -- Multimedia keys
                  -- XF86MonBrightnessUp
                  -- NOTE: x220 seems to do this automatically so we need a way to disable it there; for now, I did not add brightness.py to the sudoers file... its a workaround but should be fixed asap
-                 , ((0, 0x1008ff02), spawn "sudo ~/bin/brightness.py increase 10 | show_osd_message")
+                 , ((0, 0x1008ff02), spawn "sudo ~/bin/brightness increase 10 | show_osd_message")
                  -- XF86MonBrightnessDown
-                 , ((0, 0x1008ff03), spawn "sudo ~/bin/brightness.py decrease 10 | show_osd_message")
+                 , ((0, 0x1008ff03), spawn "sudo ~/bin/brightness decrease 10 | show_osd_message")
                  -- XF86AudioLowerVolume
-                 , ((0, 0x1008ff11), spawn "amixer set Master on 3%- | grep -E '[0-9]+%' | show_osd_message")
+                 , ((0, 0x1008ff11), spawn "~/bin/volumecontrol decrease 5 | show_osd_message")
                  -- XF86AudioRaiseVolume
-                 , ((0, 0x1008ff13), spawn "amixer set Master on 3%+ | grep -E '[0-9]+%' | show_osd_message")
+                 , ((0, 0x1008ff13), spawn "~/bin/volumecontrol increase 5 | show_osd_message")
                  -- XF86AudioMute
-                 , ((0, 0x1008ff12), spawn "amixer set Master toggle | grep -E '[0-9]+%' | show_osd_message")
+                 , ((0, 0x1008ff12), spawn "~/bin/volumecontrol toggle | show_osd_message")
                  ]
         myWorkspaces = ["1:term","2:web","3","4","5","6","7","8","9:daemons"]
 

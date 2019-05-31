@@ -112,4 +112,13 @@ endif
 " vim:set ft=vim et sw=2:
 
 
+" Allow Ctrl+hjkl for split navigation
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" open new split panes to right and bottom
+set splitbelow
+set splitright
 

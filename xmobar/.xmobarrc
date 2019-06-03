@@ -2,8 +2,9 @@
 
 -- Config { font = "xft:Fiery Turk-6"
 -- Config { font = "-*-Fixed-Medium-R-Semicondensed-*-13-*-*-*-*-*-*-*"
-Config { font = "xft:Terminus:pixelsize=12:style=Regular"
-        , additionalFonts = ["xft:FontAwesome:size=8"]
+-- Config { font = "xft:Terminus:pixelsize=12:style=Regular"
+Config { font = "xft:envypn:pixelsize=13:style=Regular"
+        , additionalFonts = ["xft:FontAwesome:size=8", "xft:FontAwesome:size=10"]
         , borderColor = "black"
         , borderWidth = 0
         , border = TopB
@@ -14,7 +15,12 @@ Config { font = "xft:Terminus:pixelsize=12:style=Regular"
         , iconOffset = 6
         , commands = 
                 --[ Run Weather "KEMT" ["-t","<tempC>C","-L","18","-H","25","--normal","green","--high","red","--low","lightblue"] 36000
-                [ Run Weather "KEMT" [ "--template", "<skyCondition>: <fc=#4682B4><tempF></fc>°F <fc=#4682B4><rh></fc>%"
+                [ 
+
+                  Run Com "echo"
+                                     ["-n",      "<fn=2>\xf1cb</fn>"
+                                     ] "icon" 0
+                , Run Weather "KEMT" [ "--template", "<skyCondition>: <fc=#4682B4><tempF></fc>°F <fc=#4682B4><rh></fc>%"
                                      ] 36000
                 , Run DynNetwork     [ "--template" , " <tx> <rx>(<dev>)"
                                      , "--Low"      , "1000000"       -- units: B/s
@@ -28,6 +34,7 @@ Config { font = "xft:Terminus:pixelsize=12:style=Regular"
                 -- Run wireless python script that mimics xmobars wireless plugin. really only
                 -- needed for me because I use this config on multiple PCs and there is not
                 -- a DynWireless plugin
+
                 , Run Com "xmobar_wireless.py"
                                      ["-t",      "<fn=1>\xf1eb</fn> <essid>:<quality>"
                                      ,"-L"       ,"0"
@@ -61,25 +68,25 @@ Config { font = "xft:Terminus:pixelsize=12:style=Regular"
                                      , "--high"     , "#ff7070"
                                      , "--width" , "7"
                                      ] 30
-                , Run BatteryP ["BAT0"]
-                               ["-t"          , "<acstatus>"
-                               , "-L"         , "15"
-                               , "-H"         , "60"
-                               , "--low"      , "#ff7070"
-                               , "--normal"   , "#eeba44"
-                               , "--high"     , "lightgreen"
-                               , "--" -- battery specific options
+                , Run Com "xmobar_battery.py"
+                                     [ "BAT0"
+                                     , "-t"         , "<acstatus>"
+                                     , "-L"         , "15"
+                                     , "-H"         , "60"
+                                     , "--low"      , "#ff7070"
+                                     , "--normal"   , "#eeba44"
+                                     , "--high"     , "lightgreen"
+                                     , "--" -- battery specific options
                                          -- discharging
                                          , "-o", "<leftipat> <left>% (<timeleft>)"
                                          -- charging
                                          , "-O", "<leftipat> <left>% (<timeleft>)"
                                          -- charged
-                                         , "-i", "<fc=lightgreen>100% </fc>"
-                                         --, "-i", ""  -- thumb (filled)
+                                         , "-i", "<leftipat> <left>% "
                                          , "--off-icon-pattern", "<fn=1>\xf0e7</fn>"
-                                         , "--idle-icon-pattern", "<fc=#50aa55><fn=1>\xf0e7</fn></fc>"
-                                         , "--on-icon-pattern", "<fn=1>\xf1e6</fn>"
-                               ] 100
+                                         , "--idle-icon-pattern", "<fc=#50aa55><fn=1>\xf164</fn></fc>"
+                                         , "--on-icon-pattern", "<fc=lightyellow><fn=1>\xf1e6</fn></fc>"
+                               ] "batteryinfo" 100
                 , Run Date "<fn=1>\xf133</fn> %m/%d/%y" "date" 20
                 , Run Date "<fn=1>\xf017</fn> <fc=#ee9a00>%H:%M:%S</fc>" "time" 10
                 , Run Com "generate-stalonetray-padding-for-xmobar.sh" [] "trayerpad" 50
@@ -87,7 +94,7 @@ Config { font = "xft:Terminus:pixelsize=12:style=Regular"
                 ]
         , sepChar = "%"
         , alignSep = "}{"
-        , template = "%StdinReader%} %multicpu%%thermal9%%memory% %dynnetwork%{%wirelessinfo%   %date%   %time%   %battery%%trayerpad%"
+        , template = "%icon% %StdinReader%} %multicpu%%thermal9%%memory% %dynnetwork%{%wirelessinfo%   %date%   %time%   %batteryinfo%%trayerpad%"
 --        , template = "%StdinReader%} %multicpu%%thermal9%%memory%%swap%%diskio% %dynnetwork%{%wlan0wi%   %date%   %time%   %battery%"
 --        , template = "%StdinReader%} %multicpu%  %memory% %swap%  %dynnetwork%{%wlan0wi%  %date%  %time%  %battery% | %KEMT% "
 --        , template = "%StdinReader% | %multicpu% | %memory% * %swap% | %wlan0% - %eth0% }{<fc=#ee9a00>%date%</fc> | %battery% | %KEMT% "

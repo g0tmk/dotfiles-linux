@@ -28,7 +28,7 @@ QEMU_ABSOLUTE_PATH="${WORKING_DIR}/qemu-${QEMU_VERSION_TO_INSTALL}/${QEMU_BUILD_
 
 install_prereqs() {
     # QEMU build dependencies
-    sudo apt install -y git libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev
+    sudo apt install -y git build-essential libglib2.0-dev libfdt-dev libpixman-1-dev zlib1g-dev
     # optional dependencies; not sure which features are needed so install them all
     sudo apt install -y libaio-dev libbz2-dev libcap-dev libcap-ng-dev libcurl4-gnutls-dev libgtk-3-dev libncurses5-dev libnuma-dev libsasl2-dev libsdl1.2-dev libseccomp-dev libsnappy-dev libssh2-1-dev libvde-dev libvdeplug-dev libvte-2.91-dev libxen-dev liblzo2-dev xfslibs-dev libnfs-dev libiscsi-dev
     # optional dependencies not available on debian 9.9:
@@ -115,10 +115,13 @@ create_osx_install_files() {
     # clone OSX-KVM repo and use it to fetch OSX ISO
     mkdir -p "$WORKING_DIR"
     cd "$WORKING_DIR"
-    git clone https://github.com/kholia/OSX-KVM.git
+    # ignore git failures since I don't want to exit if repo already exists
+    git clone https://github.com/kholia/OSX-KVM.git || true
     cd OSX-KVM
 
-    echo "\nShowing available OSX ISOs (I just picked newest (10.14.5 build 18F203))"
+    #echo "\nShowing available OSX ISOs (EDIT: install at 2 mins remain?)I just picked newest (10.14.5 build 18F203))"
+    echo "\nShowing available OSX ISOs (I picked (10.14.4 build 18E2034))"
+    rm BaseSystem.dmg BaseSystem.img || true
     ./fetch-macOS.py
     dmg2img BaseSystem.dmg BaseSystem.img
 
@@ -164,7 +167,7 @@ start_osx() {
       - Scheme: GUID Partition Map
       - and hit Erase
     - Close Disk Utility
-    - (NOT NEEDED) Go to Utilities > Terminal and type 'cp -av /Extra /Volumes/KVMDisk/'
+    - (NOT NEEDED hopefully since I didn't see a /Extra) Go to Utilities > Terminal and type 'cp -av /Extra /Volumes/KVMDisk/'
     - Select 'Reinstall macOS' and select KVMDisk. The installer will download about
       3 GB and take ~45 minutes before booting automatically into OSX."
     ./boot-macOS-NG-absolutepath.sh

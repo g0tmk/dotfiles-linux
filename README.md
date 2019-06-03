@@ -381,6 +381,12 @@
     sudo ninja -C build install
     ```
 
+0. Setup Franz (messenger)
+
+    - Download .deb from [here](https://www.meetfranz.com/download?platform=linux&type=deb)
+    - `sudo dpkg -i file.deb`
+    - you can now run `franz`
+
 0. Setup Dell Command | Configure (Dell hardware only)
 
     - This allows for control over some BIOS settings from the OS, ie keyboard

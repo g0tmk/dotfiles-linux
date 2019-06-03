@@ -381,66 +381,6 @@
     sudo ninja -C build install
     ```
 
-0. ~~Install tizonia~~
-
-    - *NOTE: Latest (0.18.0) not good for soundcloud. Loads at most 10 songs with --soundcloud-user-stream, maybe a soundcloud API limitation. It also misses some tracks, but not as many as mopidy-soundcloud. Check again after some major version updates*
-
-    - guide from [here](http://tizonia.org/docs/debian/)
-    - NOTE: I disagree with some of the actions take in the standard install script.
-      Since I don't want to hose my system by running this, download the script and
-      make the following changes:
-      - Modify the two calls to tee /etc/apt/sources.list: The new sources should
-        be added to /etc/apt/sources.list.d/mopidy.list and tizonia.list
-      - Remove --force-yes from the apt install call
-
-    ```bash
-    curl 'https://bintray.com/user/downloadSubjectPublicKey?username=tizonia' | sudo apt-key add - 
-    echo "deb https://dl.bintray.com/tizonia/debian stretch main" | sudo tee /etc/apt/sources.list.d/tizonia.list
-    curl 'http://apt.mopidy.com/mopidy.gpg' | sudo apt-key add -
-    echo "deb http://apt.mopidy.com/ stable main contrib non-free" | sudo tee -a /etc/apt/sources.list.d/mopidy.list
-
-    cd /tmp
-    wget https://github.com/tizonia/tizonia-openmax-il/raw/master/tools/install.sh
-    vi install.sh
-    # make changes listed above
-    ./install-edited.sh
-    tizonia --soundcloud-user-stream
-    ```
-
-    - Removing:
-
-    ```bash
-    sudo apt remove tizonia-all
-    sudo apt remove libspotify12
-    sudo rm /etc/apt/sources.list.d/tizonia.list
-    sudo rm /etc/apt/sources.list.d/mopidy.list
-    sudo apt update
-    sudo apt autoremove
-    ```
-
-0. ~~Install mopidy~~
-
-    - *NOTE: Latest (mopidy-soundcloud 2.1.0) not good for soundcloud. Pulls _up to_ the 10 most recent songs and many don't pull at all (those with unicode?) Check again if/when this has moved to python 3.*
-
-    ```bash
-    # you may need these, but skip if you don't `sudo apt install gir1.2-gst-plugins-base-1.0 gir1.2-gstreamer-1.0 python-gst-1.0 python-pykka`
-
-    sudo apt install python-gst-1.0 gir1.2-gstreamer-1.0 gir1.2-gst-plugins-base-1.0 gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly gstreamer1.0-tools
-
-    sudo pip install -U mopidy
-    sudo pip install -U mopidy-soundcloud
-
-    mopidy
-    ncmpcpp
-    ```
-
-    - Removing:
-
-    ```bash
-    sudo pip uninstall mopidy-soundcloud
-    sudo pip uninstall mopidy
-    ```
-
 0. Setup Dell Command | Configure (Dell hardware only)
 
     - This allows for control over some BIOS settings from the OS, ie keyboard
@@ -514,6 +454,66 @@
     # need to try latest version
     ```
 
+0. ~~Install tizonia~~
+
+    - NOTE: Latest (0.18.0) isn't worth using for soundcloud. Loads at most 10 songs with --soundcloud-user-stream, maybe a soundcloud API limitation. It also misses some tracks, but not as many as mopidy-soundcloud. Check again after some major version updates
+
+    - guide from [here](http://tizonia.org/docs/debian/)
+    - NOTE: I disagree with some of the actions take in the standard install script.
+      Since I don't want to hose my system by running this, download the script and
+      make the following changes:
+      - Modify the two calls to tee /etc/apt/sources.list: The new sources should
+        be added to /etc/apt/sources.list.d/mopidy.list and tizonia.list
+      - Remove --force-yes from the apt install call
+
+    ```bash
+    curl 'https://bintray.com/user/downloadSubjectPublicKey?username=tizonia' | sudo apt-key add - 
+    echo "deb https://dl.bintray.com/tizonia/debian stretch main" | sudo tee /etc/apt/sources.list.d/tizonia.list
+    curl 'http://apt.mopidy.com/mopidy.gpg' | sudo apt-key add -
+    echo "deb http://apt.mopidy.com/ stable main contrib non-free" | sudo tee -a /etc/apt/sources.list.d/mopidy.list
+
+    cd /tmp
+    wget https://github.com/tizonia/tizonia-openmax-il/raw/master/tools/install.sh
+    vi install.sh
+    # make changes listed above
+    ./install-edited.sh
+    tizonia --soundcloud-user-stream
+    ```
+
+    - Removing:
+
+    ```bash
+    sudo apt remove tizonia-all
+    sudo apt remove libspotify12
+    sudo rm /etc/apt/sources.list.d/tizonia.list
+    sudo rm /etc/apt/sources.list.d/mopidy.list
+    sudo apt update
+    sudo apt autoremove
+    ```
+
+0. ~~Install mopidy~~
+
+    - NOTE: Latest (mopidy-soundcloud 2.1.0) isn't worth using for soundcloud. Pulls _up to_ the 10 most recent songs and many don't pull at all (those with unicode?) Check again if/when this has moved to python 3.
+
+    ```bash
+    # you may need these, but skip if you don't `sudo apt install gir1.2-gst-plugins-base-1.0 gir1.2-gstreamer-1.0 python-gst-1.0 python-pykka`
+
+    sudo apt install python-gst-1.0 gir1.2-gstreamer-1.0 gir1.2-gst-plugins-base-1.0 gstreamer1.0-plugins-good gstreamer1.0-plugins-ugly gstreamer1.0-tools
+
+    sudo pip install -U mopidy
+    sudo pip install -U mopidy-soundcloud
+
+    mopidy
+    ncmpcpp
+    ```
+
+    - Removing:
+
+    ```bash
+    sudo pip uninstall mopidy-soundcloud
+    sudo pip uninstall mopidy
+    ```
+
 0. ~~Setup yeganesh:~~ Yeganesh is included in ~/bin/.
 
     ```bash
@@ -558,47 +558,28 @@
 
 
 #### TODO:
-
 - use hostname_colorized in PS1 and remove its TODO in binary section above
 - colorscheme update: dark blue is too dark
 - finish copying info from documents/xps/debian_notes.txt to this repo
-- maintenence
-  - xps9550 palmrest
-  - xps9550 repaste
-- check grub bootloader (colors not working)
 - add aliases to yeganesh with [this](https://github.com/8carlosf/dotfiles/blob/master/bin/dmenui)
+- get syncthing working and autostart it (maybe)
 - edit start_syncthing
   - needs a better name, too bad `syncthing` is taken by the default install
   - if service running, opens a browser. otherwise it opens after ~4 seconds
 - get something going that will run slock automatically after ~20 mins of inactivity
 - add more stuff to left side of xmobar
-- go through tmux conf - there are some weird settings in there
-- make a small wrapper around amixer that allows higher-level logic (ie if sound is
-  muted and you hit the 'volume down' key, set volume to minimum and unmute)
-  - make sure that the wrapper always applies volume changes before unmuting
-- get syncthing working and autostart it (maybe)
 - Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed
 - Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
 - modify tmux config to not show stats on bottom bar that are already in xmobar
 - check out dell command | configure; there are builds for linux
-  - NOTE: these links are for dcc 3.3 - use 4.2 instead
-  - [link to download](https://www.dell.com/support/article/us/en/04/sln311302/dell-command-configure?lang=en)
-  - [link to documentation](https://www.dell.com/support/manuals/us/en/04/command-configure-v3.3/dellcommandconfigure-cli-3.3/-primarybatterycfg?guid=guid-681d4efe-eed0-4d0f-b290-afdd74e81765&lang=en-us)
-  - then run `sudo /opt/dell/dcc/cctk` to show usage (and show which options are valid
-    on this system
-  - then configure with `sudo /opt/dell/dcc/cctk --primarybatterycfg=custom:70-90`
-  - NOTE: there are other useful options that may work also:
     - `--biosver`: show bios version
     - `--fullscreenlogo`: hide/show logo at post
     - `--splashscreen` enable or disable, maybe similar to above
-    - `--kbdbacklighttimeoutac` and `--kbdbacklighttimeoutbatt` allow adjusting kbd backlight timeouts
     - `--keyboardillumination` allow adjusting kbd backlight brightness
-    - `--mfgdate` shows manufacturing date
     - `--fanspeed` auto, high, medium, medium_high, medium_low, low
     - `--fanspeedctrllevel` 0-100
       - 0=auto; higher number provides larger cooling boost
     - `--sysfanspeed` fullspeed, noisereduce
-    - `--sysname` show system name?
     - `--thunderboltsecuritylevel` can be used to disable thunderbolt port
       - nosecurity (thunderbolt enabled), userauthorization, secureconnect, displayport (thunderbolt disabled)
 - check out fasd (and jetho's repo)
@@ -626,19 +607,18 @@
 
 
 #### BUGS
-- capslock->escape remapping doesn't stay bound always? maybe after wake from sleep?
+- setxkbmap remappings are unbound after wake from sleep ~50% of the time
   - workaround for now is run `remap` when this happens
-  - appears to affect other remappings also (ie win/alt swap)
   - seems to be a known bug, one of the comments has a workaround that may work
     - [comment](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=633849#92)
     - [workaround script](https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=633849;filename=40xkb-save-restore;msg=92)
+- xmobar temperature readout glitches after wake from suspend
+  - happened twice in a row within two days, but hasen't happened in > 2 weeks. will
+    make temperature script if the bug happens again.
 - ~~Figure out why xmobar is hidden by windows by default~~
   - It is hidden by windows, but trayer is not. Opening a window after 4 
     seconds (trayer startup delay) has no issue. So this could be solved
     by improving trayer startup delay (a different todo)
-- xmobar temperature readout glitches after wake from suspend
-  - happened twice in a row within two days, but hasen't happened in > 2 weeks. will
-    make temp script if the bug happens again.
 
 
 #### Notes

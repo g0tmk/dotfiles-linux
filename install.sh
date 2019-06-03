@@ -79,6 +79,13 @@ stow_dotfiles () {
     echo
 }
 
+font_setup () {
+    echo "Updating font cache..."
+    fc-cache
+    ask "Hit enter to open font wizard. Choose Native, Automatic, Yes." stow_dotfiles
+    sudo dpkg-reconfigure fontconfig-config
+}
+
 change_settings () {
     echo "Changing shell to zsh..."
     chsh -s /bin/zsh
@@ -93,6 +100,7 @@ f(){ install_apps "./app_list_minimal.txt"; }; ask "Install minimal apps?" f
 f(){ install_apps "./app_list_extras.txt"; }; ask "Install extra apps (games, etc)?" f
 ask "Install dotfiles?" stow_dotfiles
 ask "Change settings (shell, alternatives)?" change_settings
+ask "Update font cache/settings?" font_setup
 echo "Done!"
 
 

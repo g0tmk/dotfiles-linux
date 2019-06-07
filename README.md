@@ -613,6 +613,8 @@
 
 
 #### BUGS
+- occasionally tmux prefix hotkey stops working in urxvt. Seems to be a urxvt issue.
+  - workaround for now is close urxvt, open a new one, and reattach with `tmux a`
 - setxkbmap remappings are unbound after wake from sleep ~50% of the time
   - workaround for now is run `remap` when this happens
   - seems to be a known bug, one of the comments has a workaround that may work
@@ -622,9 +624,9 @@
   - happened twice in a row within two days, but hasen't happened in > 2 weeks. will
     make temperature script if the bug happens again.
 - ~~Figure out why xmobar is hidden by windows by default~~
-  - It is hidden by windows, but trayer is not. Opening a window after 4 
-    seconds (trayer startup delay) has no issue. So this could be solved
-    by improving trayer startup delay (a different todo)
+  - New windows apparently cover xmobar but not trayer - once trayer opens, the layout
+    automatically reconfigures to show trayer (and xmobar since it is the same height
+    as trayer). Improving trayer startup delay in .xsessionrc will fix this for good.
 
 
 #### Notes

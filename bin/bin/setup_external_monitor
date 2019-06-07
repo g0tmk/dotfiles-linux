@@ -4,56 +4,70 @@
 #  - resolution is set to default
 #  - HDMI1 and DP1 are enabled if they are detected and configured to the left of primary
 #
-# TODOS:
-#  - Modify to iterate over displays instead of repeating so much code
+# rotations (default none)
+# --rotate
+# --rotate2
+# --upsidedown
+#
+# positions (default to the left)
+# --right
+# --left
+# --above
 
-xrandr_command="/usr/bin/xrandr"
-sed_command="/bin/sed"
+xrandr_command="/usr/bin/xrandr --verbose"
+egrep_command="/bin/egrep"
 INTERNAL_DISPLAY_NAME="eDP1"
 
 extra_params=""
 
-if [ "$1" = "--rotate" ]; then
-    echo "Rotating external display(s) right"
-    extra_params+=" --rotate right"
-fi
+rotation="--rotate normal"
+#position="--above $INTERNAL_DISPLAY_NAME"
+position="--left-of $INTERNAL_DISPLAY_NAME"
 
-DISPLAY_TO_CHECK="HDMI1"
-is_display_connected=`DISPLAY=:0 $xrandr_command | $sed_command -n '/$DISPLAY_TO_CHECK connected/p'`
-if [ -n "$is_display_connected" ]; then
-    echo "Enabling display $DISPLAY_TO_CHECK"
-    DISPLAY=:0 $xrandr_command --output "$DISPLAY_TO_CHECK" --auto --left-of "$INTERNAL_DISPLAY_NAME" $extra_params
-else
-    DISPLAY=:0 $xrandr_command --output "$DISPLAY_TO_CHECK" --off
-fi
 
-DISPLAY_TO_CHECK="HDMI-1"
-is_display_connected=`DISPLAY=:0 $xrandr_command | $sed_command -n '/$DISPLAY_TO_CHECK connected/p'`
-if [ -n "$is_display_connected" ]; then
-    echo "Enabling display $DISPLAY_TO_CHECK"
-    DISPLAY=:0 $xrandr_command --output "$DISPLAY_TO_CHECK" --auto --left-of "$INTERNAL_DISPLAY_NAME" $extra_params
-else
-    DISPLAY=:0 $xrandr_command --output "$DISPLAY_TO_CHECK" --off
-fi
+while test $# -gt 0
+do
+    case "$1" in
+        --rotate|--rotatecw|--90) 
+            rotation="--rotate right"
+            ;;
+        --rotate2|--rotateccw|--270)
+            rotation="--rotate left"
+            ;;
+        --upsidedown|--flipped|--inverted|--180) 
+            rotation="--rotate inverted"
+            ;;
+        --right)
+            position="--right-of $INTERNAL_DISPLAY_NAME"
+            ;;
+        --left)
+            position="--left-of $INTERNAL_DISPLAY_NAME"
+            ;;
+        --above)
+            position="--above $INTERNAL_DISPLAY_NAME"
+            ;;
+        --*) echo "bad option $1"
+            ;;
+        *) echo "argument $1"
+            ;;
+    esac
+    shift
+done
 
-DISPLAY_TO_CHECK="DP1"
-is_display_connected=`DISPLAY=:0 $xrandr_command | $sed_command -n '/$DISPLAY_TO_CHECK connected/p'`
-if [ -n "$is_display_connected" ]; then
-    echo "Enabling display $DISPLAY_TO_CHECK"
-    DISPLAY=:0 $xrandr_command --output "$DISPLAY_TO_CHECK" --auto --left-of "$INTERNAL_DISPLAY_NAME" $extra_params
-else
-    DISPLAY=:0 $xrandr_command --output "$DISPLAY_TO_CHECK" --off
-fi
+configure_output() {
+    if DISPLAY=:0 $xrandr_command | $egrep_command "$1 connected" > /dev/null; then
+        echo "Enabling display $1"
+        DISPLAY=:0 $xrandr_command --output "$1" --auto $rotation $position
+    else
+        DISPLAY=:0 $xrandr_command --output "$1" --off > /dev/null 2>&1
+    fi
+}
 
-DISPLAY_TO_CHECK="VGA-1"
-is_display_connected=`DISPLAY=:0 $xrandr_command | $sed_command -n '/$DISPLAY_TO_CHECK connected/p'`
-if [ -n "$is_display_connected" ]; then
-    echo "Enabling display $DISPLAY_TO_CHECK"
-    DISPLAY=:0 $xrandr_command --output "$DISPLAY_TO_CHECK" --auto --left-of "$INTERNAL_DISPLAY_NAME" $extra_params
-else
-    DISPLAY=:0 $xrandr_command --output "$DISPLAY_TO_CHECK" --off
-fi
-
+# TODO: use `xrandr --listmonitors` to generate a list to configure instead
+configure_output "HDMI1"
+configure_output "HDMI-1"
+configure_output "DP1"
+configure_output "VGA-1"
 
 
 # re-init some settings since changing monitor config breaks:
@@ -61,5 +75,6 @@ fi
 #  conky location
 sleep 2
 sh ~/.fehbg &
-killall -SIGUSR1 conky
+#killall -SIGUSR1 conky
 
+exit 0

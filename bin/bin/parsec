@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 
+# Start parsec, stopping others if needed
+#
+#   pass --autoconnect to automatically use the first host if it up
+#
+
 set -Ee          # exit immediately on command failure
 set -o pipefail  # treat failure within a pipe as failure
 set -u           # disallow unset variables
 
-PARSECD_BINARY="parsecd"
+PARSECD_BINARY="parsecd client_windowed=1"
 
 if pgrep -x "$PARSECD_BINARY" > /dev/null
 then
@@ -12,7 +17,43 @@ then
     killall "$PARSECD_BINARY" || true
 fi
 
-# run parsec
-"$PARSECD_BINARY" \
-    client_windowed=1
+autoconnect=false
+while test $# -gt 0
+do
+    case "$1" in
+        --autoconnect)
+            autoconnect=true
+            ;;
+        #--*) echo "bad option $1"
+        #    ;;
+        #*) echo "argument $1"
+        #    ;;
+    esac
+    shift
+done
+
+
+# no autoconnect so just run parsec
+if $autoconnect; then 
+    $PARSECD_BINARY
+    exit 0
+fi
+
+# try to autoconnect with expect
+echo '#!usr/bin/expect -f
+
+set timeout 2
+
+spawn -ignore HUP '${PARSECD_BINARY}'
+
+expect "Host up!\r"
+expect "Use saved password for g0tmk? (y/n):"
+send -- "y\r"
+
+expect "Select server:"
+send -- "1\r"
+
+interact
+#expect eof
+' | expect "-"
 

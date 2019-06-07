@@ -13,6 +13,7 @@ curl
 debian-handbook
 dos2unix
 dzen2
+expect
 fcrackzip
 feh
 ffmpeg

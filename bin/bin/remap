@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# apply my custom keyboard remappings
+#
+# this script should NOT cause issues if remappings are already applied
+
 
 # set capslock = escape
 setxkbmap -option caps:escape

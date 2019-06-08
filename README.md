@@ -577,17 +577,6 @@
 - Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed
 - Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
 - modify tmux config to not show stats on bottom bar that are already in xmobar
-- check out dell command | configure; there are builds for linux
-    - `--biosver`: show bios version
-    - `--fullscreenlogo`: hide/show logo at post
-    - `--splashscreen` enable or disable, maybe similar to above
-    - `--keyboardillumination` allow adjusting kbd backlight brightness
-    - `--fanspeed` auto, high, medium, medium_high, medium_low, low
-    - `--fanspeedctrllevel` 0-100
-      - 0=auto; higher number provides larger cooling boost
-    - `--sysfanspeed` fullspeed, noisereduce
-    - `--thunderboltsecuritylevel` can be used to disable thunderbolt port
-      - nosecurity (thunderbolt enabled), userauthorization, secureconnect, displayport (thunderbolt disabled)
 - check out fasd (and jetho's repo)
 - check out [rofi](https://github.com/davatorium/rofi) (dmenu/yeganesh replacement)
 - check out YouCompleteMe (https://github.com/Valloric/YouCompleteMe)
@@ -596,7 +585,6 @@
 - login to firefox to sync maybe? its a pain to re-setup
 - figure out a good way to save some of fstab's contents (NASes etc). maybe have a file that you append to current fstab during setup?
 - figure out where fieryturk comes from (it is used in .xmobarrc)
-- compare envypn font (from [here](https://bbs.archlinux.org/viewtopic.php?id=144462) with terminus font)
 - check out polybar [here](https://github.com/jaagr/polybar)
   - [screenshot](https://old.reddit.com/r/unixporn/comments/bjq866/bspwm_first_time_posting_i_hope_you_guys_like_it_3/) [dotfiles]( https://raw.githubusercontent.com/jaagr/dots/master/.local/etc/themer/themes/darkpx/polybar)
   - [screenshot](https://i.imgur.com/A6spiZZ.png)
@@ -604,8 +592,6 @@
 - eventually add gtk theme
   - [Fantome](https://github.com/addy-dclxvi/gtk-theme-collections)
 - maybe make a new games.md for the install instructions for games
-- add `qrcode` binary that can accept from stdin (or filename arg maybe) and display qr in terminal
-  - bonus: use unicode to increase pixel resolution OR generate an image the terminal can understand (like ranger)
 - setup auto install for redshift; two manual steps needed after installing via apt:
   - add `Environment=DISPLAY=:0` to `/usr/lib/systemd/user/redshift.service` under 
     the [Service] header

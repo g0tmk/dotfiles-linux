@@ -99,6 +99,10 @@ class Battery():
         return val
 
     @property
+    def health_percent_readable(self):
+        return "{:.0f}".format(self.health_percent)
+
+    @property
     def status(self):
         """Determine the _real_ state of the battery (Charging/Discharging/AC Idle)
         using the current draw of the battery, output of tlp-stat, and /sys status."""
@@ -192,7 +196,8 @@ if __name__ == "__main__":
         metavar="TEMPLATE",
         help=(
             "Output template. Definition is a subset of the standard xmobarr Battery "
-            "plugin. Allowed values: left, leftbar, leftipat, timeleft, watts, acstatus."
+            "plugin. Allowed values: left, leftbar, leftipat, timeleft, watts, "
+            "acstatus. Also allowed custom values: health."
         ),
     )
     p.add_argument(
@@ -371,6 +376,7 @@ if __name__ == "__main__":
     template = template.replace("<left>", charge)
     template = template.replace("<leftbar>", leftbar)
     template = template.replace("<timeleft>", b.time_left_readable)
+    template = template.replace("<health>", b.health_percent_readable)
 
     print(template, end="")
 

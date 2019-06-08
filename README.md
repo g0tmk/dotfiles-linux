@@ -7,8 +7,8 @@
    - [Notes about installing a Debian Stretch on a Dell XPS 15](http://wiki.yobi.be/wiki/Laptop_Dell_XPS_15)
    - [Dell XPS 15 - ArchWiki](https://wiki.archlinux.org/index.php/Dell_XPS_15)
    - [Dell XPS 15 9550 - ArchWiki](https://wiki.archlinux.org/index.php/Dell_XPS_15_(9550))
+   - 2015-09-11 [Ubuntu 15.10 on Dell XPS 15 9550](https://ubuntuforums.org/showthread.php?t=2301071&p=13382949#post13382949)
    - 2016-01-13 [Arch on XPS 15 (late 2015)](https://bbs.archlinux.org/viewtopic.php?id=204739)
-   - [Ubuntu 15.10 on Dell XPS 15 9550](https://ubuntuforums.org/showthread.php?t=2301071&p=13382949#post13382949)
    - 2016-05-16 [Ubuntu 16.04 on Dell XPS 15 9550](https://ubuntuforums.org/showthread.php?t=2317843)
    - 2017-12-01 [Installing Kali Linux on a Dell XPS 9550](https://www.rafaelhart.com/2017/12/installing-kali-linux-on-a-dell-xps-9550/)
 
@@ -19,12 +19,14 @@
  - `clipboard` to handle terminal I/O (`ls | clipboard` or `clipboard > pasted.txt`)
  - `colortable` shows all terminal color text/background combinations and their codes
  - `colortable256` shows all 256 terminal colors
+ - `qrcode` to display text from the terminal as a qrcode
  - `remap` applies keyboard remappings. sometimes needed after a wake from suspend
  - `setup_external_monitor` to handle enabling/disabling of secondary monitors
  - `show_osd_message "message"` shows a message onscreen. Used for shortcut feedback
  - `ssht` to connect to ssh clients and auto-tmux
  - `start_syncthing` starts the syncthing user service
  - `time_shell_command` runs a shell command 1000 times and shows its average runtime
+ - `volumecontrol [set | increase | decrease] percent` or `volumecontrol toggle` to set volume
  - some more niche ones
    - `dwarf_fortress` to launch dwarf fortress with some basic command line options
    - `game_on_bpc` to wake up my desktop and log in remotely via parsec once it is up
@@ -34,6 +36,7 @@
    - `garbage` shows files in home directory that I can probably delete
    - `generate-stalonetray-padding-for-xmobar.sh` is used by xmobar to detect trayer size
    - `hostname_colorized` generates a different colored name per-host. used in terminal PS1
+   - `xmobar_battery.py` is used by xmobar to show battery info
    - `xmobar_wireless.py` is used by xmobar to show wireless info
 
 #### Install steps on a fresh Debian (Stable) machine

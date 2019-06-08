@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+# convert first argument (string) to qrcode and display it
+#
+# runs qrcode-terminal, downloading repo first if needed
+
+REPO_URL="git@github.com:g0tmk/qrcode-terminal.git"
+REPO_LOCATION="${HOME}/repos/qrcode-terminal"
+
+check_download_repo() {
+    # check if repo exists at $2, if not, download it from $1
+
+    # pull repo name from url (assumes only alphanumeric, _, and - characters)
+    repo_name=$(echo $1 | egrep -o "[A-Za-z0-9_-]+\.git" | sed -e "s/.git$//g")
+    
+    if ! ls "$2" > /dev/null 2>&1; then
+        read -p "Error: Can't find $repo_name - download it from git? [y/n]:"
+
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            git clone "$1" "$2"
+        else
+            exit 1
+        fi
+    fi
+}
+
+check_download_repo "$REPO_URL" "$REPO_LOCATION"
+
+python "$REPO_LOCATION" $1

@@ -70,11 +70,25 @@ configure_output "DP1"
 configure_output "VGA-1"
 
 
-# re-init some settings since changing monitor config breaks:
-#  wallpaper tiling
-#  conky location
+# re-init things that are broken due to monitor reconfiguration
 sleep 2
+
+# wallpaper tiling
 sh ~/.fehbg &
+sleep 0.5
+
+# conky location
 #killall -SIGUSR1 conky
+#sleep 0.5
+
+# synergy virtual monitor size
+#killall synergy
+#start-synergy
+#sleep 0.5
+
+# stalonetray posision is fixed by restarting it
+#killall stalonetray
+#stalonetray &
+#sleep 0.5
 
 exit 0

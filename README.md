@@ -34,7 +34,7 @@
    - `parsec` starts parsecd correctly (killing it first if running). used by game_on_bpc
    - `parsec-browser` is the same as above, but also opens a browser to config if needed
    - `garbage` shows files in home directory that I can probably delete
-   - `generate-tray-padding.sh` is used by xmobar to detect trayer size
+   - `generate-tray-padding` is used by xmobar to detect trayer size
    - `hostname_colorized` generates a different colored name per-host. used in terminal PS1
    - `xmobar_battery.py` is used by xmobar to show battery info
    - `xmobar_wireless.py` is used by xmobar to show wireless info

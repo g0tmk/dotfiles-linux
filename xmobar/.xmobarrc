@@ -36,7 +36,7 @@ Config { font = "xft:envypn:pixelsize=13:style=Regular"
                 -- a DynWireless plugin
 
                 , Run Com "xmobar_wireless.py"
-                                     ["-t",      "<fn=1>\xf1eb</fn> <essid>:<quality>"
+                                     ["-t",      "<fn=1>\xf1eb</fn> <essid_short> <quality>%"
                                      ,"-L"       ,"0"
                                      ,"-H"       ,"32"
                                      ,"--low"    ,"#ff7070"

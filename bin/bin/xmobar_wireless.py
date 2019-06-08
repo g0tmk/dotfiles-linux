@@ -59,7 +59,8 @@ if __name__ == "__main__":
         metavar="TEMPLATE",
         help=(
             "Output template. Definition is a subset of the standard xmobarr Wireless "
-            "plugin. Allowed values: essid, quality, qualitybar."
+            "plugin. Allowed values: essid, quality, qualitybar. Custom values: "
+            "essid_short. "
         ),
     )
     p.add_argument(
@@ -151,6 +152,10 @@ if __name__ == "__main__":
         print("Wifi not connected", end="")
         sys.exit(0)
 
+    # make 'short' name by trimming words to 3 chars
+
+    essid_short = ' '.join([word[:3] for word in essid.split()])
+
     if quality < float(args.Low):
         color = args.low
     elif quality < float(args.High):
@@ -176,6 +181,7 @@ if __name__ == "__main__":
 
     template = args.template
     template = template.replace("<essid>", essid)
+    template = template.replace("<essid_short>", essid_short)
     template = template.replace("<quality>", quality)
     template = template.replace("<qualitybar>", qualitybar)
 

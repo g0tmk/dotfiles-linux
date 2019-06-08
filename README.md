@@ -28,6 +28,7 @@
  - `time_shell_command` runs a shell command 1000 times and shows its average runtime
  - `volume [set | increase | decrease] percent` or `volume toggle` to set volume
  - some more niche ones
+   - `desktop_log` outputs a list of system issues/things that need action. used by conky
    - `dwarf_fortress` to launch dwarf fortress with some basic command line options
    - `game_on_bpc` to wake up my desktop and log in remotely via parsec once it is up
    - `wake_bpc` tells the router to send a WoL packet to my desktop. used by game_on_bpc
@@ -599,6 +600,11 @@
   - add `Environment=DISPLAY=:0` to `/usr/lib/systemd/user/redshift.service` under 
     the [Service] header
   - run `systemctl --user enable redshift` then `systemctl --user start redshift`
+- Make some kind of automatic color scheme management that reads from a single location
+  - conky can execute a shell script which returns current terminal colors
+    - see [this stackoverflow answer](https://stackoverflow.com/a/37285624)
+  - xmobar's configuration could be edited with sed before starting
+    - would be nice to use somehting more obvious/explicit
 
 
 #### BUGS

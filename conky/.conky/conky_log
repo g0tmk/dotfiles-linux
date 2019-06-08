@@ -1,0 +1,54 @@
+conky.config = {
+    background=false,
+    alignment='bottom_left',
+    gap_x=20,
+    gap_y=20,
+    maximum_width=600,
+    minimum_width=0,
+
+    update_interval=60,
+    update_interval_on_battery=180,
+    total_run_times=0,
+    double_buffer=true,
+    
+    use_xft=true,
+    --font='Terminus:pixelsize=12:style=Regular',
+    --font='Terminus:pixelsize=15:style=Regular',
+    font='envypn:pixelsize=13:style=Regular',
+    override_utf8_locale=true,
+
+    own_window=true,
+    own_window_transparent = false,
+    --own_window_transparent = true,
+    own_window_argb_visual = true,
+    -- no background (100% transparency)
+    own_window_argb_value = 0,
+    -- dark transparent background (~40% transparent)
+    --own_window_argb_value = 160,
+    own_window_colour = '000000',
+    own_window_type='override',
+    own_window_class='conky',
+    own_window_hints='below,undecorated,sticky,skip_taskbar,skip_pager',
+    draw_shades=false,
+    draw_outline=false,
+    draw_borders=false,
+
+    -- dark blue
+    --default_color='002a5e',
+    -- light orange
+    --default_color='ff5614',
+    -- dark grey
+    --default_color='666666',
+    -- black
+    --default_color='000000',
+    -- white
+    --default_color='ffffee',
+    -- white from google material theme
+    --default_color='eceff1',
+    -- grey matches xmobar text color
+    default_color='grey',
+    --default_color='acafb1',
+}
+conky.text = [[
+${execi 60 "${HOME}/bin/desktop_log"}
+]]

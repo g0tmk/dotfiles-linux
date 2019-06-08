@@ -20,9 +20,9 @@ sleep 4 && compton -CG --vsync --experimental-backends --backend=glx &
 #sh ~/.xmonad/bin/conkybar.sh &
 #sh ~/.xmonad/bin/musicbar.sh &
 
-# open desktop panels (after 1s pause - may need to increase in future)
-# TODO: re-enable, move down 2px, edit config 
-# conky -p 1 -c ~/.conky/conky_desktop &
+# open desktop panels (after 4s pause - may need to increase in future)
+# TODO: 
+conky -p 4 -c ~/.conky/conky_log &
 
 
 # Set up an icon tray. Reads transparency from .xmobarrc to match it

@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
 # vim swapfiles. sw[a-p] would be more complete, but match swf files
-find ~ | egrep -e "\.sw[g-p]$" -e "\.DS_Store$"
-
+for file in $(find ~ | egrep -e "\.sw[g-p]$" -e "\.DS_Store$"); do
+    # skip open files
+    if lsof $file > /dev/null 2>&1; then
+        continue
+    fi
+    echo "file: $file"
+done
 

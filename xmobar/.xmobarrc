@@ -89,7 +89,7 @@ Config { font = "xft:envypn:pixelsize=13:style=Regular"
                                ] "batteryinfo" 100
                 , Run Date "<fn=1>\xf133</fn> %m/%d/%y" "date" 20
                 , Run Date "<fn=1>\xf017</fn> <fc=#ee9a00>%H:%M:%S</fc>" "time" 10
-                , Run Com "generate-stalonetray-padding-for-xmobar.sh" [] "trayerpad" 50
+                , Run Com "generate-tray-padding" [] "trayerpad" 50
                 , Run StdinReader
                 ]
         , sepChar = "%"

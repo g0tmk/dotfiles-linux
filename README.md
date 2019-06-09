@@ -114,6 +114,12 @@
     # try brightness controls (Fn+F11 on xps9550)
     ```
 
+0. Allow power commands without sudo password. Add to /etc/sudoers with `sudo visudo`:
+
+    ```bash
+    Cmnd_Alias    POWERCMDS = /sbin/shutdown, /sbin/reboot
+    <your_username> ALL = NOPASSWD: POWERCMDS
+    ```
 0. Enable sensors (xps9550 only)
 
     - First run `sensors`. If you see fan RPMs, skip this section.
@@ -605,6 +611,12 @@
     - see [this stackoverflow answer](https://stackoverflow.com/a/37285624)
   - xmobar's configuration could be edited with sed before starting
     - would be nice to use somehting more obvious/explicit
+- enable DRI3 to improve graphics performance. I tried guides online which suggest to
+  create a 20-intel.conf and add a line to enable, but it seems to already be enabled,
+  just not in use.
+    - `cat /var/log/Xorg.0.log | egrep -i "DRI[2-3]"` shows both DRI2 and DRI3 is
+      loaded, but only DRI2 is enabled.
+    - Outout of `LIBGL_DEBUG=verbose glxinfo | grep libgl` shows only DRI2 in use
 
 
 #### BUGS

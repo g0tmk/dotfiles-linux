@@ -17,6 +17,11 @@ promptinit
 prompt pws
 RPROMPT="%F{green}%~%f"
 
+# Import colorscheme from 'wal' asynchronously
+# # &   # Run the process in the background.
+# # ( ) # Hide shell job control messages.
+(cat ~/.cache/wal/sequences &)
+
 ## Source Prezto.
 #if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
 #  source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"

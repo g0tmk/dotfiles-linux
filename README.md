@@ -120,6 +120,16 @@
     Cmnd_Alias    POWERCMDS = /sbin/shutdown, /sbin/reboot
     <your_username> ALL = NOPASSWD: POWERCMDS
     ```
+
+0. Install pywal to enable colorschemes based on the wallpaper
+
+    ```bash
+    pip3 install --user pywal
+    # install extra backends (optional)
+    pip3 install --user haishoku colorthief colorz
+
+    ```
+
 0. Enable sensors (xps9550 only)
 
     - First run `sensors`. If you see fan RPMs, skip this section.

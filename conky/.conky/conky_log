@@ -1,13 +1,14 @@
 conky.config = {
     background=false,
     alignment='bottom_left',
-    gap_x=20,
-    gap_y=20,
+    gap_x=25,
+    gap_y=25,
     maximum_width=600,
     minimum_width=0,
+    border_inner_margin=10,
 
-    update_interval=60,
-    update_interval_on_battery=180,
+    update_interval=180,
+    update_interval_on_battery=600,
     total_run_times=0,
     double_buffer=true,
     
@@ -19,13 +20,17 @@ conky.config = {
 
     own_window=true,
     own_window_transparent = false,
-    --own_window_transparent = true,
+
     own_window_argb_visual = true,
     -- no background (100% transparency)
-    own_window_argb_value = 0,
+    --own_window_argb_value = 0,
     -- dark transparent background (~40% transparent)
     --own_window_argb_value = 160,
+    -- dark transparent background (~60% transparent)
+    own_window_argb_value = 100,
+
     own_window_colour = '000000',
+
     own_window_type='override',
     own_window_class='conky',
     own_window_hints='below,undecorated,sticky,skip_taskbar,skip_pager',
@@ -50,5 +55,8 @@ conky.config = {
     --default_color='acafb1',
 }
 conky.text = [[
+# note: desktop_log takes 1.8s to execute, so at the very least limit it to 1% cpu
+#       time with update_interval settings above.
+# TODO: verify that update_interval settings actually limit the execution of this
 ${execi 60 "${HOME}/bin/desktop_log"}
 ]]

@@ -11,17 +11,22 @@ sh ~/.fehbg &
 # set the cursor (get rid of weird X)
 xsetroot -cursor_name left_ptr
 
+
 # fix screen tear with compton (yshui's fork required for experimental-backends)
 # NOTE: needs to start _after_ xmonad, and only sleeps for 4 seconds,
 #       so xmonad/xmobar needs to finish startup by then
-sleep 4 && compton -CG --vsync --experimental-backends --backend=glx &
+#sleep 4 && compton -CG --vsync --experimental-backends --backend=glx &
+# compton blur experiments
+# 7x7box blur - pretty blurry
+#sleep 4 && compton -CG --config=/dev/null --vsync --experimental-backends --blur-background --blur-background-frame --backend="glx" --blur-background-fixed --blur-kern="7,7,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1," &
+# 9x9box blur
+#sleep 4 && compton -CG --config=/dev/null --vsync --experimental-backends --blur-background --blur-background-frame --backend="glx" --blur-background-fixed --blur-kern="9,9,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1," &
+# 11x11box blur
+sleep 4 && compton -CG --config=/dev/null --vsync --experimental-backends --blur-background --blur-background-frame --blur-background-fixed --blur-kern="11,11,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1," &
 
-# open dzen2 panels
-#sh ~/.xmonad/bin/conkybar.sh &
-#sh ~/.xmonad/bin/musicbar.sh &
+
 
 # open desktop panels (after 4s pause - may need to increase in future)
-# TODO: 
 conky -p 4 -c ~/.conky/conky_log &
 
 
@@ -46,4 +51,6 @@ sleep 4 && trayer --edge top --align right \
 
 
 exec xmonad
+
+
 

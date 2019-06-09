@@ -19,7 +19,7 @@
 # show battery health if lower than this value
 THRESHOLD_BATTERY_HEALTH=70
 # show fan RPMs if over this value
-THRESHOLD_FAN_SPEED_RPMS=3000
+THRESHOLD_FAN_SPEED_RPMS=3500
 # show 'X free space left in home' message if less than this many GB free
 THRESHOLD_HOME_DIR_GB=50
 # show load if 1-minute load average is over this value

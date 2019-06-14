@@ -43,18 +43,21 @@ if [ "$upgradable_packages" -gt 0 ]; then
     echo "${upgradable_packages} upgradeable apt packages"
 fi
 
-is_repo_uncommitted() {
+is_repo_unsaved() {
+    # return success if repository folder passed as $1 is not fully committed/pushed.
     cd $1
     git_status=$(git status 2>&1)
     if echo "$git_status" | grep "fatal: Not a git repository" > /dev/null; then
         return 1
+    elif echo "$git_status" | egrep "Your branch is ahead of '.+" > /dev/null; then
+        return 0
     elif echo "$git_status" | grep "working tree clean" > /dev/null; then
         return 1
     else
         return 0
     fi
 }
-if is_repo_uncommitted "${HOME}/dotfiles"*; then
+if is_repo_unsaved "${HOME}/dotfiles"*; then
     echo "dotfiles have uncommitted changes"
 fi
 
@@ -71,7 +74,7 @@ fi
 unsaved_repos=""
 unsaved_repo_count=0
 for folder in "${HOME}/repos/"*/; do
-    if is_repo_uncommitted "$folder"; then
+    if is_repo_unsaved "$folder"; then
         unsaved_repos+=" $(basename ${folder})"
         unsaved_repo_count=$(( $unsaved_repo_count + 1 ))
     fi

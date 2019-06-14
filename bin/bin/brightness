@@ -2,8 +2,12 @@
 from __future__ import print_function
 import sys
 
+# TODO: this file should be per-user instead of per-system
+_PREV_BRIGHTNESS_FILENAME = "/tmp/.last_brightness_value"
+
 def usage():
     print("{} ( set | increase | decrease ) percent".format(sys.argv[0]))
+    print("{} restore".format(sys.argv[0]))
     sys.exit(1)
 
 def read_file(filename):
@@ -31,43 +35,63 @@ class BrightnessControl():
         
         print("{}{: 6}%".format(brightness_bar, self.current_brightness_percent))
 
-    def set(self, percent):
+    def set(self, value):
+        value=int(value)
+        # min value is 1, max value is max_brightness
+        if value > self.max_brightness:
+            value = self.max_brightness
+        elif value < 1:
+            value = 1
+
+        # save current brightness first for restore method
+        with open(_PREV_BRIGHTNESS_FILENAME, 'w') as f:
+            f.write(str(self.current_brightness))
+        with open(self._prefix + "brightness", 'w') as f:
+            f.write(str(value))
+
+        self.print_display()
+
+    def set_percent(self, percent):
+        percent=int(percent)
         if percent > 100:
             percent = 100
         if percent < 0:
             percent = 0
-
-        if percent == 0:
-            new_value = 1
-        else:
-            new_value = int(self.max_brightness * (percent / 100.0))
-
-        with open(self._prefix + "brightness", 'w') as f:
-            f.write(str(new_value))
-
-        self.print_display()
+        self.set(int(self.max_brightness * (percent / 100.0)))
 
     def increase(self, percent):
+        percent=int(percent)
         percent_new = self.current_brightness_percent + percent
-        self.set(percent_new)
+        self.set_percent(percent_new)
 
     def decrease(self, percent):
+        percent=int(percent)
         self.increase(-percent)
+
+    def restore(self):
+        self.set(read_file(_PREV_BRIGHTNESS_FILENAME))
 
 try:
     op = sys.argv[1]
-    perc_delta = int(sys.argv[2])
 except IndexError:
     usage()
+
+def get_delta():
+    try:
+        return int(sys.argv[2])
+    except IndexError, TypeError:
+        usage()
 
 b = BrightnessControl()
 
 if op == "set":
-    b.set(perc_delta)
+    b.set_percent(get_delta())
 elif op == "increase":
-    b.increase(perc_delta)
+    b.increase(get_delta())
 elif op == "decrease":
-    b.decrease(perc_delta)
+    b.decrease(get_delta())
+elif op == "restore":
+    b.restore()
 else:
     usage()
 

@@ -12,20 +12,21 @@ Config { font = "xft:envypn:pixelsize=13:style=Regular"
         , alpha = 242
         , fgColor = "grey"
         , position = TopW L 100
-        , iconOffset = 6
+        --, iconOffset = 6
+        , iconRoot = "/home/g0tmk/.xmonad/resources" -- default: "."
         , commands = 
                 --[ Run Weather "KEMT" ["-t","<tempC>C","-L","18","-H","25","--normal","green","--high","red","--low","lightblue"] 36000
                 [ 
 
                   Run Com "echo"
-                                     ["-n",      "<fn=2>\xf1cb</fn>"
+                                     ["-n",      "<icon=debianlogo2_12x12_BEBEBE.xpm/>"
                                      ] "icon" 0
                 , Run Weather "KEMT" [ "--template", "<skyCondition>: <fc=#4682B4><tempF></fc>°F <fc=#4682B4><rh></fc>%"
                                      ] 36000
                 , Run DynNetwork     [ "--template" , " <tx> <rx>(<dev>)"
                                      , "--Low"      , "1000000"       -- units: B/s
                                      , "--High"     , "5000000"       -- units: B/s
-                                     , "--low"      , "lightgreen"
+                                     , "--low"      , "#8bc34a"
                                      , "--normal"   , "#eeba44"
                                      , "--high"     , "#ff7070"
                                      , "-S"     , "True"
@@ -34,40 +35,49 @@ Config { font = "xft:envypn:pixelsize=13:style=Regular"
                 -- Run wireless python script that mimics xmobars wireless plugin. really only
                 -- needed for me because I use this config on multiple PCs and there is not
                 -- a DynWireless plugin
-
                 , Run Com "xmobar_wireless.py"
-                                     ["-t",      "<fn=1>\xf1eb</fn> <essid_short> <quality>%"
+                                     ["-t",      "<icon=wififill_12x12_BEBEBE_9steps_%%.xpm/> <essid_short>"
                                      ,"-L"       ,"0"
                                      ,"-H"       ,"32"
                                      ,"--low"    ,"#ff7070"
                                      ,"--normal" ,"#eeba44"
-                                     ,"--high"   ,"lightgreen"
+                                     ,"--high"   ,"#8bc34a"
                                      ] "wirelessinfo" 30
+
                 , Run MultiCpu       [ "--template" ,"<total>%"
                                      , "-L"         , "25"
                                      , "-H"         , "50"
-                                     , "--low"      , "lightgreen"
+                                     , "--low"      , "#8bc34a"
                                      , "--normal"   , "#eeba44"
                                      , "--high"     , "#ff7070"
                                      , "--width"    , "6"
                                      ] 10
-                -- TODO: writer a bash script to do this because it glitches after resume from suspend
+
                 , Run ThermalZone 9  ["-t"          ,"<temp>C"
                                      , "-L"         , "60"       -- units: degC
                                      , "-H"         , "85"       -- units: degC
-                                     , "--low"      , "lightgreen"
+                                     , "--low"      , "#8bc34a"
                                      , "--normal"   , "#eeba44"
                                      , "--high"     , "#ff7070"
                                      , "--width"    , "3"
                                      ] 30
+
                 , Run Memory         [ "--template" ,"<usedratio>%"
                                      , "-L"         , "50"
                                      , "-H"         , "80"
-                                     , "--low"      , "lightgreen"
+                                     , "--low"      , "#8bc34a"
                                      , "--normal"   , "#eeba44"
                                      , "--high"     , "#ff7070"
                                      , "--width" , "7"
                                      ] 30
+                , Run Date " %b %d" "date" 20
+
+                , Run Com "xmobar_format_calendar_icon"
+                                     [ "<icon=calendar_12x13_BEBEBE_42steps_2d_week_<weeknum>_day_<daynum>.xpm/>"
+                                     ] "calendaricon" 0
+
+                , Run Date "<icon=clock_12x12_BEBEBE_24steps_%H.xpm/> <fc=#ee9a00>%H:%M</fc>" "time" 10
+
                 , Run Com "xmobar_battery.py"
                                      [ "BAT0"
                                      , "-t"         , "<acstatus>"
@@ -75,28 +85,25 @@ Config { font = "xft:envypn:pixelsize=13:style=Regular"
                                      , "-H"         , "50"
                                      , "--low"      , "#ff7070"
                                      , "--normal"   , "#eeba44"
-                                     , "--high"     , "lightgreen"
+                                     , "--high"     , "#8bc34a"
                                      , "--" -- battery specific options
-                                         -- discharging
-                                         , "-o", "<leftipat> <left>% (<timeleft>)"
-                                         -- charging
-                                         , "-O", "<leftipat> <left>% (<timeleft>)"
-                                         -- charged
-                                         , "-i", "<leftipat> <left>% "
-                                         , "--off-icon-pattern", "<fn=1>\xf0e7</fn>"
-                                         , "--idle-icon-pattern", "<fc=#50aa55><fn=1>\xf164</fn></fc>"
-                                         , "--on-icon-pattern", "<fc=lightyellow><fn=1>\xf1e6</fn></fc>"
+                                         -- discharging (ac off)
+                                         , "-o", "<leftipat> (<timeleft>)"
+                                         -- charging (ac on)
+                                         , "-O", "<leftipat> (<timeleft>)"
+                                         -- charged (ac idle)
+                                         , "-i", "<leftipat>"
+                                         , "--off-icon-pattern", "<icon=battery_ipodmini_conditionalfill_12x22_BEBEBE_16steps_$$.xpm/>"
+                                         , "--on-icon-pattern", "<icon=battery_ipodmini_conditionalfill_12x22_BEBEBE_16steps_$$.xpm/> <fn=1>\xf0e7</fn>"
+                                         , "--idle-icon-pattern", "<icon=battery_ipodmini_greenfill_12x22_BEBEBE_16steps_$$.xpm/>"
                                ] "batteryinfo" 100
-                , Run Date "<fn=1>\xf133</fn> %m/%d/%y" "date" 20
-                , Run Date "<fn=1>\xf017</fn> <fc=#ee9a00>%H:%M:%S</fc>" "time" 10
                 , Run Com "generate-tray-padding" [] "trayerpad" 50
+
                 , Run StdinReader
                 ]
         , sepChar = "%"
         , alignSep = "}{"
-        , template = "%icon% %StdinReader%} %multicpu%%thermal9%%memory% %dynnetwork%{%wirelessinfo%   %date%   %time%   %batteryinfo%%trayerpad%"
---        , template = "%StdinReader%} %multicpu%%thermal9%%memory%%swap%%diskio% %dynnetwork%{%wlan0wi%   %date%   %time%   %battery%"
---        , template = "%StdinReader%} %multicpu%  %memory% %swap%  %dynnetwork%{%wlan0wi%  %date%  %time%  %battery% | %KEMT% "
---        , template = "%StdinReader% | %multicpu% | %memory% * %swap% | %wlan0% - %eth0% }{<fc=#ee9a00>%date%</fc> | %battery% | %KEMT% "
---        , template = "%StdinReader% | %multicpu% | %memory% * %swap% | %wlan0% - %eth0% }{"
+        , template = " %icon% %StdinReader%}%multicpu%%thermal9%%memory% %dynnetwork%{%wirelessinfo%    %calendaricon%%date%    %time%    %batteryinfo% %trayerpad%"
         }
+
+

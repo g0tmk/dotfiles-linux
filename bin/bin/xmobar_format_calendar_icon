@@ -1,0 +1,77 @@
+#!/usr/bin/env bash
+
+# calculate the position of 'today' on a calendar (days on x axis, weeks on y
+# axis) and format a passed string with those values.
+#
+# example: 
+#     calendar_day_<daynum>_week_<weeknum>.xpm
+# will output (on saturday of the first week of the month):
+#     calendar_day_0_week_0.xpm
+#
+# execution time: 1.5-2.2ms
+
+#### Parse parameters
+if [ $# -eq 0 ]
+then
+    echo "Usage: $0 <format_string>"
+    echo "       where format string contains <weeknum> for week number and <daynum> for day number"
+    exit 1
+fi
+
+
+get_week_of_month() {
+	# get the current week number as an integer. if in the first week, returns 0
+	# max value returned is 5
+	# mostly based on this excellent SO answer https://stackoverflow.com/a/9608670
+
+	# month 0-11
+	month=$(( $(date '+%m') - 1))
+	# year ie 2019
+	year=$(date '+%Y')
+	# day of the week (sat-sun represented as 0-6) that this month starts on
+	first_weekday=$(date --date="$(date '+1 %B %Y')" "+%m")
+	# get the first of next month's date formatted like 2011-02-1
+	next_month=$(date --date="$(date +%Y-%m-15) +1 month" '+%Y-%m-1')
+	# calculate the numeric last day of this month (1-31) by doing "first of next month" -1 day
+	last_day_of_month=$(date --date="$(date +${next_month}) -1 day" +'%d')
+	# get day of month (1-31), subtract 1 to make it 0-indexed, and add first weekday
+	offset_date=$(( $(date '+%d') - 1 + "$first_weekday" ))
+	# choose 0 or 1 indexed for the output
+	index=0
+	# calculate current position (in days) in a normalized month where day 1 starts at the beginning of the week
+	normalized_day=$(( last_day_of_month + first_weekday - 7 ))
+	# calculate the weeks in this month by doing celi(normalized_day/7)
+	weeks_in_month=$(( ("$normalized_day"+7-1) / 7 ))
+	# add index offset
+	weeks_in_month=$(( "$weeks_in_month" + "$index" ))
+	# calculate current week
+	current_week=$(( "$index" + ("$offset_date" / 7) ))
+
+	echo "$month $year $first_weekday $next_month $last_day_of_month $offset_date $normalized_day $weeks_in_month $current_week" >&2
+
+
+	# if exact is true:
+	#  - always return exact week-of-month, even for 6-week months
+	# if exact is false:
+	#  - similar to above but the maximum value is 5 (or 6 if index is set to 1)
+
+	exact=false
+	if "$exact"; then
+		echo "$current_week"
+	elif [ "$current_week" -lt $(( 2 + "$index" )) ]; then
+		echo "$current_week"
+	else
+		if [ "$current_week" -eq "$weeks_in_month" ]; then
+			echo $(( "$index" + 5 ))
+		else
+			echo "$current_week"
+		fi
+	fi
+}
+
+
+weeknum=$(get_week_of_month)
+daynum=$(date "+%w")
+
+echo -n "$1" | sed -e "s/<weeknum>/${weeknum}/" | sed -e "s/<daynum>/${daynum}/"
+

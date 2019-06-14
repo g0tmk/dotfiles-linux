@@ -29,14 +29,16 @@ main = do
                         $ layoutHook defaultConfig
         , logHook = dynamicLogWithPP xmobarPP
                         { ppOutput = hPutStrLn xmproc
-                        , ppTitle = xmobarColor "lightgreen" "" . shorten 50
+                        , ppTitle = xmobarColor "#8bc34a" "" . shorten 65
+                        , ppCurrent = xmobarColor "#ee9a00" ""
+                        , ppSep = "   "
                         }
         , workspaces = myWorkspaces
         , modMask = mod4Mask     -- Rebind Mod to the Windows key
         , normalBorderColor = "#444444"
         -- , focusedBorderColor = "#0000dd"
         -- , focusedBorderColor = "#22bb99"
-        , focusedBorderColor = "#2299bb"
+        , focusedBorderColor = "#4887aa"
         , borderWidth = 1
         } `additionalKeys` myKeys
     where 

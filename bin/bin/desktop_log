@@ -22,6 +22,7 @@ THRESHOLD_BATTERY_HEALTH=70
 THRESHOLD_FAN_SPEED_RPMS=3500
 # show 'X free space left in home' message if less than this many GB free
 THRESHOLD_HOME_DIR_GB=50
+THRESHOLD_ROOT_DIR_GB=15
 # show load if 1-minute load average is over this value
 THRESHOLD_LOAD_AVG=1.49
 
@@ -105,7 +106,11 @@ if (( $(echo "$load_average_1m > $THRESHOLD_LOAD_AVG" | bc -l) )); then
     echo "load average is ${load_average}"
 fi
 
-free_space_home=$(df /home -h --output='avail' | grep -v "Avail" | egrep -o "[0-9]+[A-Za-z]+")
+free_space_root_gb=$(echo "scale=1; $(df / --output='avail' | grep -v "Avail") / 1024 / 1024" | bc)
+if (( $(echo "$free_space_home_gb < $THRESHOLD_HOME_DIR_GB" | bc -l) )); then
+    echo "only ${free_space_home_gb} GB available in /"
+fi
+
 free_space_home_gb=$(echo "scale=1; $(df /home --output='avail' | grep -v "Avail") / 1024 / 1024" | bc)
 if (( $(echo "$free_space_home_gb < $THRESHOLD_HOME_DIR_GB" | bc -l) )); then
     echo "only ${free_space_home_gb} GB available in /home"

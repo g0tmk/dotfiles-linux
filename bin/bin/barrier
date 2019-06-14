@@ -1,2 +1,8 @@
 #!/bin/sh
+
+if ps aux | grep 'barrierc' | grep -v 'grep' > /dev/null; then
+    echo "Barrier already running - stopping..."
+    killall barrierc
+fi
+
 flatpak run com.github.debauchee.barrier

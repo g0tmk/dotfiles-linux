@@ -55,7 +55,7 @@ do
 done
 
 configure_output() {
-    if DISPLAY=:0 $xrandr_command | $egrep_command "$1 connected" > /dev/null; then
+    if DISPLAY=:0 $xrandr_command | $egrep_command "^$1 connected" > /dev/null; then
         echo "Enabling display $1"
         DISPLAY=:0 $xrandr_command --output "$1" --auto $rotation $position
     else

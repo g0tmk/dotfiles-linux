@@ -8,7 +8,10 @@ This should work more-or-less identically to the Battery plugin with a few featu
       with BIOS PrimaryBatteryCfg
     - does not require "--" parameter to be passed on cmdline to separate default
       arguments from battery-specific ones
+    - in addition to the %%-wildcard built in to xmonad which supports replacement with
+      values 0-8, $$ is supported for 00-15 and @@ for 00-99.
     - a lot more options
+
 """
 
 from __future__ import print_function
@@ -249,7 +252,10 @@ if __name__ == "__main__":
         default="On",
         type=str,
         metavar="TEMPLATE",
-        help='string for AC "on" status (default: "On")',
+        help=(
+            'String for AC "on" status (default: "On"). Note: supports %% as a '
+            'placeholder for values 0-8, $$ for values 00-15, and @@ for values 00-99.'
+        ),
     )
     p.add_argument(
         "-i",
@@ -257,7 +263,10 @@ if __name__ == "__main__":
         default="Idle",
         type=str,
         metavar="TEMPLATE",
-        help='string for AC "idle" status (default: "On")'
+        help=(
+            'String for AC "idle" status (default: "On"). Note: supports %% as a '
+            'placeholder for values 0-8, $$ for values 00-15, and @@ for values 00-99.'
+        )
     )
     p.add_argument(
         "-o",
@@ -265,7 +274,10 @@ if __name__ == "__main__":
         default="Off",
         type=str,
         metavar="TEMPLATE",
-        help='string for AC "off" status (default: "Off")'
+        help=(
+            'String for AC "off" status (default: "Off"). Note: supports %% as a '
+            'placeholder for values 0-8, $$ for values 00-15, and @@ for values 00-99.'
+        )
     )
     p.add_argument(
         "--on-icon-pattern",
@@ -351,10 +363,6 @@ if __name__ == "__main__":
         (100 - charge) / scale_val
     )
 
-    charge = "{:.0f}".format(charge)
-    if color is not None:
-        charge = "<fc={}>{}</fc>".format(color, charge)
-
     status = b.status
     if status == "Charging":
         ac_status = args.on_ac_status
@@ -366,7 +374,16 @@ if __name__ == "__main__":
         ac_status = args.idle_ac_status
         leftipat = args.idle_icon_pattern
 
-    # TODO: do something with pattern
+    # scale 0-100 (101 values) to 0-8 (9 values)
+    leftipat = leftipat.replace("%%", "{:02d}".format(int(9*charge/101.0)))
+    # scale 0-100 (101 values) to 0-15 (16 values)
+    leftipat = leftipat.replace("$$", "{:02d}".format(int(16*charge/101.0)))
+    # scale 0-100 (101 values) to 0-99 (100 values)
+    leftipat = leftipat.replace("@@", "{:02d}".format(int(100*charge/101.0)))
+
+    charge = "{:.0f}".format(charge)
+    if color is not None:
+        charge = "<fc={}>{}</fc>".format(color, charge)
 
     template = args.template
     # replace acstatus/leftipat first - if they contain <variables> they will be replaced

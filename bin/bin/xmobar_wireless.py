@@ -173,13 +173,16 @@ if __name__ == "__main__":
         (100 - quality) / scale_val
     )
 
+    template = args.template
+    # scale 0-100 (101 values) to 0-8 (9 values)
+    template = template.replace("%%", "{:02d}".format(int(9*quality/101.0)))
+
     quality = "{:.0f}".format(quality)
     if color is not None:
         quality = "<fc={}>{}</fc>".format(color, quality)
     if args.suffix:
         quality += "%"
 
-    template = args.template
     template = template.replace("<essid>", essid)
     template = template.replace("<essid_short>", essid_short)
     template = template.replace("<quality>", quality)

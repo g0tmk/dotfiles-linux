@@ -32,7 +32,14 @@ Config { font = "xft:envypn:pixelsize=13:style=Regular"
                                      , "-S"     , "True"
                                      , "--width" , "8"
                                      ] 20
-                -- Run wireless python script that mimics xmobars wireless plugin. really only
+
+                , Run Com "xmobar_vpn.py"
+                                     ["-t",      "<vpnstatus>"
+                                     ,"--on-vpn-status"    ,"<icon=vpn_12x20_BEBEBE.xpm/> <name_short>"
+                                     ,"--off-vpn-status"   ,""
+                                     ] "vpn" 300
+
+                -- Run python script that mimics xmobars wireless plugin. really only
                 -- needed for me because I use this config on multiple PCs and there is not
                 -- a DynWireless plugin
                 , Run Com "xmobar_wireless.py"
@@ -103,7 +110,7 @@ Config { font = "xft:envypn:pixelsize=13:style=Regular"
                 ]
         , sepChar = "%"
         , alignSep = "}{"
-        , template = " %icon% %StdinReader%}%multicpu%%thermal9%%memory% %dynnetwork%{%wirelessinfo%    %calendaricon%%date%    %time%    %batteryinfo% %trayerpad%"
+        , template = " %icon% %StdinReader%}%multicpu%%thermal9%%memory% %dynnetwork%{%vpn%    %wirelessinfo%    %calendaricon%%date%    %time%    %batteryinfo% %trayerpad%"
         }
 
 

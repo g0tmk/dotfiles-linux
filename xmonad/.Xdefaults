@@ -49,6 +49,11 @@
 *italicFont: xft:Terminus:pixelsize=14:style=Bold
 *boldItalicFont: xft:Terminus:pixelsize=14:style=Bold
 
+! *font: xft:envypn:pixelsize=13:style=Regular
+! *boldFont: xft:envypn:pixelsize=13:style=Bold
+! *italicFont: xft:envypn:pixelsize=13:style=Bold
+! *boldItalicFont: xft:envypn:pixelsize=13:style=Bold
+
 ! *font: xft:Inconsolata:pixelsize=12:style=Regular
 ! *boldFont: xft:Inconsolata:pixelsize=12:style=Bold
 ! *italicFont: xft:Inconsolata:pixelsize=12:style=Bold

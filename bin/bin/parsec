@@ -34,10 +34,12 @@ done
 
 
 # no autoconnect so just run parsec
-if $autoconnect; then 
+if ! $autoconnect; then 
     $PARSECD_BINARY
     exit 0
 fi
+
+while true; do
 
 # try to autoconnect with expect
 echo '#!usr/bin/expect -f
@@ -55,5 +57,6 @@ send -- "1\r"
 
 interact
 #expect eof
-' | expect "-"
+' | expect "-" && sleep 2 && exit 0
 
+done

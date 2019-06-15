@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+# enable or disable the notification led (caps lock led on xps9550)
+
+DEVICE_PATH="/sys/class/leds/input*::capslock/brightness"
+
+if ! ls $DEVICE_PATH > /dev/null 2>&1; then
+    echo "Error: device not found (searched $DEVICE_PATH)"
+    exit 1
+fi
+
+#### Parse parameters
+if [ $# -eq 0 ]
+then
+    echo "Usage: $0 (on, off)"
+    exit 1
+fi
+
+while test $# -gt 0
+do
+    case "$1" in
+        on)
+            echo 1 | sudo tee $DEVICE_PATH
+            ;;
+        off)
+            echo 0 | sudo tee $DEVICE_PATH
+            ;;
+        #--*) echo "bad option $1"
+        #    ;;
+        #*) echo "argument $1"
+        #    ;;
+    esac
+    shift
+done
+
+

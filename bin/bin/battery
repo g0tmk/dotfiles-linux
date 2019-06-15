@@ -62,24 +62,18 @@ if [ $battery_current_ma -gt $DISCHARGE_MODE_THRESHOLD_MA ]; then
     case $battery_status in
     Charging)
         echo "State: AC_Charging$battery_time_left_string" >&2
-        status_bar_text="<plug_icon> $battery_charge_percent%$battery_time_left_string"
         ;;
     Unknown)
         echo "State: Discharging$battery_time_left_string" >&2
-        status_bar_text="<lightning_bolt_icon> $battery_charge_percent%$battery_time_left_string"
         ;;
     *)
         echo "State: Discharging$battery_time_left_string" >&2
-        status_bar_text="<lightning_bolt_icon> $battery_charge_percent%$battery_time_left_string"
         ;;
     esac
 
 
 else
     echo "State: AC_Idle" >&2
-        status_bar_text="<dot_icon> $battery_charge_percent%$battery_time_left_string"
 fi
 
-echo "Status bar:" >&2
-echo "$status_bar_text"
 

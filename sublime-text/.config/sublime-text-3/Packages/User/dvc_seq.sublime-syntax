@@ -1,0 +1,68 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+name: DVC Sequence
+file_extensions: [seq]
+scope: source.seq
+
+contexts:
+  main:
+    # Strings begin and end with quotes, and use backslashes as an escape
+    # character
+    - match: '"'
+      scope: punctuation.definition.string.begin.seq
+      push: double_quoted_string
+
+    # Comments begin with a '#' and finish at the end of the line
+    - match: '^#'
+      scope: punctuation.definition.comment.seq
+      push: line_comment
+
+    - comment: command parameter name
+      scope: parameter.seq
+      match: '([A-Za-z0-9]+)='
+
+    # Keywords are if, else for and while.
+    # Note that blackslashes don't need to be escaped within single quoted
+    # strings in YAML. When using single quoted strings, only single quotes
+    # need to be escaped: this is done by using two single quotes next to each
+    # other.
+    #- match: '\b(SEQ_IF|SEQ_ELSE|SEQ_ENDIF|SEQ_WHILE|SEQ_ENDWHILE)\b'
+    #  scope: keyword.control.seq
+
+    # Operators are AND, OR, SHL, SHR, GT, LT, etc.
+    # Note that blackslashes don't need to be escaped within single quoted
+    # strings in YAML. When using single quoted strings, only single quotes
+    # need to be escaped: this is done by using two single quotes next to each
+    # other.
+    - match: '\b(AND|OR||ADD|SUB|SHL|SHR|LT|GT|LE|GE|EQ|NE)\b'
+      scope: storage.modifier.seq
+
+    - comment: Command names start with DVC_, SEQ_. etc
+      scope: constant.language.seq
+      match: '\b(DVC_|VCB_|CAMERA_|BUS_|PSB_|SEQ_|SSD_|CMD_|TLM_|REG_|EVR_|ACE_|ADB_|ATB_-)[A-Z0-9_]+\b'
+
+    - comment: Register values start w/ %
+      scope: constant.other.seq
+      match: '(\%[0-9]+)'
+
+    - comment: CVT values look like $0:286
+      scope: constant.other.seq
+      match: '\$\d+:\d+'
+
+    # Numbers
+    - match: '\b(-)?[xX0-9A-F.]+\b'
+      scope: constant.numeric.seq
+
+  double_quoted_string:
+    - meta_scope: string.quoted.double.seq
+    - match: '\\.'
+      scope: constant.character.escape.seq
+    - match: '"'
+      scope: punctuation.definition.string.end.seq
+      pop: true
+
+  line_comment:
+    - meta_scope: comment.line.seq
+    - match: $
+      pop: true

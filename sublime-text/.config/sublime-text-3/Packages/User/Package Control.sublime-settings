@@ -1,0 +1,15 @@
+{
+	"bootstrapped": true,
+	"in_process_packages":
+	[
+	],
+	"installed_packages":
+	[
+		"Package Control",
+		"PackageDev",
+		"PackageResourceViewer",
+		"Print to HTML",
+		"Theme - Soda",
+		"Theme - Sodarized"
+	]
+}

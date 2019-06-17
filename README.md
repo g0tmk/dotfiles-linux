@@ -477,7 +477,7 @@
     >>> Failed to download
     sudo apt remove fwupd
 
-    # need to try latest version
+    # need to try latest version (https://github.com/hughsie/fwupd)
     ```
 
 0. ~~Install tizonia~~

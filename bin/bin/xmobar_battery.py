@@ -21,12 +21,6 @@ import sys
 
 # threshold under which battery is considered "charged" in milliamps
 _CHARGE_MODE_THRESHOLD_MA = 5
-# constant for now - it seems to always be in the same location
-_IWCONFIG_BINARY = "/sbin/iwconfig"
-
-
-class IWConfigNotFoundError:
-    pass
 
 
 def run_command(cmd):

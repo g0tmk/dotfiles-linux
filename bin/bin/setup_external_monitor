@@ -21,8 +21,8 @@ INTERNAL_DISPLAY_NAME="eDP1"
 extra_params=""
 
 rotation="--rotate normal"
-#position="--above $INTERNAL_DISPLAY_NAME"
-position="--left-of $INTERNAL_DISPLAY_NAME"
+#position="--above"
+position="--left-of"
 
 
 while test $# -gt 0
@@ -38,13 +38,13 @@ do
             rotation="--rotate inverted"
             ;;
         --right)
-            position="--right-of $INTERNAL_DISPLAY_NAME"
+            position="--right-of"
             ;;
         --left)
-            position="--left-of $INTERNAL_DISPLAY_NAME"
+            position="--left-of"
             ;;
         --above)
-            position="--above $INTERNAL_DISPLAY_NAME"
+            position="--above"
             ;;
         --*) echo "bad option $1"
             ;;
@@ -54,10 +54,12 @@ do
     shift
 done
 
+last_configured_output="$INTERNAL_DISPLAY_NAME"
 configure_output() {
     if DISPLAY=:0 $xrandr_command | $egrep_command "^$1 connected" > /dev/null; then
-        echo "Enabling display $1"
-        DISPLAY=:0 $xrandr_command --output "$1" --auto $rotation $position
+        echo "Enabling display $1 $position $last_configured_output"
+        DISPLAY=:0 $xrandr_command --output "$1" --auto $rotation $position $last_configured_output
+        last_configured_output="$1"
     else
         DISPLAY=:0 $xrandr_command --output "$1" --off > /dev/null 2>&1
     fi
@@ -67,6 +69,7 @@ configure_output() {
 configure_output "HDMI1"
 configure_output "HDMI-1"
 configure_output "DP1"
+configure_output "DP2"
 configure_output "VGA-1"
 
 

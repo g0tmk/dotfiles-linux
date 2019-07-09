@@ -70,6 +70,6 @@ main = do
                  -- XF86AudioMute
                  , ((0, 0x1008ff12), spawn "~/bin/volume toggle | show_osd_message")
                  ]
-        myWorkspaces = ["1:term","2:web","3","4","5","6","7","8","9:daemons"]
+        myWorkspaces = ["1:term","2:web","3","4","5","6","7","8","9:bg"]
 
 

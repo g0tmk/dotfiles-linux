@@ -1,6 +1,5 @@
 ## g0tmk's dotfiles
 
-
 #### Useful resources
  - Dell XPS 15 (9550)
    - [XPS 15 Service Manual](http://topics-cdn.dell.com/pdf/xps-15-9550-laptop_Service-Manual_en-us.pdf)
@@ -480,6 +479,33 @@
     # need to try latest version (https://github.com/hughsie/fwupd)
     ```
 
+0. Install PyCharm
+
+    - Download the latest version of JetBrains Toolbox from [here](https://www.jetbrains.com/toolbox/app/).
+
+    ```bash
+    tar xvf jetbrains-toolbox-1.15.5387.tar.gz
+    cd jetbrains-toolbox-1.15.5387
+    ./jetbrains-toolbox
+    # Click icon in the top-right and log in (if you care about syncing the IDEs settings)
+    # Scroll down to "PyCharm Community" and click Install.
+    # Run it when install is complete (this command is aliased because pycharm needs a fake wmname)
+    pycharm
+    # TODO: add instructions for configuring 'File->Settings Repository'
+    ```
+
+0. Intall miktex
+
+    ```bash
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys D6BC243565B2087BC3F897C9277A7293F59E4889
+    echo "deb http://miktex.org/download/debian stretch universe" | sudo tee /etc/apt/sources.list.d/miktex.list
+    sudo apt-get update
+    sudo apt-get install miktex
+    miktexsetup finish
+    initexmf --set-config-value "[MPM]AutoInstall=1"
+    texworks
+    ```
+
 0. ~~Install tizonia~~
 
     - NOTE: Latest (0.18.0) isn't worth using for soundcloud. Loads at most 10 songs with --soundcloud-user-stream, maybe a soundcloud API limitation. It also misses some tracks, but not as many as mopidy-soundcloud. Check again after some major version updates
@@ -584,6 +610,9 @@
 
 
 #### TODO:
+- Can't launch pycharm via Mod+p. Need to do one of the following:
+  - add alias support to yeganesh (better)
+  - add a binary to launch pycharm in ~/bin
 - use hostname_colorized in PS1 and remove its TODO in binary section above
 - colorscheme update: dark blue is too dark
 - finish copying info from documents/xps/debian_notes.txt to this repo
@@ -612,6 +641,7 @@
 - eventually add gtk theme
   - [Fantome](https://github.com/addy-dclxvi/gtk-theme-collections)
 - maybe make a new games.md for the install instructions for games
+  - include lutris since it used to be in app_list_extras.txt
 - setup auto install for redshift; two manual steps needed after installing via apt:
   - add `Environment=DISPLAY=:0` to `/usr/lib/systemd/user/redshift.service` under 
     the [Service] header

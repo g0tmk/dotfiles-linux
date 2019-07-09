@@ -44,6 +44,9 @@ set incsearch
 if maparg('<C-L>', 'n') ==# ''
   nnoremap <silent> <C-L> :nohlsearch<C-R>=has('diff')?'<Bar>diffupdate':''<CR><CR><C-L>
 endif
+"use case-sensitivity search if any caps used 
+:set ignorecase
+:set smartcase 
 
 " always show status bar
 set laststatus=2

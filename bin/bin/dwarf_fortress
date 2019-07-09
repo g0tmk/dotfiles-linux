@@ -38,6 +38,10 @@ do
             NEW_TILESET="Anikki_square_16x16.png";
             echo "xlarge selected ($NEW_TILESET)"
             ;;
+        --wander)
+            NEW_TILESET="wanderlust_16px.png";
+            echo "wander selected ($NEW_TILESET)"
+            ;;
         --mute)
             MUTE=false
             echo "sound unmuted"

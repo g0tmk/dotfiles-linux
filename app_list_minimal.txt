@@ -19,6 +19,7 @@ feh
 ffmpeg
 fonts-font-awesome
 fortune-mod
+freerdp-x11
 gcc
 gdb
 gddrescue

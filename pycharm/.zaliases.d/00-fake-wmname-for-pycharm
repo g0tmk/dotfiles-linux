@@ -1,0 +1,6 @@
+
+# openjdk
+# alias pycharm=wmname LG3D && PYCHARM_JDK=/usr/lib/jvm/java-6-openjdk-amd64 && \pycharm
+
+# oracle jdk
+alias pycharm='wmname LG3D && \pycharm'

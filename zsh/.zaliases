@@ -23,3 +23,8 @@ alias togred='toggle-redshift'
 # typos
 alias cd..='cd ..'
 
+if [ -d "$HOME/.zaliases.d" ]; then
+    for file in "$HOME/.zaliases.d/"*; do
+        source "$file"
+    done
+fi

@@ -3,5 +3,7 @@
 	name = Developer
 [core]
 	editor = /usr/bin/vim
+        # automatically convert line endings (lf vs crlf)
+	autocrlf = input
 [push]
 	default = simple

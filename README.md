@@ -494,6 +494,33 @@
     # TODO: add instructions for configuring 'File->Settings Repository'
     ```
 
+0. Install kaitai struct lib
+
+    ```bash
+    # Import GPG key, if you never used any BinTray repos before
+    sudo apt-key adv --keyserver hkp://pool.sks-keyservers.net --recv 379CE192D401AB61
+
+    # Add stable repository
+    echo "deb https://dl.bintray.com/kaitai-io/debian jessie main" | sudo tee /etc/apt/sources.list.d/kaitai.list
+    # ... or unstable repository
+    echo "deb https://dl.bintray.com/kaitai-io/debian_unstable jessie main" | sudo tee /etc/apt/sources.list.d/kaitai.list
+
+    sudo apt-get update
+    sudo apt-get install kaitai-struct-compiler
+    ```
+
+    Install kaitai struct visualizer
+
+    ```bash
+    sudo gem install kaitai-struct-visualizer
+    ```
+
+    Install pip module
+
+    ```bash
+    sudo pip3 install kaitaistruct
+    ```
+
 0. Intall miktex
 
     ```bash

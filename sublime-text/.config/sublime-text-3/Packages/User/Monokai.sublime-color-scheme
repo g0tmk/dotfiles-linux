@@ -1,0 +1,24 @@
+{
+	// http://www.sublimetext.com/docs/3/color_schemes.html
+	"variables": {
+		// "green": "#FF0000",
+
+		// used for the background color
+        "black3": "hsl(70, 8%, 10%)",
+
+        // used for line hilighting
+        "yellow4": "hsl(55, 11%, 20%)",
+        
+        // used for (at least) comments
+        "yellow5": "hsl(50, 11%, 51%)"
+	},
+	"globals": {
+		// "foreground": "var(green)",
+	},
+	"rules": [
+		{
+			// "scope": "string",
+			// "foreground": "#00FF00",
+		},
+	],
+}

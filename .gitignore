@@ -12,6 +12,10 @@ xmonad-x86_64-linux
 .*.swo
 
 
+# installed by jetbrains toolbox
+/bin/bin/pycharm
+/bin/bin/clion
+
 # files installed by miktex
 /bin/bin/a2ping
 /bin/bin/a5toa4

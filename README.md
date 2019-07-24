@@ -479,7 +479,7 @@
     # need to try latest version (https://github.com/hughsie/fwupd)
     ```
 
-0. Install PyCharm
+0. Install PyCharm + CLion
 
     - Download the latest version of JetBrains Toolbox from [here](https://www.jetbrains.com/toolbox/app/).
 
@@ -489,8 +489,14 @@
     ./jetbrains-toolbox
     # Click icon in the top-right and log in (if you care about syncing the IDEs settings)
     # Scroll down to "PyCharm Community" and click Install.
-    # Run it when install is complete (this command is aliased because pycharm needs a fake wmname)
+    # (Optional) you can install other jetbrains software (like CLion or IntelliJ) at this time
+
+    # Run this command in a terminal when install is complete (this command is aliased because pycharm needs a fake wmname)
     pycharm
+
+    # or to run CLion:
+    clion
+
     # TODO: add instructions for configuring 'File->Settings Repository'
     ```
 

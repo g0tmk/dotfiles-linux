@@ -1,12 +1,13 @@
 {
 	"bold_folder_labels": true,
 	"caret_style": "phase",
+	"color_scheme": "Packages/Color Scheme - Default/Monokai.sublime-color-scheme",
 	"fade_fold_buttons": false,
 	"font_face": "Fira Code",
 	"font_options":
 	[
 	],
-	"font_size": 11,
+	"font_size": 10,
 	"highlight_line": true,
 	"highlight_modified_tabs": true,
 	"ignored_packages":
@@ -17,7 +18,7 @@
 	"margin": 0,
 	"rulers":
 	[
-		80
+		88
 	],
 	"theme": "Soda Dark 3.sublime-theme",
 	"theme_font_options":

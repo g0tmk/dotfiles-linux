@@ -655,6 +655,9 @@
 
 
 #### TODO:
+- replace DynNetwork plugin in xmobar with a new xmobar_network.py file.
+  - allow minimum units with `--smallestunit K`
+  - option to use shorter units (K instead of K/s) with `--shortunits True`
 - Can't launch pycharm via Mod+p. Need to do one of the following:
   - add alias support to yeganesh (better)
   - add a binary to launch pycharm in ~/bin
@@ -695,7 +698,7 @@
   - conky can execute a shell script which returns current terminal colors
     - see [this stackoverflow answer](https://stackoverflow.com/a/37285624)
   - xmobar's configuration could be edited with sed before starting
-    - would be nice to use somehting more obvious/explicit
+    - could be more obvious/explicit, like importing colors.hs from pywal
 - enable DRI3 to improve graphics performance. I tried guides online which suggest to
   create a 20-intel.conf and add a line to enable, but it seems to already be enabled,
   just not in use.

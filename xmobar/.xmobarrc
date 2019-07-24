@@ -23,7 +23,7 @@ Config { font = "xft:envypn:pixelsize=13:style=Regular"
                                      ] "icon" 0
                 , Run Weather "KEMT" [ "--template", "<skyCondition>: <fc=#4682B4><tempF></fc>°F <fc=#4682B4><rh></fc>%"
                                      ] 36000
-                , Run DynNetwork     [ "--template" , " <tx> <rx>(<dev>)"
+                , Run DynNetwork     [ "--template" , " <rx> <tx>(<dev>)"
                                      , "--Low"      , "1000000"       -- units: B/s
                                      , "--High"     , "5000000"       -- units: B/s
                                      , "--low"      , "#8bc34a"

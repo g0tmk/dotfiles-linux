@@ -539,6 +539,18 @@
     texworks
     ```
 
+0. Install RetroArch (game emulator)
+
+    - NOTE: Pretty buggy, but that may be because I run a tiling WM.
+
+    ```bash
+    flatpak remote-add --user --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    flatpak install --user flathub org.libretro.RetroArch
+    # how to update:
+    flatpak update --user org.libretro.RetroArch
+    flatpak run org.libretro.RetroArch 
+    ```
+
 0. ~~Install tizonia~~
 
     - NOTE: Latest (0.18.0) isn't worth using for soundcloud. Loads at most 10 songs with --soundcloud-user-stream, maybe a soundcloud API limitation. It also misses some tracks, but not as many as mopidy-soundcloud. Check again after some major version updates

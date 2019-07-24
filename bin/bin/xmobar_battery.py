@@ -53,8 +53,15 @@ class Battery():
 
     @property
     def current_draw_amps(self):
-        val_ua = int(read_file(self._prefix + "current_now"))
-        return val_ua / 1000000.0
+        try:
+            val_ua = int(read_file(self._prefix + "current_now"))
+        except OSError:
+            # this file may not exist for a few seconds after AC is plugged in.
+            # return 0 in this case (not ideal; it indicates idle) until I can think
+            # of something better
+            return 0
+        else:
+            return val_ua / 1000000.0
     
     @property
     def watts(self):
@@ -101,8 +108,11 @@ class Battery():
 
     @property
     def status(self):
-        """Determine the _real_ state of the battery (Charging/Discharging/AC Idle)
-        using the current draw of the battery, output of tlp-stat, and /sys status."""
+        """Determine the _real_ state of the battery using the current draw, output
+        of tlp-stat, and /sys status.
+        
+        Returns one of "Charging", "Discharging", or "AC Idle"
+        """
         sys_class_status = read_file(self._prefix + "status").strip()
 
         # tlp_output = run_command('tlp-stat -s')
@@ -143,10 +153,18 @@ class Battery():
         acpi_battery_info = run_command(['acpi', '-b'])
 
         # regex matches both these strings, named group 'time_left' is optional:
-        # Battery 0: Discharging, 96%, 05:25:42 remaining
-        # Battery 0: Full, 100%
+        #   Battery 0: Discharging, 96%, 05:25:42 remaining
+        #   Battery 0: Full, 100%
+        # also noticed these (for a few seconds after AC is plugged in)
+        #   Battery 0: Charging, 98%, rate information unavailable
+        #   Battery 0: Unknown, 95%, rate information unavailable
+        #   Battery 0: Unknown, 95%
         regex_str = "^Battery (?P<id>\d+): (?P<status>\w+), (?P<charge_percent>\d+)%(?:, (?P<time_left>[\d:]+) (remaining|until charged))*$"
         for line in acpi_battery_info.split('\n'):
+            # for lines which basically say "I don't know", fallback on 00:00:00
+            if line.startswith("Battery {}".format(desired_battery_id)):
+                if "Unknown" in line or "rate information unavailable" in line:
+                    return "00:00:00"
             match = re.match(regex_str, line)
             if match:
                 battery_id, status, charge_percent, time_left, suffix = match.groups()

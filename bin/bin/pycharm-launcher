@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+
+# TODO: finish/use this launched
+echo "Pycharm-launcher is not finished. Edit the file first."
+exit 1
+
+
+
+# launch pycharm after setting up a few things:
+#  - download pycharm-settings repo if not present
+#  - 
+# make sure pycharm settings repo is present then launch pycharm
+
+REPO_URL="git@github.com:g0tmk/pycharm-settings.git"
+REPO_LOCATION="${HOME}/repos/pycharm-settings"
+
+check_download_repo() {
+    # check if repo exists at $2, if not, download it from $1
+
+    # pull repo name from url (assumes only alphanumeric, _, and - characters)
+    repo_name=$(echo $1 | egrep -o "[A-Za-z0-9_-]+\.git" | sed -e "s/.git$//g")
+    
+    if ! ls "$2" > /dev/null 2>&1; then
+        read -p "Error: Can't find $repo_name - download it from git? [y/n]:"
+
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            git clone "$1" "$2"
+        else
+            exit 1
+        fi
+    fi
+}
+
+check_download_repo "$REPO_URL" "$REPO_LOCATION"
+
+# set wmname since java runtime expects certain WM types, and LG3D is compatible with xmonad
+# backslash before pycharm makes sure we ignore any aliases
+wmname LG3D && \pycharm
+ 
+

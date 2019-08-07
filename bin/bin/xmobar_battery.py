@@ -163,7 +163,9 @@ class Battery():
         for line in acpi_battery_info.split('\n'):
             # for lines which basically say "I don't know", fallback on 00:00:00
             if line.startswith("Battery {}".format(desired_battery_id)):
-                if "Unknown" in line or "rate information unavailable" in line:
+                if ("Unknown" in line 
+                        or "rate information unavailable" in line
+                        or "100%,  until charged" in line):
                     return "00:00:00"
             match = re.match(regex_str, line)
             if match:

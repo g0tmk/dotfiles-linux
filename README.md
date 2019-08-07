@@ -551,6 +551,54 @@
     flatpak run org.libretro.RetroArch 
     ```
 
+0. Install blueman (for xbox one controller via bluetooth - work-in-progress)
+
+
+    ```bash
+    sudo apt install bluetooth blueman
+    # now, re-start the system (or at least the X server)
+    sudo systemctl start bluetooth
+    sudo systemctl status bluetooth
+    sudo systemctl enable bluetooth
+    # for xbox one controllers:
+    echo 1 > /sys/module/bluetooth/parameters/disable_ertm
+    # if the service started OK, then there is no need to add `btusb` kernel module. Otherwise run these:
+    ```
+    1. Add `btusb` to /etc/modules
+    2. Reboot or run `sudo modprobe btusb`
+
+    ```bash
+    # pair a controller:
+    blueman-manager
+    ```
+
+    ```bash
+    # add drivers for xbox one controller (maybe optional, needs testing)
+    # see https://github.com/paroj/xpad
+    ```
+    - see [here](https://www.maketecheasier.com/set-up-xbox-one-controller-ubuntu/) for
+      more info ie how to control kbd/mouse with controller and how to calibrate
+
+0. Install ImageMagick 7.0.8+ from source
+
+    ```bash
+    # install openjp2 lib for jpeg2000 support
+    sudo apt install libopenjp2-7-dev
+    cd /tmp
+    wget https://imagemagick.org/download/ImageMagick.tar.gz
+    tar xvf ImageMagick.tar.gz
+    cd ImageMagick-*
+    # verify the output of this "configure" command contains this:
+    #    DELEGATES       = ... openjp2 ...
+    ./configure
+    make
+    sudo make install
+    # run the following command if you get "error while loading shared libraries" errors
+    sudo ldconfig /usr/local/lib
+    # check the version is correct:
+    convert --version
+    ```
+
 0. ~~Install tizonia~~
 
     - NOTE: Latest (0.18.0) isn't worth using for soundcloud. Loads at most 10 songs with --soundcloud-user-stream, maybe a soundcloud API limitation. It also misses some tracks, but not as many as mopidy-soundcloud. Check again after some major version updates

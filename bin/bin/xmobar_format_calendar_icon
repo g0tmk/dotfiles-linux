@@ -10,6 +10,15 @@
 #
 # execution time: 1.5-2.2ms
 
+#
+# TODO: - replace this with a python script since it already takes 1-2 milliseconds to run
+#         OR get someone who understands bash better to optimize/simplify this. The logic
+#         should be sound but the syntax makes it basically unmaintainable
+#       - make a test handler for this since it is such a pain to test it. ideally the
+#         test runner will mock the date module
+#       
+#
+
 #### Parse parameters
 if [ $# -eq 0 ]
 then
@@ -25,7 +34,7 @@ get_week_of_month() {
 	# mostly based on this excellent SO answer https://stackoverflow.com/a/9608670
 
 	# month 0-11
-	month=$(( $(date '+%m') - 1))
+        month=$(echo "$(date '+%m') - 1" | bc)
 	# year ie 2019
 	year=$(date '+%Y')
 	# day of the week (sat-sun represented as 0-6) that this month starts on
@@ -35,11 +44,11 @@ get_week_of_month() {
 	# calculate the numeric last day of this month (1-31) by doing "first of next month" -1 day
 	last_day_of_month=$(date --date="$(date +${next_month}) -1 day" +'%d')
 	# get day of month (1-31), subtract 1 to make it 0-indexed, and add first weekday
-	offset_date=$(( $(date '+%d') - 1 + "$first_weekday" ))
+        offset_date=$(echo "$(date '+%d') - 1 + $first_weekday" | bc)
 	# choose 0 or 1 indexed for the output
 	index=0
 	# calculate current position (in days) in a normalized month where day 1 starts at the beginning of the week
-	normalized_day=$(( last_day_of_month + first_weekday - 7 ))
+	normalized_day=$(echo "$last_day_of_month + $first_weekday - 7" | bc)
 	# calculate the weeks in this month by doing celi(normalized_day/7)
 	weeks_in_month=$(( ("$normalized_day"+7-1) / 7 ))
 	# add index offset

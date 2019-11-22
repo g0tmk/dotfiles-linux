@@ -39,6 +39,7 @@
    - `hostname_colorized` generates a different colored name per-host. used in terminal PS1
    - `xmobar_battery.py` is used by xmobar to show battery info
    - `xmobar_wireless.py` is used by xmobar to show wireless info
+   - `umount_cifs_lazy` will unmount a cifs mount regardless of its state (ie timed out)
 
 #### Install steps on a fresh Debian (Stable) machine
 

@@ -77,7 +77,7 @@ Config { font = "xft:envypn:pixelsize=13:style=Regular"
                                      , "--high"     , "#ff7070"
                                      , "--width" , "7"
                                      ] 30
-                , Run Date " %b %d" "date" 30
+                , Run Date "%b %d" "date" 30
 
                 , Run Com "xmobar_format_calendar_icon"
                                      [ "<icon=calendar_12x13_BEBEBE_42steps_2d_week_<weeknum>_day_<daynum>.xpm/>"
@@ -110,7 +110,7 @@ Config { font = "xft:envypn:pixelsize=13:style=Regular"
                 ]
         , sepChar = "%"
         , alignSep = "}{"
-        , template = " %icon% %StdinReader%}%multicpu%%thermal9%%memory% %dynnetwork%{%vpn%    %wirelessinfo%    %calendaricon%%date%    %time%    %batteryinfo% %trayerpad%"
+        , template = " %icon% %StdinReader%}%multicpu%%thermal9%%memory% %dynnetwork%{%vpn%    %wirelessinfo%    %calendaricon% %date%    %time%    %batteryinfo% %trayerpad%"
         }
 
 

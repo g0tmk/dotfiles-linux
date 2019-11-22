@@ -789,9 +789,11 @@
 
 
 #### BUGS
+- after boot, volume controls will not work until something tries to use the speakers
 - occasionally tmux prefix hotkey stops working in urxvt. Seems to be a urxvt issue.
   - workaround for now is close urxvt, open a new one, and reattach with `tmux a`
 - setxkbmap remappings are unbound after wake from sleep ~50% of the time
+  - note: I have not seen this for ~ 2 months, maybe not an issue anymore? as of 8-22-19
   - workaround for now is run `remap` when this happens
   - seems to be a known bug, one of the comments has a workaround that may work
     - [comment](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=633849#92)
@@ -818,5 +820,3 @@
 - External display names (in xrandr):
   - x220: HDMI-1 (and probably also VGA-1)
   - xps9550: HDMI1 and DP1
-
-

@@ -56,7 +56,7 @@ get_week_of_month() {
 	# calculate current week
 	current_week=$(( "$index" + ("$offset_date" / 7) ))
 
-	echo "$month $year $first_weekday $next_month $last_day_of_month $offset_date $normalized_day $weeks_in_month $current_week" >&2
+	#echo "$month $year $first_weekday $next_month $last_day_of_month $offset_date $normalized_day $weeks_in_month $current_week" >&2
 
 
 	# if exact is true:

@@ -1,7 +1,25 @@
 #!/usr/bin/env bash
 
 # Control volume of current pulseaudio sink
-# TODO: do this in python
+# TODO:
+#   - do this in python
+#   - immediately after boot, volume controls do not work (pulseaudio is not running
+#     yet?) either way, volume controls output this:
+#       +10:47% volume increase 5
+#       No PulseAudio daemon running, or not running as session daemon.
+#       No PulseAudio daemon running, or not running as session daemon.
+#       No PulseAudio daemon running, or not running as session daemon.
+#       No PulseAudio daemon running, or not running as session daemon.
+#       No PulseAudio daemon running, or not running as session daemon.
+#       You have to specify a sink name/index and a volume
+#       No PulseAudio daemon running, or not running as session daemon.
+#       No PulseAudio daemon running, or not running as session daemon.
+#       No PulseAudio daemon running, or not running as session daemon.
+#       No PulseAudio daemon running, or not running as session daemon.
+#       Volume: %
+#       +10:48% volume increase 5
+#       Volume: 60%
+#
 
 
 getdefaultsinkname() {

@@ -18,6 +18,7 @@
  - `clipboard` to handle terminal I/O (`ls | clipboard` or `clipboard > pasted.txt`)
  - `colortable` shows all terminal color text/background combinations and their codes
  - `colortable256` shows all 256 terminal colors
+ - `pc` runs a python-compatible cli calculator
  - `qrcode` to display text from the terminal as a qrcode
  - `remap` applies keyboard remappings. sometimes needed after a wake from suspend
  - `setup_external_monitor` to handle enabling/disabling of secondary monitors

@@ -2,6 +2,9 @@
 # better defaults
 alias ls='ls --color'
 
+# calculator; pc = Python Calculator
+alias pc='python -i -c "from math import *"'
+
 # tmux
 alias tmux='tmux -2'
 alias tma='tmux attach -d -t'

@@ -262,7 +262,10 @@
     sudo systemctl status thermald.service
     ```
 
-0. Install virtualbox (from [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22))
+0. Install virtualbox
+
+    - Original guide [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22))
+    - Info on integration with tiling WM [here](http://kissmyarch.blogspot.com/2012/01/hiding-menu-and-statusbar-of-virtualbox.html)
 
     ```bash
     # install virtualbox using their apt source:
@@ -271,10 +274,18 @@
     sudo apt update
     sudo apt search virtualbox | grep ^virtualbox  # install the newest available
     sudo apt install virtualbox-6.x
+
     # you can now run `virtualbox`
     # NOTE: On first run it will prompt to install an extension pack. This will probably
     #       fail unless you run virtualbox with sudo. Once installed, you can run it
     #       normally again (without sudo).
+
+    # configure virtualbox to allow tiling WM hotkeys
+    # see https://askubuntu.com/questions/144905/virtualbox-windows-key-pass-through-to-gnome
+    # - in VirtualBox go to File->Preferences
+    # - Under "Input" uncheck "Auto Capture Keyboard"
+    # - (Optional) View -> Status Bar -> Hide
+    # - (Optional, show with Host+Home) View -> Menu Bar -> Hide
     ```
 
 0. Install sublime text & sublime merge (from [here](https://www.sublimetext.com/docs/3/linux_repositories.html))

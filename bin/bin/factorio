@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+~/programs/factorio/bin/x64/factorio --fullscreen=false
+

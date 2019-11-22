@@ -671,6 +671,22 @@
     convert --version
     ```
 
+0. Install factorio
+
+    ```bash
+    # download latest version from https://factorio.com/download
+    tar xvf factorio_alpha_x64_0.17.66.tar.xz
+    mkdir ~/programs
+    mv factorio ~/programs/factorio
+
+    # if syncthing is setup, link the saves folder there:
+    mkdir -p ~/Sync/misc/backups/saves/factorio/BXPSd-link
+    rmdir ~/programs/factorio/saves
+    ln -s ~/Sync/misc/backups/saves/factorio/BXPSd-link ~/programs/factorio/saves
+
+    factorio  # uses launcher in ~/bin
+    ```
+
 0. ~~Install tizonia~~
 
     - NOTE: Latest (0.18.0) isn't worth using for soundcloud. Loads at most 10 songs with --soundcloud-user-stream, maybe a soundcloud API limitation. It also misses some tracks, but not as many as mopidy-soundcloud. Check again after some major version updates

@@ -380,7 +380,7 @@
     # you can now run `start_syncthing` (a launcher in ~/bin/)
     ```
 
-0. Install yshui's compton fork [github](https://github.com/yshui/compton)
+0. Install picom, yshui's compton fork [github](https://github.com/yshui/picom)
 
     - NOTE: This branch of compton is much newer, and actually maintained, but may have
       bugs. If you are not interested in helping develop compton, simply run
@@ -388,13 +388,15 @@
       the mainstream version you will likely need to modify .xsessionrc.
       Another option is to install a recent release from yshui's github (v6.2 when this
       was written).
+    - NOTE: during the "ninja -C build" step, I got an error like "FAILED: needed xcb-render ['>=1.12.0'] found 1.12"
+      To fix, edit src/meson.build and change this: "'>=1.12.0'" with this: "'>=1.12'"
 
     ```bash
     # from guide in README.md
     sudo apt install meson ninja-build libx11-dev libx11-xcb-dev libxext-dev x11proto-core-dev xcb libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-xinerama0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libxdg-basedir-dev libpcre2-dev libev-dev uthash-dev
     cd ~/repos
-    git clone https://github.com/yshui/compton.git compton-yshui
-    cd compton-yshui
+    git clone https://github.com/yshui/picom.git
+    cd picom
     git submodule update --init --recursive
     meson --buildtype=release . build
     ninja -C build

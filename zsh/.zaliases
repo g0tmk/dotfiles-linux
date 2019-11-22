@@ -20,6 +20,9 @@ alias hgrep='history 0 | egrep '
 #alias raspberry=ssht\ pi@raspberrypi
 #alias volumio=ssht\ volumio@volumio
 
+# VMs
+alias win10vm='VBoxManage startvm "Windows 10"'
+
 alias toggle-redshift='pkill -USR1 redshift'
 alias togred='toggle-redshift'
 

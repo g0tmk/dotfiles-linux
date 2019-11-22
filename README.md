@@ -446,6 +446,24 @@
             Default: Adaptive
     ```
 
+0. Install OpenVPN client and configure a VPN
+
+    ```bash
+    # check connectivity to server first, if desired
+    nc -vu <public_ip_address> 443
+    sudo apt install openvpn
+    sudo cp myconfigfile.ovpn /etc/openvpn/client/ 
+    sudo openvpn --client --config /etc/openvpn/client/myconfigfile.ovpn 
+    # should output a lot of text ending with "Initialization Sequence Completed"
+
+    # test connectivity by pinging the VPN server's gateway IP
+    ping 10.8.0.1
+    # verify route through VPN server exists
+    ip route
+    # verify this outputs the public IP of the VPN server
+    dig TXT +short o-o.myaddr.l.google.com @ns1.google.com 
+    ```
+
 0. Install pptp client to connect to pptp VPNs
 
     - [Debian setup guide](http://pptpclient.sourceforge.net/howto-debian.phtml)

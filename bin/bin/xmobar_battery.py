@@ -1,16 +1,29 @@
 #!/usr/bin/env python3
-"""Print battery info. Interface is designed to mimic options passed to
-the Battery plugin for Xmobar. 
+"""Print battery info. Interface is designed to mimic options passed to the Battery 
+plugin for Xmobar. 
 
 This should work more-or-less identically to the Battery plugin with a few features:
 
-    - shows correct status for dell batteries when configured to a custom charge range
+    - Shows correct status for dell batteries when configured to a custom charge range
       with BIOS PrimaryBatteryCfg
-    - does not require "--" parameter to be passed on cmdline to separate default
+    - Does not require "--" parameter to be passed on cmdline to separate default
       arguments from battery-specific ones
-    - in addition to the %%-wildcard built in to xmonad which supports replacement with
+    - In addition to the %% wildcard built in to xmonad which supports replacement with
       values 0-8, $$ is supported for 00-15 and @@ for 00-99.
-    - a lot more options
+    - A lot more options, most of which are not broken out into command line args, but
+      would be easy to add. Run --show_debug_info to see all available battery info.
+
+TODO:
+    - Make Battery properties asynchronous, then make format_status asynchronous, then
+      (optional) add a format_status_blocking that wraps it in an event loop. This will
+      allow later supervisor code to run multiple updates at once and also improve the
+      current code structure a little by allowing all battery calls at once.
+    - Move default format arguments into Battery.format_status - they should really be
+      there otherwise using format_status later porogramatically will be a pain. Since
+      main() should stay simple, it will keep passing all arguments to format_status,
+      which means the default arguments will probably stupidly have to remain in the
+      calls to argparse as well. Test later and see if passing None from argparse is
+      possible for all those arguments in the default case.
 
 """
 
@@ -18,6 +31,7 @@ from __future__ import print_function
 import subprocess
 import re
 import sys
+import logging
 
 # threshold under which battery is considered "charged" in milliamps
 _CHARGE_MODE_THRESHOLD_MA = 5
@@ -27,6 +41,7 @@ def run_command(cmd):
     """Run a command and return its stdout as a string. Command must be passed
     as a list of parameters ie ['ls', '-la']"""
     return subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL).stdout.decode('utf-8')
+
 
 def read_file(filename):
     with open(filename, 'r') as f:
@@ -153,12 +168,14 @@ class Battery():
         acpi_battery_info = run_command(['acpi', '-b'])
 
         # regex matches both these strings, named group 'time_left' is optional:
-        #   Battery 0: Discharging, 96%, 05:25:42 remaining
-        #   Battery 0: Full, 100%
-        # also noticed these (for a few seconds after AC is plugged in)
-        #   Battery 0: Charging, 98%, rate information unavailable
-        #   Battery 0: Unknown, 95%, rate information unavailable
-        #   Battery 0: Unknown, 95%
+        #     Battery 0: Discharging, 96%, 05:25:42 remaining
+        #     Battery 0: Full, 100%
+        # also noticed these (for a few seconds after AC is plugged in), these are
+        # caught before running the regex
+        #     Battery 0: Charging, 98%, rate information unavailable
+        #     Battery 0: Unknown, 95%, rate information unavailable
+        #     Battery 0: Unknown, 95%
+        #     Battery 0: Full, 100%,  until charged
         regex_str = "^Battery (?P<id>\d+): (?P<status>\w+), (?P<charge_percent>\d+)%(?:, (?P<time_left>[\d:]+) (remaining|until charged))*$"
         for line in acpi_battery_info.split('\n'):
             # for lines which basically say "I don't know", fallback on 00:00:00
@@ -185,8 +202,78 @@ class Battery():
             hours, minutes, seconds = [int(n) for n in val.split(":")]
             return (hours * 3600) + (minutes * 60) + seconds
 
+    def format_status(
+            self,
+            template=None,
+            low_threshold=None,
+            high_threshold=None,
+            low_color=None,
+            normal_color=None,
+            high_color=None,
+            on_ac_status=None,
+            off_ac_status=None,
+            idle_ac_status=None,
+            on_icon_pattern=None,
+            off_icon_pattern=None,
+            idle_icon_pattern=None,
+            border_width=None):
+        """Format a string with the current battery state."""
+        # TODO: add all default arguments here.
+        if template is None:
+            template = "Batt: <watts>W, <left>% / <timeleft> (<acstatus>) <leftbar>"
 
-if __name__ == "__main__":
+        try:
+            charge = self.charge_percent
+        except Exception as e:
+            logging.error("No battery")
+            return "No Battery"
+
+        scale_val = 100 / border_width
+        leftbar = "#" * round(charge / scale_val) + ":" * round(
+            (100 - charge) / scale_val
+        )
+
+        status = self.status
+        if status == "Charging":
+            ac_status = on_ac_status
+            leftipat = on_icon_pattern
+        elif status == "Discharging":
+            ac_status = off_ac_status
+            leftipat = off_icon_pattern
+        elif status == "AC Idle":
+            ac_status = idle_ac_status
+            leftipat = idle_icon_pattern
+
+        # scale 0-100 (101 values) to 0-8 (9 values)
+        leftipat = leftipat.replace("%%", "{:02d}".format(int(9*charge/101.0)))
+        # scale 0-100 (101 values) to 0-15 (16 values)
+        leftipat = leftipat.replace("$$", "{:02d}".format(int(16*charge/101.0)))
+        # scale 0-100 (101 values) to 0-99 (100 values)
+        leftipat = leftipat.replace("@@", "{:02d}".format(int(100*charge/101.0)))
+
+        charge_str = "{:.0f}".format(charge)
+        if charge < float(low_threshold) and low_color is not None:
+            color = low_color
+            charge_str = "<fc={}>{}</fc>".format(color, charge_str)
+        elif charge < float(high_threshold) and normal_color is not None:
+            color = normal_color
+            charge_str = "<fc={}>{}</fc>".format(color, charge_str)
+        elif high_color is not None:
+            color = high_color
+            charge_str = "<fc={}>{}</fc>".format(color, charge_str)
+
+        # replace acstatus/leftipat first - if they contain <variables> they will be replaced
+        template = template.replace("<acstatus>", ac_status)
+        template = template.replace("<leftipat>", leftipat)
+        template = template.replace("<watts>", "{:.1f}".format(self.watts))
+        template = template.replace("<left>", charge_str)
+        template = template.replace("<leftbar>", leftbar)
+        template = template.replace("<timeleft>", self.time_left_readable)
+        template = template.replace("<health>", self.health_percent_readable)
+        return template
+            
+
+def main():
     import argparse
 
     # Initialize arg parser. Note since we override -h, add_help must be false
@@ -272,17 +359,6 @@ if __name__ == "__main__":
         ),
     )
     p.add_argument(
-        "-i",
-        "--idle-ac-status",
-        default="Idle",
-        type=str,
-        metavar="TEMPLATE",
-        help=(
-            'String for AC "idle" status (default: "On"). Note: supports %% as a '
-            'placeholder for values 0-8, $$ for values 00-15, and @@ for values 00-99.'
-        )
-    )
-    p.add_argument(
         "-o",
         "--off-ac-status",
         default="Off",
@@ -290,6 +366,17 @@ if __name__ == "__main__":
         metavar="TEMPLATE",
         help=(
             'String for AC "off" status (default: "Off"). Note: supports %% as a '
+            'placeholder for values 0-8, $$ for values 00-15, and @@ for values 00-99.'
+        )
+    )
+    p.add_argument(
+        "-i",
+        "--idle-ac-status",
+        default="Idle",
+        type=str,
+        metavar="TEMPLATE",
+        help=(
+            'String for AC "idle" status (default: "On"). Note: supports %% as a '
             'placeholder for values 0-8, $$ for values 00-15, and @@ for values 00-99.'
         )
     )
@@ -341,74 +428,44 @@ if __name__ == "__main__":
     # TODO: figure out why this does not work
     # p.add_argument('--help', action='help', help='show this help message and exit')
     
+    # ignore args that are exactly "--" for backwards compatibility with xmobar
     args = p.parse_args(args=[x for x in sys.argv[1:] if x != "--"])
 
     try:
-        b = Battery("BAT0")
-        charge = b.charge_percent
+        battery = Battery(args.battery_id)
+        charge = battery.charge_percent
     except Exception as e:
         print("No Battery")
-        import traceback
-        traceback.print_exc()
-        sys.exit(1)
+        raise
 
     # print all info for debugging
     if args.show_debug_info:
-        all_vals = [attr for attr in dir(b) 
+        all_vals = [attr for attr in dir(battery) 
                     if not attr.startswith('__')]
         for val in all_vals:
             try:
-                print("  {}: {}".format(val, getattr(b, val)))
+                print("  {}: {}".format(val, getattr(battery, val)))
             except Exception as e:
                 print("Error reading {}: {}".format(val, str(e)))
-                import traceback
-                traceback.print_exc()
-                sys.exit(1)
+                raise
 
-    if charge < float(args.Low):
-        color = args.low
-    elif charge < float(args.High):
-        color = args.normal
-    else:
-        color = args.high
+    output = battery.format_status(
+        template=args.template,
+        low_threshold=args.Low,
+        high_threshold=args.High,
+        low_color=args.low,
+        normal_color=args.normal,
+        high_color=args.high,
+        on_ac_status=args.on_ac_status,
+        off_ac_status=args.off_ac_status,
+        idle_ac_status=args.idle_ac_status,
+        on_icon_pattern=args.on_icon_pattern,
+        off_icon_pattern=args.off_icon_pattern,
+        idle_icon_pattern=args.idle_icon_pattern,
+        border_width=args.bwidth)
+    print(output, end="")
 
-    scale_val = 100 / args.bwidth
-    leftbar = "#" * round(charge / scale_val) + ":" * round(
-        (100 - charge) / scale_val
-    )
 
-    status = b.status
-    if status == "Charging":
-        ac_status = args.on_ac_status
-        leftipat = args.on_icon_pattern
-    elif status == "Discharging":
-        ac_status = args.off_ac_status
-        leftipat = args.off_icon_pattern
-    elif status == "AC Idle":
-        ac_status = args.idle_ac_status
-        leftipat = args.idle_icon_pattern
-
-    # scale 0-100 (101 values) to 0-8 (9 values)
-    leftipat = leftipat.replace("%%", "{:02d}".format(int(9*charge/101.0)))
-    # scale 0-100 (101 values) to 0-15 (16 values)
-    leftipat = leftipat.replace("$$", "{:02d}".format(int(16*charge/101.0)))
-    # scale 0-100 (101 values) to 0-99 (100 values)
-    leftipat = leftipat.replace("@@", "{:02d}".format(int(100*charge/101.0)))
-
-    charge = "{:.0f}".format(charge)
-    if color is not None:
-        charge = "<fc={}>{}</fc>".format(color, charge)
-
-    template = args.template
-    # replace acstatus/leftipat first - if they contain <variables> they will be replaced
-    template = template.replace("<acstatus>", ac_status)
-    template = template.replace("<leftipat>", leftipat)
-    template = template.replace("<watts>", "{:.1f}".format(b.watts))
-    template = template.replace("<left>", charge)
-    template = template.replace("<leftbar>", leftbar)
-    template = template.replace("<timeleft>", b.time_left_readable)
-    template = template.replace("<health>", b.health_percent_readable)
-
-    print(template, end="")
-
+if __name__ == "__main__":
+    main()
 

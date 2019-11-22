@@ -17,10 +17,6 @@ import sys
 _IWCONFIG_BINARY = "/sbin/iwconfig"
 
 
-class IWConfigNotFoundError:
-    pass
-
-
 def run_command(cmd):
     """Run a command and return its stdout as a string. Command must be passed
     as a list of parameters ie ['ls', '-la']"""
@@ -43,6 +39,66 @@ def get_wireless_info():
         
     return None, None
 
+def get_formatted_wireless_info(
+        template,
+        low_threshold=None,
+        high_threshold=None,
+        low_color=None,
+        medium_color=None,
+        high_color=None,
+        suffix=None,
+        bar_width=None):
+    essid, quality = get_wireless_info()
+    if essid is None:
+        print("Wifi not connected", end="")
+        sys.exit(0)
+
+    if low_threshold is None:
+        low_threshold = 33
+
+    if high_threshold is None:
+        high_threshold = 66
+
+    if suffix is None:
+        suffix = False
+
+    if bar_width is None:
+        bar_width = 10
+
+    # make 'short' name by trimming words to 3 chars
+    essid_short = ' '.join([word[:3] for word in essid.split()])
+
+    if quality < float(low_threshold):
+        color = low_color
+    elif quality < float(high_threshold):
+        color = medium_color
+    else:
+        color = high_color
+
+    if quality > 100:
+        quality = 100
+    if quality < 0:
+        quality = 0
+
+    scale_val = 100 / bar_width
+    qualitybar = "#" * round(quality / scale_val) + ":" * round(
+        (100 - quality) / scale_val
+    )
+
+    # scale 0-100 (101 values) to 0-8 (9 values)
+    template = template.replace("%%", "{:02d}".format(int(9*quality/101.0)))
+
+    quality = "{:.0f}".format(quality)
+    if color is not None:
+        quality = "<fc={}>{}</fc>".format(color, quality)
+    if suffix:
+        quality += "%"
+
+    template = template.replace("<essid>", essid)
+    template = template.replace("<essid_short>", essid_short)
+    template = template.replace("<quality>", quality)
+    template = template.replace("<qualitybar>", qualitybar)
+    return template
 
 if __name__ == "__main__":
     import argparse
@@ -147,47 +203,15 @@ if __name__ == "__main__":
     # p.add_argument('--help', action='help', help='show this help message and exit')
     args = p.parse_args()
 
-    essid, quality = get_wireless_info()
-    if essid is None:
-        print("Wifi not connected", end="")
-        sys.exit(0)
+    output = get_formatted_wireless_info(
+        args.template,
+        low_threshold=args.Low,
+        high_threshold=args.High,
+        low_color=args.low,
+        medium_color=args.normal,
+        high_color=args.high,
+        suffix=args.suffix,
+        bar_width=args.bwidth)
 
-    # make 'short' name by trimming words to 3 chars
-
-    essid_short = ' '.join([word[:3] for word in essid.split()])
-
-    if quality < float(args.Low):
-        color = args.low
-    elif quality < float(args.High):
-        color = args.normal
-    else:
-        color = args.high
-
-    if quality > 100:
-        quality = 100
-    if quality < 0:
-        quality = 0
-
-    scale_val = 100 / args.bwidth
-    qualitybar = "#" * round(quality / scale_val) + ":" * round(
-        (100 - quality) / scale_val
-    )
-
-    template = args.template
-    # scale 0-100 (101 values) to 0-8 (9 values)
-    template = template.replace("%%", "{:02d}".format(int(9*quality/101.0)))
-
-    quality = "{:.0f}".format(quality)
-    if color is not None:
-        quality = "<fc={}>{}</fc>".format(color, quality)
-    if args.suffix:
-        quality += "%"
-
-    template = template.replace("<essid>", essid)
-    template = template.replace("<essid_short>", essid_short)
-    template = template.replace("<quality>", quality)
-    template = template.replace("<qualitybar>", qualitybar)
-
-    print(template, end="")
-
+    print(output, end="")
 

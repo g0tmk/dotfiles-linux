@@ -612,6 +612,45 @@
     - see [here](https://www.maketecheasier.com/set-up-xbox-one-controller-ubuntu/) for
       more info ie how to control kbd/mouse with controller and how to calibrate
 
+0. Pair a bluetooth headset:
+
+   ```bash
+   sudo apt install pulseaudio pulseaudio-module-bluetooth pavucontrol bluez-firmware
+   sudo service bluetooth restart
+   killall pulseaudio
+
+   # pair + trust the device in this gui
+   blueman-manager
+
+   # configure output to the headphones in this gui - also enable "A2DP" here
+   pavucontrol
+
+   # TODO: make volume hotkeys adjust bluetooth audio also
+   ```
+
+0. Install Xbox One S controller support over bluetooth [xpadneo](https://github.com/atar-axis/xpadneo)
+
+    ```bash
+    # install dependencies
+    sudo apt-get install dkms linux-headers-`uname -r`
+    # install xpadneo
+    git clone https://github.com/atar-axis/xpadneo.git
+    cd xpadneo
+    # read it first :)
+    sudo ./install.sh 
+
+    # connect a controller
+    sudo modprobe btusb
+    sudo bluetoothctl
+    scan on
+    # push scan button on the top of the controller
+    # wait for controller to appear (9C:AA:1B:22:E5:62 for me)
+    pair 9C:AA:1B:22:E5:62
+    trust 9C:AA:1B:22:E5:62
+    connect 9C:AA:1B:22:E5:62
+    # wait for the rumble - done!
+    ```
+
 0. Install ImageMagick 7.0.8+ from source
 
     ```bash

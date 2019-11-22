@@ -60,6 +60,17 @@ install_apps () {
     sudo apt install $(< "$1")
 }
 
+clone_repo () {
+    mkdir ~/repos 2> /dev/null
+    cd ~/repos
+    git clone "$1" 2> /dev/null
+}
+
+clone_all_repos () {
+    clone_repo https://github.com/g0tmk/pystatusbar.git
+    clone_repo https://github.com/yshui/picom.git
+}
+
 stow_dotfiles () {
     # loop through all folders (except etc) and run stow to install them
     echo -n "Stowing... "
@@ -98,6 +109,7 @@ change_settings () {
 
 f(){ install_apps "./app_list_minimal.txt"; }; ask "Install minimal apps?" f
 f(){ install_apps "./app_list_extras.txt"; }; ask "Install extra apps (games, etc)?" f
+ask "Install missing repositories?" clone_all_repos
 ask "Install dotfiles?" stow_dotfiles
 ask "Change settings (shell, alternatives)?" change_settings
 ask "Update font cache/settings?" font_setup

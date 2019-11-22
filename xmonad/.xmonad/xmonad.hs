@@ -21,7 +21,9 @@ bitmapDir = userDir ++ ".xmonad/xbm/"
 --autoStart = userDir ++ ".xmonad/bin/autostart.sh"
 
 main = do
-    xmproc <- spawnPipe "xmobar"
+
+    --xmproc <- spawnPipe "xmobar"
+    xmproc <- spawnPipe "PYTHONPATH=/home/$USER/repos python3 -m pystatusbar -c /home/$USER/repos/pystatusbar/config_bxpsd.config 2> /tmp/pystatusbar_stderr 1> /tmp/pystatusbar_stdout"
 
     --spawn $ "sh " ++ autoStart
 
@@ -33,7 +35,7 @@ main = do
                         $ layoutHook defaultConfig
         , logHook = dynamicLogWithPP xmobarPP
                         { ppOutput = hPutStrLn xmproc
-                        , ppTitle = xmobarColor "#8bc34a" "" . shorten 65
+                        , ppTitle = xmobarColor "#8bc34a" "" . shorten 70
                         , ppCurrent = xmobarColor "#ee9a00" ""
                         , ppSep = "   "
                         }

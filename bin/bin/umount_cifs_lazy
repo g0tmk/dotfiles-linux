@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# unmount a CIFS mount immediately, even if there are issues ding so - ie interface down
+
+
+if [ -z "$1" ]
+then
+    echo "usage: $0 <mount_path>"
+    exit 1
+fi
+
+umount -t cifs -l $1
+

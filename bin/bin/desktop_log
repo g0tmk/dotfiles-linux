@@ -3,7 +3,11 @@
 # Show miscellaneous status lines if they fit certain conditions. For example - if
 # there are any uncommitted changes in dotfiles, state it. Otherwise print nothing.
 #
+# TO ADD:
+#  - message 'CPU is not undervolted'
+#
 # TODO:
+#  - 'syncthing is not running' always printed; does not correctly detect the syncthing service
 #  - Refactor this to be templated.
 #    - All of these statuses could be boiled down to:
 #      - a command to run which generates a number
@@ -107,8 +111,8 @@ if (( $(echo "$load_average_1m > $THRESHOLD_LOAD_AVG" | bc -l) )); then
 fi
 
 free_space_root_gb=$(echo "scale=1; $(df / --output='avail' | grep -v "Avail") / 1024 / 1024" | bc)
-if (( $(echo "$free_space_home_gb < $THRESHOLD_HOME_DIR_GB" | bc -l) )); then
-    echo "only ${free_space_home_gb} GB available in /"
+if (( $(echo "$free_space_root_gb < $THRESHOLD_ROOT_DIR_GB" | bc -l) )); then
+    echo "only ${free_space_root_gb} GB available in /"
 fi
 
 free_space_home_gb=$(echo "scale=1; $(df /home --output='avail' | grep -v "Avail") / 1024 / 1024" | bc)

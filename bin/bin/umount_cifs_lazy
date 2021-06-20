@@ -9,5 +9,5 @@ then
     exit 1
 fi
 
-umount -t cifs -l $1
+sudo umount -t cifs -l $1
 

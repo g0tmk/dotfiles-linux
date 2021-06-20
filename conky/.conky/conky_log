@@ -58,5 +58,7 @@ conky.text = [[
 # note: desktop_log takes 1.8s to execute, so at the very least limit it to 1% cpu
 #       time with update_interval settings above.
 # TODO: verify that update_interval settings actually limit the execution of this
-${execi 60 "${HOME}/bin/desktop_log"}
+${color #ee9a00}${execi 60 "${HOME}/bin/desktop_log"}
+${color}${alignr}${execpi 60 "${HOME}/bin/desktop_prices"}
 ]]
+

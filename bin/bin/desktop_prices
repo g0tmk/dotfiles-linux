@@ -1,0 +1,242 @@
+#!/usr/bin/env bash
+
+# show prices of a few assets
+
+
+is_network_connected() {
+    ip addr | egrep "(enp[0-9]+s[0-9]+|wlp[0-9]+s[0-9]+|eth[0-9]+|ens[0-9]+)" | grep "state UP" > /dev/null
+}
+
+cached_curl() {
+    cache_dir="/tmp/"$USER"/curl_cache/"
+    mkdir -p "$cache_dir"
+    url_md5=$(echo "$1" | openssl md5 | cut -d " " -f 2)
+    cached_filename="${cache_dir}${url_md5}_$(date '+%H').cached"
+    if ls "$cached_filename" 2>&1 > /dev/null; then
+        cat "$cached_filename"
+    else
+        if ! is_network_connected; then
+            return 1
+        fi
+        # remove non-matching cached files (with expired time values)
+        rm -rf "${cache_dir}${url_md5}"_*.cached
+        curl_data=$(curl -s "$1")
+        if [ $? -ne 0 ]; then
+            return 1
+        fi
+        if echo "${curl_cache}" | grep "502 Bad Gateway" > /dev/null 2>&1; then
+            return 1
+        fi
+        echo "$curl_data" | tee "$cached_filename"
+    fi
+}
+
+format_usd_value() {
+    # round the value to 2 decimals, if greater than 10000 then hide decimals
+    if [ "$1" == "" ]; then
+        echo "format_usd_value got empty param" >&2
+        return 1
+    fi
+
+    # if > 10000 then hide decimal part
+    # uses 'bc' because bash does not support float comparison
+    if [ $(echo "$1>10000"| bc) -eq 1 ]; then
+        value=$(echo "scale=0; ${1}/1" | bc -l)
+    else
+        value=$(echo "scale=2; ${1}/1" | bc -l)
+    fi
+    echo $value
+}
+
+format_percent() {
+    # - round input numbers to 1 decimal place 
+    # - add a '+' character if it is positive
+    # - color values red/green based on value TODO: brightness on value would be cool
+    if [ "$1" == "" ]; then
+        echo "format_percent got empty param" >&2
+        return 1
+    fi
+
+    percent=$(echo "scale=1; ${1}/1" | bc -l)
+    # TODO: if percent ends in .0 (like 2.0) then remove the .0
+
+    # if no minus character and percent is not 0, color green and prefix with +. else red.
+    if ! echo "$percent" | grep "-" > /dev/null 2>&1 && [ $percent != "0" >/dev/null 2>&1 ]; then
+        change_percent="\${color #8bc34a}+${percent}\${color}"
+    else
+        change_percent="\${color #ff7070}${percent}\${color}"
+    fi
+    echo $change_percent
+}
+
+stock_price() {
+    # load the latest price for a given stock ticker
+
+    # to get this url:
+    # - load this page: https://seekingalpha.com/symbol/VOO
+    # - open inspector to network info, check any json files that are loaded. one will be this.
+    url="https://finance.api.seekingalpha.com/v2/real-time-prices?symbols=${1}"
+    api_response=$(cached_curl "$url")
+    if [ $? -ne 0 ]; then
+        return 1
+    fi
+    price=$(echo "$api_response" | egrep -o '"last": *"*[-0-9.]+"*' | egrep  -o "[-0-9.]+")
+    # if no matches, probably a bad api response. print the response for debugging and exit
+    if [ "$price" == "" ]; then
+        echo "No match in stock_price: ${api_response}" >&2
+        return 1
+    fi
+
+    format_usd_value "$price"
+}
+
+stock_change_24h() {
+    url="https://finance.api.seekingalpha.com/v2/real-time-prices?symbols=${1}"
+    api_response=$(cached_curl "$url")
+    if [ $? -ne 0 ]; then
+        return 1
+    fi
+
+    change_percent=$(echo "$api_response" | egrep -o '"percentChange": *"*[-0-9.]+"*' | egrep -o "[-0-9.]+")
+    # if no matches, probably a bad api response. print the response for debugging and exit
+    if [ "$change_percent" == "" ]; then
+        echo "No match in stock_change_24h: ${api_response}" >&2
+        return 1
+    fi
+
+    # round value to 1 decimal point
+    change_percent=$(echo "scale=1; $change_percent/1" | bc -l)
+
+    # don't show anything if value is 0
+    if [ "$change_percent" == "0" ]; then
+        return
+    else
+        echo "($(format_percent $change_percent)%%)"
+    fi
+}
+
+gold_price() {
+    url="https://data-asg.goldprice.org/dbXRates/USD"
+    api_response=$(cached_curl "$url")
+    if [ $? -ne 0 ]; then
+        return 1
+    fi
+    price=$(echo "$api_response" | egrep -o '"xauPrice":"*[-0-9.]+"*' | egrep -o "[-0-9.]+")
+    # if no matches, probably a bad api response. print the response for debugging and exit
+    if [ "$price" == "" ]; then
+        echo "No match in gold_price: ${api_response}" >&2
+        return 1
+    fi
+
+    format_usd_value "$price"
+}
+
+gold_change_24h() {
+    url="https://data-asg.goldprice.org/dbXRates/USD"
+    api_response=$(cached_curl "$url")
+    if [ $? -ne 0 ]; then
+        return 1
+    fi
+
+    price_usd=$(echo "$api_response" | egrep -o '"xauPrice":"*[-0-9.]+"*' | egrep -o "[-0-9.]+")
+    # if no matches, probably a bad api response. print the response for debugging and exit
+    if [ "$price_usd" == "" ]; then
+        echo "No match in gold_change_24h price: ${api_response}" >&2
+        return 1
+    fi
+
+    change_usd=$(echo "$api_response" | egrep -o '"chgXau": *"*[-0-9.]+"*' | egrep -o "[-0-9.]+")
+    # if no matches, probably a bad api response. print the response for debugging and exit
+    if [ "$change_usd" == "" ]; then
+        echo "No match in gold_change_24h change: ${api_response}" >&2
+        return 1
+    fi
+
+    change_percent=$(echo "scale=1; 100*$change_usd/$price_usd" | bc -l)
+
+    # don't show anything if value is 0
+    if [ "$change_percent" == "0" ]; then
+        return
+    else
+        echo "($(format_percent $change_percent)%%)"
+    fi
+}
+
+silver_price() {
+    url="https://data-asg.goldprice.org/dbXRates/USD"
+    api_response=$(cached_curl "$url")
+    if [ $? -ne 0 ]; then
+        return 1
+    fi
+    price=$(echo "$api_response" | egrep -o '"xagPrice":"*[-0-9.]+"*' | egrep -o "[-0-9.]+")
+    # if no matches, probably a bad api response. print the response for debugging and exit
+    if [ "$price" == "" ]; then
+        echo "No match in silver_price: ${api_response}" >&2
+        return 1
+    fi
+    format_usd_value "$price"
+}
+
+
+crypto_price() {
+    url="https://api.coingecko.com/api/v3/simple/price?ids=${1}&vs_currencies=usd&include_24hr_change=true"
+    api_response=$(cached_curl "$url")
+    if [ $? -ne 0 ]; then
+        return 1
+    fi
+    price=$(echo "$api_response" | egrep -o '"usd":"*[-0-9.]+"*' | egrep -o "[-0-9.]+")
+    # if no matches, probably a bad api response. print the response for debugging and exit
+    if [ "$price" == "" ]; then
+        echo "No match in crypto_price: ${api_response}" >&2
+        return 1
+    fi
+
+    format_usd_value "$price"
+}
+
+crypto_change_24h() {
+    url="https://api.coingecko.com/api/v3/simple/price?ids=${1}&vs_currencies=usd&include_24hr_change=true"
+    api_response=$(cached_curl "$url")
+    if [ $? -ne 0 ]; then
+        return 1
+    fi
+
+    price_usd=$(echo "$api_response" | egrep -o '"usd":"*[-0-9.]+"*' | egrep -o "[-0-9.]+")
+    # if no matches, probably a bad api response. print the response for debugging and exit
+    if [ "$price_usd" == "" ]; then
+        echo "No match in crypto_change_24h price: ${api_response}" >&2
+        return 1
+    fi
+    change_usd=$(echo "$api_response" | egrep -o '"usd_24h_change":"*[-0-9.]+"*' | cut -d : -f 2 | egrep -o "[-0-9.]+")
+    # if no matches, probably a bad api response. print the response for debugging and exit
+    if [ "$change_usd" == "" ]; then
+        echo "No match in crypto_change_24h change: ${api_response}" >&2
+        return 1
+    fi
+    # at some point before dec 16 2020, 'change' switched to percetage instead of absolute dollar amount
+    #change_percent=$(echo "scale=1; 100*$change_usd/$price_usd" | bc -l)
+    change_percent=$(echo "scale=1; $change_usd" | bc -l)
+
+    # don't show anything if value is 0
+    if [ "$change_percent" == "0" ]; then
+        return
+    else
+        echo "($(format_percent $change_percent)%%)"
+    fi
+}
+
+
+#price_width=9
+#change_width=8
+#printf "bitcoin: %${price_width}.${price_width}s %${change_width}.${change_width}s\n" "\$$(crypto_price btc)" "$(crypto_change_1h btc)% 1h"
+#printf "ethereum:%${price_width}.${price_width}s %${change_width}.${change_width}s\n" "\$$(crypto_price eth)" "$(crypto_change_1h eth)% 1h"
+#printf "monero:  %${price_width}.${price_width}s %${change_width}.${change_width}s\n" "\$$(crypto_price xmr)" "$(crypto_change_1h xmr)% 1h"
+
+# note: conky parses $ as a special character. to escape it, we need to echo two $$ chars in a row
+#printf "btc $(crypto_price bitcoin) $(crypto_change_24h bitcoin)  eth $(crypto_price ethereum) $(crypto_change_24h ethereum)  voo $(stock_price VOO) $(stock_change_24h VOO)  dji $(stock_price DJI) $(stock_change_24h DJI)  xau $(gold_price) $(gold_change_24h)"
+printf "btc $(crypto_price bitcoin) $(crypto_change_24h bitcoin)  eth $(crypto_price ethereum) $(crypto_change_24h ethereum)  voo $(stock_price VOO) $(stock_change_24h VOO)  xau $(gold_price) $(gold_change_24h)"
+
+#printf "btc $(crypto_price bitcoin) $(crypto_change_24h bitcoin)  eth $(crypto_price ethereum) $(crypto_change_24h ethereum)  xau $(gold_price) $(gold_change_24h)\n"
+#printf "voo $(stock_price VOO) $(stock_change_24h VOO)  dji $(stock_price DJI) $(stock_change_24h DJI)"
+
+

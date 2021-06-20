@@ -45,6 +45,7 @@
 ! *boldItalicFont: -*-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1
 
 *font: xft:Terminus:pixelsize=14:style=Regular
+!*font: xft:TerminessTTF Nerd Font:style=Regular:pixelsize=14
 *boldFont: xft:Terminus:pixelsize=14:style=Bold
 *italicFont: xft:Terminus:pixelsize=14:style=Bold
 *boldItalicFont: xft:Terminus:pixelsize=14:style=Bold

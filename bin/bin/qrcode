@@ -26,4 +26,4 @@ check_download_repo() {
 
 check_download_repo "$REPO_URL" "$REPO_LOCATION"
 
-python "$REPO_LOCATION" $1
+python3 "$REPO_LOCATION" $1

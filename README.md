@@ -463,10 +463,12 @@
 0. Install OpenVPN client and configure a VPN
 
     ```bash
+    # For proXPN, Download config files from http://www.proxpn.com/updater/locations.html
     # check connectivity to server first, if desired
     nc -vu <public_ip_address> 443
     sudo apt install openvpn
     sudo cp myconfigfile.ovpn /etc/openvpn/client/ 
+    sudo chmod go-rwx /etc/openvpn/client/myconfigfile.ovpn
     sudo openvpn --client --config /etc/openvpn/client/myconfigfile.ovpn 
     # should output a lot of text ending with "Initialization Sequence Completed"
 

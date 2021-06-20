@@ -1,9 +1,11 @@
 [user]
-	email = developer@local
-	name = Developer
+	email = user@local
+	name = User
 [core]
 	editor = /usr/bin/vim
         # automatically convert line endings (lf vs crlf)
 	autocrlf = input
 [push]
 	default = simple
+[credential]
+	helper = cache

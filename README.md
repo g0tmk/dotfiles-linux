@@ -849,6 +849,8 @@
 
 
 #### BUGS
+- volume controls do not work on bluetooth (or any non-built-in-speaker) headphones
+  - the slider that changes in pavucontrol is named "Built-in Audio Analog Stereo"
 - after boot, volume controls will not work until something tries to use the speakers
 - occasionally tmux prefix hotkey stops working in urxvt. Seems to be a urxvt issue.
   - workaround for now is close urxvt, open a new one, and reattach with `tmux a`

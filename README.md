@@ -51,6 +51,8 @@
     # Install the absolute minimum manually
     sudo apt update
     sudo apt install git apt-transport-https
+    # allow git to cache passwords for up to an hour
+    git config --global credential.helper cache 3600
     sudo sed -i 's/http:/https:/g' /etc/apt/sources.list
 
     # Install apps and link dotfiles. See install.sh for details.

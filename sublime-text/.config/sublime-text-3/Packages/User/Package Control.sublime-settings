@@ -5,11 +5,14 @@
 	],
 	"installed_packages":
 	[
+		"Anaconda",
+		"DoxyDoxygen",
+		"MarkdownPreview",
 		"Package Control",
 		"PackageDev",
 		"PackageResourceViewer",
 		"Print to HTML",
 		"Theme - Soda",
 		"Theme - Sodarized"
-	]
+	],
 }

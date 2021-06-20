@@ -819,6 +819,7 @@
 - check out YouCompleteMe (https://github.com/Valloric/YouCompleteMe)
 - check out freerdp-x11
 - check out nemo - it has a better compact mode than nautilus
+  - after install run `gsettings set org.nemo.desktop show-desktop-icons false` to disable desktop window
 - login to firefox to sync maybe? its a pain to re-setup
 - figure out a good way to save some of fstab's contents (NASes etc). maybe have a file that you append to current fstab during setup?
 - figure out where fieryturk comes from (it is used in .xmobarrc)

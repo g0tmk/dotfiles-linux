@@ -92,6 +92,7 @@ function print_blocks {
     done
 }
 
+printf "blk red grn ylw blu mag cya wht blk red grn ylw blu mag cya wht\n"
 print_run 0 16 # The first 16 colours are spread over the whole spectrum
 printf "\n"
 print_blocks 16 231 6 6 3 # 6x6x6 colour cube between 16 and 231 inclusive

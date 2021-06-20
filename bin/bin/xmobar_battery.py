@@ -128,7 +128,12 @@ class Battery():
         
         Returns one of "Charging", "Discharging", or "AC Idle"
         """
-        sys_class_status = read_file(self._prefix + "status").strip()
+        try:
+            sys_class_status = read_file(self._prefix + "status").strip()
+        except Exception as e:
+            logging.error('Failed to read battery status: {}'.format(e))
+            # if status check fails, default to something - AC Idle is as good as anything
+            return "AC Idle"
 
         # tlp_output = run_command('tlp-stat -s')
         # tlp_status = None
@@ -275,6 +280,8 @@ class Battery():
 
 def main():
     import argparse
+    # configure logging to output to stderr
+    logging.basicConfig(level=logging.INFO)
 
     # Initialize arg parser. Note since we override -h, add_help must be false
     p = argparse.ArgumentParser(

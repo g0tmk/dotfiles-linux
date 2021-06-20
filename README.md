@@ -691,6 +691,65 @@
     factorio  # uses launcher in ~/bin
     ```
 
+
+0. Install Rollercoaster Tycoon (NOT YET WORKING)
+
+    ```bash
+    # NOTE: these instructions are not fully correct - needed debian 10+ to complete, and I was on 9
+
+    sudo mkdir /mnt/rc2_cd
+    sudo mount RC2.iso /mnt/rc2_cd -o loop
+    sudo apt install unshield
+    mkdir ~/programs/rc2
+    INSTALLDIR=/mnt/rc2_cd
+    EXTRACTDIR=~/programs/rc2
+
+    unshield -g Minimum -d "$EXTRACTDIR" x "$INSTALLDIR/data1.hdr"
+    cp -R "$INSTALLDIR/Data/" "$EXTRACTDIR/Minimum/Data"
+    mv "$EXTRACTDIR/Minimum" "$EXTRACTDIR/RCT2"
+    sudo umount /mnt/rc2_cd
+
+    # clone and build openrc2 - if you were on ubuntu, you could just use the ppa...
+    # AppImage file provided on the website appeared to require debian 10 only libs, so no debian 9
+    git clone https://github.com/OpenRCT2/OpenRCT2.git
+    cd OpenRC2
+    mkdir build
+    cd build
+    cmake ..
+
+    # for the latest version, check here:
+    wget https://github.com/OpenRCT2/OpenRCT2/releases/download/v0.2.6/OpenRCT2-0.2.6-linux-x86_64.tar.gz
+    tar xvf Open*
+    cd OpenRCT2
+
+    # for the latest version, check here: 
+    cd ~/programs/rc2
+    wget https://github.com/OpenRCT2/OpenRCT2/releases/download/v0.2.6/OpenRCT2-0.2.6-linux-x86_64.AppImage
+    chmod +x Open*
+    ln -s OpenRCT2-0.2.6-linux-x86_64.AppImage OpenRC2_latest
+    # this runs a wrapper script in ~/bin
+    rollercoastertycoon2
+
+    sudo apt install playonlinux
+    playonlinux
+    # in the gui, click the "Configure" button, click "New", select 32 bits, select "System" as the wine version, type "rc2" as name of virtual drive, click OK.
+    # in the gui, click the "Configure" button, select rc2 drive, wine tab, click "Configure Wine", go to Drives tab, click "Add", add D: with path /mnt/rc2_cd
+    # might have to restart playonlinux here
+    # in the gui, click "Install Program", search for "Rollercoaster Tycoon 2" (You might have to check "No-cd needed" in search options)
+
+
+    ```
+
+    ```bash
+    # separate attempt number 2
+    # needed if running openrct2 throws 'libduktape.so.202: cannot open shared object file'
+    sudo apt install duktape-deb
+    cd ~/programs/rc2
+    wget https://github.com/Limetric/OpenRCT2-binaries/releases/download/v0.3.3-efd5d7d/OpenRCT2-0.3.3-develop-efd5d7d-linux-x86_64.tar.gz
+    tar xvf OpenRCT2-0.3.3-develop-efd5d7d-linux-x86_64.tar.gz
+    cd OpenRCT2
+    ./openrct2
+    ```
 0. ~~Install tizonia~~
 
     - NOTE: Latest (0.18.0) isn't worth using for soundcloud. Loads at most 10 songs with --soundcloud-user-stream, maybe a soundcloud API limitation. It also misses some tracks, but not as many as mopidy-soundcloud. Check again after some major version updates

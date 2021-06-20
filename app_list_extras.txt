@@ -1,4 +1,8 @@
 
+flatpak
 gimp
+hdparm
+iperf
+kaitai-struct-compiler
 lutris
 

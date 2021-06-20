@@ -50,12 +50,14 @@ main = do
         , borderWidth = 1
         } `additionalKeys` myKeys
     where 
-        myKeys = -- Ctrl+Shift+Z: Lock screen with slock
-                 [ ((mod4Mask .|. shiftMask, xK_z), spawn "sudo ~/bin/brightness set 0; slock; sudo ~/bin/brightness restore")
-                 -- screenshot 1 NOTE: hotkey not working - check xK_Print
-                 , ((controlMask, xK_Print), spawn "sleep 0.2 && scrot -s &; echo 'Select area' | show_osd_message")
-                 -- screenshot 2: works fine; why doesn't above work?
-                 , ((0, xK_Print), spawn "scrot && echo 'Took screenshot!' | show_osd_message")
+        myKeys = 
+                 [ 
+                 -- Ctrl+Shift+Z: Lock screen with slock
+                   ((mod4Mask .|. shiftMask, xK_z), spawn "sudo ~/bin/brightness set 0; slock; sudo ~/bin/brightness restore")
+                 -- screenshot (select area)
+                 , ((controlMask, xK_Print), spawn "sleep 0.2; scrot -s --exec 'mv $f ~/screenshots' && echo 'Took screenshot!' | show_osd_message")
+                 -- screenshot (fullscreen)
+                 , ((0, xK_Print), spawn "scrot --exec 'mv $f ~/screenshots' && echo 'Took screenshot!' | show_osd_message")
                  -- Mod+b: toggle fullscreen
                  , ((mod4Mask, xK_b     ), sendMessage ToggleStruts)
                  -- Mod+p: yeganesh NOTE: "$()" syntax will execute the output (yeganesh only outputs the binary's name)

@@ -16,6 +16,9 @@ echo 'a VVV below fails sometimes "no such file or something"' >&2
 battery_current_ua=$(< /sys/class/power_supply/BAT0/current_now)
 battery_current_ma=$(echo "$battery_current_ua / 1000" | bc)
 
+battery_voltage_uv=$(< /sys/class/power_supply/BAT0/voltage_now)
+battery_voltage_mv=$(echo "scale=2; $battery_voltage_uv / 1000" | bc)
+
 battery_charge_now_uah=$(< /sys/class/power_supply/BAT0/charge_now)
 battery_charge_now_mah=$(echo "$battery_charge_now_uah / 1000" | bc)
 

@@ -316,6 +316,12 @@
     ln -s ~/.mozilla/firefox/firefox ~/bin/firefox
     sudo update-alternatives --install /usr/bin/x-www-browser x-www-browser ~/bin/firefox 200
     # you can now run `firefox`
+
+    # to install shadowfox, download the latest from here https://overdodactyl.github.io/ShadowFox/#
+    # make sure you set firefox theme to 'Dark' first
+    wget https://github.com/SrKomodo/shadowfox-updater/releases/download/v1.7.19/shadowfox_linux_x64
+    chmod+x shadowfox_linux_x64
+    ./shadowfox_linux_x64
     ```
 
 0. Install barrier (instructions from [here](https://github.com/debauchee/barrier/releases/tag/v2.1.2))
@@ -691,6 +697,41 @@
     factorio  # uses launcher in ~/bin
     ```
 
+0. Install ClickUp
+
+    ```bash
+    # download latest desktop app for linux here https://clickup.com/apps
+    unzip ~/Downloads/clickup-desktop-2.0.8-linux.zip
+    ~/Downloads/clickup-desktop-2.0.8-x86_64.AppImage --no-sandbox
+    # NOTE: see here for info on how to get it to run in-sandbox:
+    # https://github.com/standardnotes/forum/issues/690#issuecomment-531802728
+    ```
+
+0. Install Minecraft
+
+    ```bash
+    # download latest deb from minecraft.net and install it
+    sudo dpkg -i minecraft-latest.deb
+    minecraft-launcher
+
+    # if launcher fails with error "Couldn't load launcher core from /home/g0tmk/.minecraft/launcher/liblauncher.so: LoadErrorNotPresent"
+    #   then download latest libstdc++ (i did the one for buster)
+    cd /tmp
+    wget http://ftp.us.debian.org/debian/pool/main/g/gcc-8/libstdc++6_8.3.0-6_amd64.deb
+    ar x libstdc++6_8.3.0-6_amd64.deb
+    tar xvf data.tar.xz
+    cp usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25 usr/lib/x86_64-linux-gnu/libstdc++.so.6 ~/.minecraft/launcher/
+    minecraft-launcher
+    ```
+
+0. Install evmlab (NOT YET WORKING)
+
+    ```bash
+    sudo apt install python3 python3-pip
+    python3 -m pip install evmlab[consolegui,abidecoder,docker]
+    python3 -m evmlab opviewer --hash 0xETHTXHASH
+
+    ```
 
 0. Install Rollercoaster Tycoon (NOT YET WORKING)
 
@@ -750,6 +791,16 @@
     cd OpenRCT2
     ./openrct2
     ```
+
+
+0. Install mkchromecast (NOT TESTED / NOT WORKING)
+
+    ```bash
+    sudo apt install mkchromecast
+    sudo apt install python3-flask python3-flask python3-psutil
+    mkchromecast --video -i videofile.mp4
+    ```
+
 0. ~~Install tizonia~~
 
     - NOTE: Latest (0.18.0) isn't worth using for soundcloud. Loads at most 10 songs with --soundcloud-user-stream, maybe a soundcloud API limitation. It also misses some tracks, but not as many as mopidy-soundcloud. Check again after some major version updates

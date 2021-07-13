@@ -5,6 +5,9 @@
 *.background:   #111111
 *.cursorColor:  #eceff1
 
+! set cursor size so adding more monitors doesn't make cursor size grow
+Xcursor.size: 32
+
 ! black
 *.color0:       #263238
 *.color8:       #37474f

@@ -6,6 +6,7 @@
 *.cursorColor:  #eceff1
 
 ! set cursor size so adding more monitors doesn't make cursor size grow
+! TODO: verify this actually works...
 Xcursor.size: 32
 
 ! black

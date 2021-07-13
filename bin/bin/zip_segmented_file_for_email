@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+
+# compress input files then split them into pieces for emailing.
+#
+# note: email server limit is 5048576 bytes _per email_ (including email message and
+#       quoted reply text) so there isn't a prefect value here. 
+#
+# note: an email I sent with 17647790 bytes of attachments was reported by the server
+#       as a total of 24178762 bytes. Email attachments are sent base64 so
+#       17647790 * 4/3 = 23530386 bytes. 648376 bytes of overhead then. If we double
+#       that for safety then expect 1296752 as overhead. This leaves 
+#       5048576-1296752 = 3751824 bytes of attachment space left, converted from base64
+#       this leaves 3751824 * 3/4 = 2813868 bytes per attachment. lame. Using 2813864
+#       since this is the next lowest uint32-aligned size.
+
+set -Ee          # exit immediately on command failure
+set -o pipefail  # treat failure within a pipe as failure
+set -u           # disallow unset variables
+
+# split files into pieces this large
+MAX_SIZE_PER_FILE_B=2813864
+DEFAULT_FILENAME=data.7z
+
+# check if binaries exist
+if ! type 7za > /dev/null; then
+    echo "Error: 7za binary missing"
+fi
+if ! type zip > /dev/null; then
+    echo "Error: zip binary missing"
+fi
+
+# parse parameters
+if [ $# -eq 0 ]; then
+    echo "Usage: $0 file1 [file2] ..."
+    exit 1
+fi
+
+# count files
+total_count=0
+for file in "$@"; do
+    count=$(find $file | wc -l)
+    total_count=$(($total_count + $count))
+done
+echo "Compressing $total_count files..."
+
+# ask for output name; spin until it is ok
+while [ true ]; do
+    # flush stdin
+    read -t 0.1 -n 10000 discard || true
+    # 
+    read -p "Enter name for the new archive, or hit enter to use $DEFAULT_FILENAME: " -r
+    OUTPUT_FILENAME="$REPLY"
+
+    # if no response use default filename
+    if [[ "$OUTPUT_FILENAME" = "" ]]; then
+        OUTPUT_FILENAME="$DEFAULT_FILENAME"
+    fi
+
+    # add .7z to filename if it doesn't end with it already
+    if [[ "$OUTPUT_FILENAME" != "*.7z" ]]; then
+        OUTPUT_FILENAME="$OUTPUT_FILENAME.7z"
+    fi
+
+    # make sure chosen file does not exist
+    if ls $OUTPUT_FILENAME.[0-9][0-9][0-9].zip > /dev/null; then
+        echo
+        echo "Error: $OUTPUT_FILENAME exists - choose a different name?"
+        continue
+    fi
+
+    # filename OK, move on
+    break
+done
+
+# compress input into split 7za archives
+# -p: use password
+# -bb0: set output log level to lowest
+# -v: split into volumes of given size
+7za a -p -bb0 -v"$MAX_SIZE_PER_FILE_B"b "$OUTPUT_FILENAME" "$@"
+
+# zip each 7za chunk
+for file in "$OUTPUT_FILENAME".[0-9][0-9][0-9]; do
+#for file in $(find . -regextype "egrep" -iregex "$OUTPUT_FILENAME.[0-9]+"); do
+    echo "Creating $file.zip..."
+    zip -q "$file.zip" "$file"
+    rm "$file"
+done
+
+

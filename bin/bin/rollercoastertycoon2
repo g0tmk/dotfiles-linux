@@ -1,0 +1,4 @@
+#!/bin/bash
+
+~/programs/rc2/OpenRC2_latest set-rc2 ~/programs/rc2/RCT2
+

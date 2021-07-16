@@ -372,6 +372,20 @@
     sudo systemctl status thermald.service
     ```
 
+0. Install sublime text & sublime merge (from [here](https://www.sublimetext.com/docs/3/linux_repositories.html))
+
+    ```bash
+    # install using their apt source:
+    echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
+    wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
+    sudo apt update
+    sudo apt install apt-transport-https
+    sudo apt install sublime-text sublime-merge
+    # you can now run `subl` and `smerge`
+
+    # TODO: figure out how to include (or auto-install) my plugins list. Example:
+    #   - MarkdownPreview
+    ```
 0. Install virtualbox
 
     - Original guide [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22))
@@ -398,27 +412,25 @@
     # - (Optional, show with Host+Home) View -> Menu Bar -> Hide
     ```
 
-0. Install sublime text & sublime merge (from [here](https://www.sublimetext.com/docs/3/linux_repositories.html))
-
-    ```bash
-    # install using their apt source:
-    echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
-    wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
-    sudo apt update
-    sudo apt install apt-transport-https
-    sudo apt install sublime-text sublime-merge
-    # you can now run `subl` and `smerge`
-
-    # TODO: figure out how to include (or auto-install) my plugins list. Example:
-    #   - MarkdownPreview
-    ```
-
 0. Install firefox stable (from [here](https://wiki.debian.org/Firefox#Firefox_Stable.2C_Beta_and_Nightly))
 
-    - Note: If you don't care about having the most modern firefox, skip all this and
-      run `sudo apt install firefox-esr` instead.
+    - If a desktop environment is installed already, you might have the best version of
+      firefox already. Check if firefox-esr and firefox are installed already, if they
+      are, skip the rest of this section.
 
     ```bash
+    sudo apt show firefox-esr
+    sudo apt show firefox
+    ```
+
+    - If you want the debian-packaged version of firefox (possibly older but stable and
+      secure) then all you need to run is `sudo apt install firefox-esr`, and skip the
+      rest of this section.
+    - If you want the latest firefox, then you can install the latest version like this:
+
+    ```bash
+    # first remove any debian-packaged versions
+    sudo apt remove firefox firefox-esr
     # download firefox from website and extract to a directory in home:
     # TODO: this doesn't work but should: wget https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64&lang=en-US
     wget https://download-installer.cdn.mozilla.net/pub/firefox/releases/66.0.5/linux-x86_64/en-US/firefox-66.0.5.tar.bz2
@@ -428,6 +440,7 @@
     sudo update-alternatives --install /usr/bin/x-www-browser x-www-browser ~/bin/firefox 200
     # you can now run `firefox`
 
+    # (optional, modern firefox has a dark mode that is good enough)
     # to install shadowfox, download the latest from here https://overdodactyl.github.io/ShadowFox/#
     # make sure you set firefox theme to 'Dark' first
     wget https://github.com/SrKomodo/shadowfox-updater/releases/download/v1.7.19/shadowfox_linux_x64

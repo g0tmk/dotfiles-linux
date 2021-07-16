@@ -22,15 +22,16 @@
 #
 
 
-getdefaultsinkname() {
-    pacmd stat | awk -F": " '/^Default sink name: /{print $2}'
-}
+#getdefaultsinkname() {
+#    pacmd stat | awk -F": " '/^Default sink name: /{print $2}'
+#}
 
 getdefaultsinkvol() {
-    pacmd list-sinks |
-        awk '/^\s+name: /{indefault = $2 == "<'$(getdefaultsinkname)'>"}
-            /^\s+volume: / && indefault {print $5; exit}' |
-        awk -F"%" '{print $1}'
+    amixer sget Master | egrep -o "Front Left.+[0-9]+%" | egrep -o "[0-9]+%" | egrep -o "[0-9]+"
+    #pacmd list-sinks |
+    #    awk '/^\s+name: /{indefault = $2 == "<'$(getdefaultsinkname)'>"}
+    #        /^\s+volume: / && indefault {print $5; exit}' |
+    #    awk -F"%" '{print $1}'
 }
 
 setdefaulsinkvol() {
@@ -46,20 +47,22 @@ setdefaulsinkvol() {
     else
         NEW_VOL=$1
     fi
-    
-    pactl set-sink-volume $(getdefaultsinkname) $NEW_VOL%
+
+    amixer -q sset Master "$NEW_VOL%"
+    #pactl set-sink-volume $(getdefaultsinkname) $NEW_VOL%
 }
 
 toggledefaultsink() {
-    pactl set-sink-mute $(getdefaultsinkname) toggle
+    amixer -q sset Master toggle
+    #pactl set-sink-mute $(getdefaultsinkname) toggle
 }
 
 isdefaultsinkmuted() {
-    pacmd list-sinks |
-        awk '/^\s+name: /{indefault = $2 == "<'$(getdefaultsinkname)'>"}
-            /^\s+muted: / && indefault {print $2; exit}' | grep yes > /dev/null
+    amixer sget Master | egrep -o "Front Left.+\[(on|off)\]" | egrep -o "\[(on|off)\]" | grep off > /dev/null
+    #pacmd list-sinks |
+    #    awk '/^\s+name: /{indefault = $2 == "<'$(getdefaultsinkname)'>"}
+    #        /^\s+muted: / && indefault {print $2; exit}' | grep yes > /dev/null
 }
-
 
 #### Parse parameters
 if [ $# -eq 0 ]

@@ -61,14 +61,17 @@ install_apps () {
 }
 
 clone_repo () {
-    mkdir ~/repos 2> /dev/null
-    cd ~/repos
-    git clone "$1" 2> /dev/null
+    mkdir -p /home/$USER/repos 2> /dev/null
+    if [ -d "/home/$USER/repos/$1" ]; then
+        echo "/home/$USER/repos/$1 exists"
+    else
+        git clone "$2" "/home/$USER/repos/$1" 2> /dev/null
+    fi
 }
 
 clone_all_repos () {
-    clone_repo https://github.com/g0tmk/pystatusbar.git
-    clone_repo https://github.com/yshui/picom.git
+    clone_repo pystatusbar https://github.com/g0tmk/pystatusbar.git
+    clone_repo picom https://github.com/yshui/picom.git
 }
 
 stow_dotfiles () {
@@ -93,7 +96,7 @@ stow_dotfiles () {
 font_setup () {
     echo "Updating font cache..."
     fc-cache
-    ask "Hit enter to open font wizard. Choose Native, Automatic, Yes." stow_dotfiles
+    ask "Hit enter to open font wizard. Choose Native, Slight, Automatic, Yes." stow_dotfiles
     sudo dpkg-reconfigure fontconfig-config
 }
 
@@ -101,7 +104,7 @@ change_settings () {
     echo "Changing shell to zsh..."
     chsh -s /bin/zsh
     echo "Changing terminal to urxvt..."
-    update-alternatives --set x-terminal-emulator /usr/bin/urxvt
+    sudo update-alternatives --set x-terminal-emulator /usr/bin/urxvt
     echo "Detecting hardware sensors..."
     sudo sensors-detect
 }

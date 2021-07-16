@@ -19,6 +19,7 @@ curl
 debian-handbook
 dmenu
 dos2unix
+dunst
 dzen2
 exfat-fuse
 exfat-utils
@@ -39,12 +40,14 @@ gddrescue
 git
 grep
 gzip
+html-xml-utils
 htop
 ifstat
 iftop
 iotop
 less
 libghc-xmonad-dev
+libnotify-bin
 lm-sensors
 lshw
 lxappearance

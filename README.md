@@ -11,6 +11,24 @@
    - 2016-05-16 [Ubuntu 16.04 on Dell XPS 15 9550](https://ubuntuforums.org/showthread.php?t=2317843)
    - 2017-12-01 [Installing Kali Linux on a Dell XPS 9550](https://www.rafaelhart.com/2017/12/installing-kali-linux-on-a-dell-xps-9550/)
 
+#### Basics
+ - Xmonad interface using Alt as the mod key
+ - Hotkeys
+   - Open terminal: Alt+Shift+Enter
+   - Open app launcher: Alt+P
+   - Lock screen: Alt+Shift+Z
+   - Reload configs and restart xmonad: Alt+Q
+   - Logout: Alt+Shift+Q
+   - Sleep: Power button or close lid
+   - Save screenshot to `~/screenshots`: PrtScr
+   - Save selection of the screen to `~/screenshots`: Shift+PrtScr`
+ - Apps
+    - File manager: `ranger`
+    - App switcher: `rofi`
+    - Configure wifi: `wicd-curses`
+    - Power management: xfce4-power-manager (`xfce4-power-manager-settings` to manage)
+    - File manager (gui): `nautilus`
+
 #### Custom commands
  - `barrier` starts barrier to allow control from another computer's keyboard/mouse
  - `battery` shows battery stats
@@ -43,26 +61,113 @@
 
 #### Install steps on a fresh Debian (Stable) machine
 
-0. Install Debian minimal system, install only "Standard System Utilities"
+0. If installing on a Dell XPS 9550, follow this first `guide_xps9550_hardware_install_notes.txt`.
+
+0. Install Debian minimal system (see guide_xxx_hardware_install_notes), install only "Standard System Utilities". Optionally select "Debian desktop environment" which will install Gnome 3.
+
+0. Fix apt sources list
+
+    # edit /etc/apt/sources.list and comment-out the "cdrom" line, you may also need to add more lines - for debian buster it should look like:
+
+    deb http://deb.debian.org/debian buster main contrib non-free
+    deb-src http://deb.debian.org/debian buster main contrib non-free
+    deb http://deb.debian.org/debian-security/ buster/updates main contrib non-free
+    deb-src http://deb.debian.org/debian-security/ buster/updates main contrib non-free
+    deb http://deb.debian.org/debian buster-updates main contrib non-free
+    deb-src http://deb.debian.org/debian buster-updates main contrib non-free
+
+    # now switch apt over to using HTTPS
+    sudo apt install git apt-transport-https
+    sudo sed -i 's/http:/https:/g' /etc/apt/sources.list
+
+0. Health checks
+ - First need to check some common issues that - if they are present - we should fix early.
+   - Check suspend by running `systemctl suspend`. The system should go to S3 sleep if bios is configured correctly (power will apppear to turn off, all fans stop).
+   - Check for extra interrupts - this made me reinstall my Debian 9 OS because I could not figure out what was wrong. After replacing it with Debian 10, the issue eventually became apparent.
+     - Run `watch -n 1 sudo cat /proc/interrupts` to show counters for all interrupts - in my case, IRQ 16 was incrementing by about 15,000 per second. To upgrade to a newer kernel using backports (WARNING: while newer, using a kernel from backports is actually worse for security. Backports are not officially supported, so they will not receive security updates like stable packages.
+
+        sudo -i
+        echo "deb https://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list
+        echo "deb-src https://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list
+        apt update
+        apt install -t buster-backports linux-image-amd64
+        exit
+        sudo reboot
+        # now run the above test again, verify the interrupt rate is normal (100 per sec roughly)
+
+0. (Optional) If using Gnome 3 as a fallback window manager, change a few settings after booting into it. The majority of these settings will not be used when booting int xmonad, however, some will persist (for example - theme).
+
+   - click "super" key, un-favorite the unused apps on the left (help, rythmbox, etc)
+   - open "Tweaks" app -> Appearance -> Application Theme -> Adwaita-dark
+   - open "Tweaks" app -> Extensions -> Removeable drive menu -> On
+   - open "Tweaks" app -> Keyboard & Mouse -> Mouse Click Emulation -> Area
+   - open "Tweaks" app -> Top Bar -> Battery Percentage -> On
+   - open "Tweaks" app -> Top Bar -> Date -> On
+   - open settings -> privacy -> purge trash & temporary files -> automatically purge temporary files -> On
+   - open settings -> bluetooth -> Off (for now)
+   - open settings -> devices -> Keyboard -> add custom shortcut with command `x-terminal-emulator` and shortcut Ctrl+Alt+T
+   - open settings -> devices -> removable media -> set all sections to "ask what to do"
+   - open settings -> devices -> mouse & touchpad -> tap to click -> on
+   - open settings -> devices -> displays -> Night Light -> On
+   - open settings -> details -> users -> automatic login -> On
+   - also, change these after installing default apps:
+     - open settings -> details -> default applications -> music -> mpv Media Player
+     - open settings -> details -> default applications -> video -> mpv Media Player
+     - open "Tweaks" app -> Fonts -> Interface Text -> Ubuntu Regular (size: 11)
+     - open "Tweaks" app -> Fonts -> Document Text -> Ubuntu Regular (size: 11)
+     - open "Tweaks" app -> Fonts -> Monospace Text -> Terminus Regular (size: 11)
+     - open "Tweaks" app -> Fonts -> Legacy Window Titles -> Ubuntu Medium (size: 11)
 
 0. Install base software
 
     ```bash
-    # Install the absolute minimum manually
     sudo apt update
-    sudo apt install git apt-transport-https
-    # allow git to cache passwords for up to an hour
-    git config --global credential.helper cache 3600
-    sudo sed -i 's/http:/https:/g' /etc/apt/sources.list
+    # optional: copy ~/.ssh/id_rsa key from somewhere, or generate a new one with `ssh-keygen -t rsa -b 4096`
 
     # Install apps and link dotfiles. See install.sh for details.
     git clone git://github.com/g0tmk/dotfiles-linux.git ~/dotfiles
     cd ~/dotfiles
+    # say yes to everything
     ./install.sh
+    # reboot, make sure enerything looks OK
+
+    # sensors-detect will probably tell you to add coretemp to /etc/modules - instead do this:
+    # run this command, if you see output then coretemp is enabled already
+    cat /proc/modules | grep coretemp
+    # if you see no output, add coretemp to /etc/modules
+
+    # optional; run this if some hardware does not work and reboot (I did not need it for debian 10 on xps9550)
+    sudo apt install firmware-misc-nonfree
+
+    # optional; if default apps are fine with you then skip this
+    sudo update-alternatives --all
     ```
+
+0. Xmonad
+
+    - reboot. in login screen, select "xmonad" as window manager, login
+    - alt+shift+enter to open terminal
+    - if xmonad fails to start, you might need to run this (but try not to, it is worse than the built-in xorg driver)`sudo apt install xserver-xorg-video-intel`
+
+0. Improve graphics performance (for intel embedded gpus)
+
+    sudo apt remove xserver-xorg-video-intel
+    sudo apt install xserver-xorg-core
+    reboot
+
+0. Install NTP
+
+- run `sudo apt-get install ntp`
+- add these lines to /etc/ntp.conf (and remove the generic ones)
+    server 0.north-america.pool.ntp.org
+    server 1.north-america.pool.ntp.org
+    server 2.north-america.pool.ntp.org
+    server 3.north-america.pool.ntp.org
 
 0. Configure sound (optional)
 
+    - run `speaker-test` (or make a sound some other way)
+      - if no sound, run `sudo alsactl init`
     - Run `alsamixer` 
     - Hit F6 and select sound card (probably "HDA Intel PCH")
     - set all channels to 0db. Unmute channels with 'm'. I left all muted except
@@ -72,19 +177,6 @@
 
     - First, check if this is needed for you. Scroll with your touchpad and if the
       direction is fine (and you don't care about tapping), skip this section.
-    - Run `xinput --list` to see all input devices. On the xps9550 I saw two touchpads,
-      "DLL06E4:01 06CB:7A13 Touchpad" and "SynPS/2 Synaptics TouchPad". I just ignored
-      the synaptics one. 
-    - Run `xinput --list-props "<device name>"`, you should see many lines starting
-      with "libinput". If they start with "Synaptics" instead, run this to switch to
-      libinput:
-
-    ```bash
-    sudo mkdir /etc/X11/xorg.conf.d
-    # force libinput instead of synaptics by copying the default config to /etc
-    # not sure why this is needed, but on the xps9550 it used synaptics occasionally
-    sudo cp /usr/share/X11/xorg.conf.d/40-libinput.conf /etc/X11/xorg.conf.d/40-libinput.conf
-    ```
 
     - Run these commands to configure libinput:
 
@@ -107,6 +199,28 @@
     EndSection
     ```
 
+    - Reboot and check if it worked. If not, try the following:
+    - Run `xinput --list` to see all input devices. On the xps9550 I saw two touchpads,
+      "DLL06E4:01 06CB:7A13 Touchpad" and "SynPS/2 Synaptics TouchPad". I just ignored
+      the synaptics one. 
+    - Run `xinput --list-props "<device name>"`, you should see many lines starting
+      with "libinput". If they start with "Synaptics" instead, run this to switch to
+      libinput:
+
+    ```bash
+    sudo mkdir /etc/X11/xorg.conf.d
+    # force libinput instead of synaptics by copying the default config to /etc
+    # not sure why this is needed, but on the xps9550 it used synaptics occasionally
+    sudo cp /usr/share/X11/xorg.conf.d/40-libinput.conf /etc/X11/xorg.conf.d/40-libinput.conf
+    ```
+
+    - Reboot and check if scroll direction is fixed. If not, try method #2:
+
+    ```
+    open `/usr/share/X11/xorg.conf.d/50-vmmouse.conf`
+    add `Option "ButtonMapping" "1 2 3 5 4 6 7 8"` between `Section` and `EndSection`
+    ```
+
 0. Setup brightness control (not needed on x220). Add to /etc/sudoers with `sudo visudo`:
 
     - First try brightness controls (Fn+F11 on xps9550). If it works, skip this section.
@@ -124,24 +238,13 @@
     <your_username> ALL = NOPASSWD: POWERCMDS
     ```
 
-0. Install pywal to enable colorschemes based on the wallpaper
-
-    ```bash
-    pip3 install --user pywal
-    # install extra backends (optional)
-    pip3 install --user haishoku colorthief colorz
-
-    ```
-
-0. Enable sensors (xps9550 only)
-
-    - First run `sensors`. If you see fan RPMs, skip this section.
+0. Enable sensors (needed on debian 10 xps9550). First run `sensors`. If you see fan RPMs, skip this section.
 
     ```bash
     # verify dell kernel module is present:
-    modinfo dell-smm-hwmon | grep '^description'
+    find /lib/modules/$(uname -r) -type f -name '*.ko' | grep dell-smm-hwmon
     # temporarily enable module; ignore_dmi because xps9550 is not a supported system (works anyways)
-    modprobe dell-smm-hwmon ignore_dmi=1
+    sudo modprobe dell-smm-hwmon ignore_dmi=1
     # verify module is running (you should see "dell_smm_hwmon: vendor=Dell Inc., ..."
     sudo dmesg | grep dell_smm_hwmon
     # verify new sensors are visible (you should see fan RPMs now)
@@ -193,9 +296,9 @@
 
     ```bash
     sudo apt install libnl-3-dev libnl-genl-3-dev gettext libgettextpo-dev autopoint libncurses5-dev libncursesw5-dev libtool-bin dh-autoreconf
-    wget https://01.org/sites/default/files/downloads//powertop-v2.10.tar.gz
-    tar xvf powertop-v2.10.tar.gz
-    cd powertop-v2.10
+    wget https://01.org/sites/default/files/downloads//powertop-v2.12.tar.gz
+    tar xvf powertop-v2.12.tar.gz
+    cd powertop-v2.12
     ./autogen.sh
     ./configure
     make
@@ -296,10 +399,14 @@
     ```bash
     # install using their apt source:
     echo "deb https://download.sublimetext.com/ apt/stable/" | sudo tee /etc/apt/sources.list.d/sublime-text.list
-    wget -q -O- https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add
+    wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -
     sudo apt update
+    sudo apt install apt-transport-https
     sudo apt install sublime-text sublime-merge
     # you can now run `subl` and `smerge`
+
+    # TODO: figure out how to include (or auto-install) my plugins list. Example:
+    #   - MarkdownPreview
     ```
 
 0. Install firefox stable (from [here](https://wiki.debian.org/Firefox#Firefox_Stable.2C_Beta_and_Nightly))
@@ -389,15 +496,20 @@
 
     ```bash
     # Add the release PGP keys:
-    curl -s https://syncthing.net/release-key.txt | sudo apt-key add -
+    sudo curl -s -o /usr/share/keyrings/syncthing-archive-keyring.gpg https://syncthing.net/release-key.gpg
 
     # Add the "stable" channel to your APT sources:
-    echo "deb https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
+    echo "deb [signed-by=/usr/share/keyrings/syncthing-archive-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
+
+    # Increase preference of Syncthing's packages ("pinning")
+    printf "Package: *\nPin: origin apt.syncthing.net\nPin-Priority: 990\n" | sudo tee /etc/apt/preferences.d/syncthing
 
     # Update and install syncthing:
-    sudo apt-get update
-    sudo apt-get install syncthing
+    sudo apt update
+    sudo apt install syncthing
     # you can now run `start_syncthing` (a launcher in ~/bin/)
+    # load interface at http://localhost:8384/
+    # later, put a .stignore file at the root of each synced folder that contains `#include .stglobalignore`
     ```
 
 0. Install picom, yshui's compton fork [github](https://github.com/yshui/picom)
@@ -792,7 +904,6 @@
     ./openrct2
     ```
 
-
 0. Install mkchromecast (NOT TESTED / NOT WORKING)
 
     ```bash
@@ -838,6 +949,14 @@
     sudo apt autoremove
     ```
 
+0. ~~Install pywal to enable colorschemes based on the wallpaper~~ skipped
+
+    ```bash
+    pip3 install --user pywal
+    # install extra backends (optional)
+    pip3 install --user haishoku colorthief colorz
+    ```
+
 0. ~~Install mopidy~~
 
     - NOTE: Latest (mopidy-soundcloud 2.1.0) isn't worth using for soundcloud. Pulls _up to_ the 10 most recent songs and many don't pull at all (those with unicode?) Check again if/when this has moved to python 3.
@@ -861,7 +980,7 @@
     sudo pip uninstall mopidy
     ```
 
-0. ~~Setup yeganesh:~~ Yeganesh is included in ~/bin/.
+0. ~~Setup yeganesh:~~ Yeganesh is included in `~/bin/`.
 
     ```bash
     # Download latest from [here](dmwit.com/yeganesh)
@@ -905,6 +1024,8 @@
 
 
 #### TODO:
+- replace middle-click paste with something better. It is too easy to accidentally triple-tap with the touchpad and dump a block of text at the cursor. Step 1 is disable middle click with touchpad, then step 2 is merge the x-selection and the standard clipboard with some kind of app or maybe even a custom shortcut with an intelligent paste (or Ctrl+V for one, Ctrl+Shift+V for another). Should google how others have solved this problem.
+- add sublime text 4 themes and colorscheme. Config is saved already
 - replace DynNetwork plugin in xmobar with a new xmobar_network.py file.
   - allow minimum units with `--smallestunit K`
   - option to use shorter units (K instead of K/s) with `--shortunits True`

@@ -3,6 +3,6 @@ flatpak
 gimp
 hdparm
 iperf
-kaitai-struct-compiler
-lutris
-
+mpv
+vlc
+wireshark

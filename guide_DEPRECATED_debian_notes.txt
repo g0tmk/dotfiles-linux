@@ -1,0 +1,147 @@
+WARNING:DEPRECATED! WARNING:DEPRECATED! WARNING:DEPRECATED! WARNING:DEPRECATED!
+WARNING:DEPRECATED! WARNING:DEPRECATED! WARNING:DEPRECATED! WARNING:DEPRECATED!
+WARNING:DEPRECATED!
+WARNING:DEPRECATED!
+WARNING:DEPRECATED!     This file should be merged to README.txt.
+WARNING:DEPRECATED!     Hardware-specific info should be merged to guide_xps9550_hardware_install_notes.txt
+WARNING:DEPRECATED!
+WARNING:DEPRECATED!
+WARNING:DEPRECATED! WARNING:DEPRECATED! WARNING:DEPRECATED! WARNING:DEPRECATED!
+WARNING:DEPRECATED! WARNING:DEPRECATED! WARNING:DEPRECATED! WARNING:DEPRECATED!
+
+
+
+NOTES ON SETUP INSIDE NEW DEBIAN INSTALL
+----------------------------------------
+
+
+
+# syncthing]
+ - [MAYBE NOT NECESSARY] edit /lib/systemd/system/syncthing@.service, add `-home=/home/g0tmk/.config/syncthing` to the exec line
+   - note: it seems syncthing is using ~/.config/syncthing as config folder, will monitor this
+
+
+# configure bumblebee
+  - `sudo dpkg --add-architecture i386`
+  - `sudo apt-get update`
+  - NOTE: when you run the next command, it will ask you at some point if you want to create a xorg.conf file. Do NOT let the installer run nvidia-xconfig, it will break things.
+  - `sudo apt-get install bumblebee-nvidia primus primus-libs:i386 `
+  - `sudo adduser $USER bumblebee`
+  - NOTE: at this point, `sudo optirun nvidia-smi` did not work (prints error "Cannot access secondary GPU - Failed to open DRM device for pci:..."), site here "https://github.com/Bumblebee-Project/Bumblebee/issues/749" mentions that bumblebee is incompatible with xserver-xorg-legacy.. so run:
+    - `sudo apt remove xserver-xorg-legacy` and reboot: not fixed
+    - `sudo apt install nvidia-driver` and reboot: not fixed
+    - add dummy screen to /etc/bumblebee/xorg.conf.nvidia via (https://bbs.archlinux.org/viewtopic.php?id=185894) and reboot: no change
+    - in /etc/bumblebee/bumblebee.conf, change Driver= to Driver=nvidia, reboot: not fixed
+    - add nouveau.modeset=0 to GRUB cmdline
+
+  - Back to fixing this issue...
+    - Edit `/etc/bumblebee/bumblebee.conf` and change `Driver=` to `Driver=nvidia`
+      and reboot.
+    - `optirun nvidia-smi` Works! Why...
+      - Currently running services:
+        - `systemctl status bumblebeed` -> active (running)
+      - Currently installed apt applications:
+        - bumblebee-nvidia version 3.2.1-14
+        - primus version 0~20150328-4
+        - primus-libs:i386 version 0~20150328-4
+        - xserver-xorg-legacy version 2:1.19.2-1+deb9u
+        - nvidia-driver version 390.116-1
+      - Current configs:
+        - /etc/bumblebee/xorg.conf does not exist
+        - contents of /etc/bumblebee/xorg.conf.nvidia:
+
+        Section "ServerLayout"
+            Identifier  "Layout0"
+            Option      "AutoAddDevices" "false"
+            Option      "AutoAddGPU" "false"
+        EndSection
+
+        Section "Device"
+            Identifier  "DiscreteNvidia"
+            Driver      "nvidia"
+            VendorName  "NVIDIA Corporation"
+
+        #   If the X server does not automatically detect your VGA device,
+        #   you can manually set it here.
+        #   To get the BusID prop, run `lspci | egrep 'VGA|3D'` and input the data
+        #   as you see in the commented example.
+        #   This Setting may be needed in some platforms with more than one
+        #   nvidia card, which may confuse the proprietary driver (e.g.,
+        #   trying to take ownership of the wrong device). Also needed on Ubuntu 13.04.
+        #   BusID "PCI:01:00:0"
+
+        #   Setting ProbeAllGpus to false prevents the new proprietary driver
+        #   instance spawned to try to control the integrated graphics card,
+        #   which is already being managed outside bumblebee.
+        #   This option doesn't hurt and it is required on platforms running
+        #   more than one nvidia graphics card with the proprietary driver.
+        #   (E.g. Macbook Pro pre-2010 with nVidia 9400M + 9600M GT).
+        #   If this option is not set, the new Xorg may blacken the screen and
+        #   render it unusable (unless you have some way to run killall Xorg).
+
+            Option "ProbeAllGpus" "false"
+
+            Option "NoLogo" "true"
+            Option "UseEDID" "false"
+            Option "UseDisplayDevice" "none"
+        EndSection
+
+        Section "Screen"
+            Identifier "Default Screen"
+            Device "DiscreteNvidia"
+        EndSection
+
+
+#### how to build xmobar (info only)
+- `sudo aptitude install cabal-install`
+- `sudo aptitude install libxpm-dev libasound2-dev libghc-libxml-sax-dev c2hs libiw-dev`
+- `cabal update`
+- `cabal install xmobar --flags="all_extensions"`
+
+
+BIOS:
+- ACHI Mode: OFF
+- Performance
+  - C-state: OFF
+- Virt. support: Disabled both
+- Sys config
+  - USB/Thunder
+    - Always allow
+    - Dell docks: uncheck
+  - Drives
+    - SATA0: uncheck
+    - SATA1: uncheck
+- Webcam: disabled
+- Auto OS recovery threshold: OFF
+- BIOS recover from HD & downgrade: both uncheck
+- Fastboot: minimal
+- Disable dell SupportAssist
+
+
+disable bluetooth to help with battery:
+[NOTE: disabling more kernel modules may help, but btusb was reported as a problem with iotop. For example, the bluetooth module is still installed/loaded]
+- `sudo touch /etc/modprobe.d/btusb.conf`
+- `echo 'blacklist btusb' >> /etc/modprobe.d/btusb.conf`
+
+
+veracrypt
+
+
+steam
+
+
+libreoffice (comes installed by default in debian gnome)
+
+
+mpd
+
+
+apcupsd
+
+
+audacious
+
+
+ufw
+
+

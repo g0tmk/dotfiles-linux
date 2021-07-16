@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+killall dunst
+notify-send --urgency critical "dunst restarted" "test critical message from $0"
+notify-send --urgency low "dunst restarted" "test low urgency message from $0"
+notify-send "dunst restarted" "test normal message from $0"
+

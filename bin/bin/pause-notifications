@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# send signal to dunst to pause notifications
+killall -SIGUSR1 dunst
+

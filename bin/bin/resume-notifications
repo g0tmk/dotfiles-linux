@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+# send signal to dunst to resume notifications
+killall -SIGUSR2 dunst
+

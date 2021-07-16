@@ -427,11 +427,17 @@
 
     ```bash
     # install virtualbox using their apt source:
-    echo "deb https://download.virtualbox.org/virtualbox/debian stretch contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list
+    # WARNING: make sure to modify apt name from buster to something else, if needed
+    echo "deb https://download.virtualbox.org/virtualbox/debian buster contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list
     wget -q -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo apt-key add
     sudo apt update
-    sudo apt search virtualbox | grep ^virtualbox  # install the newest available
+    sudo apt search virtualbox | grep ^virtualbox
+    # install the newest available
+    # NOTE: change this value if there is a newer version
     sudo apt install virtualbox-6.x
+
+    # add yourself to vboxusers group
+    sudo usermod -a -G vboxusers $USER
 
     # you can now run `virtualbox`
     # NOTE: On first run it will prompt to install an extension pack. This will probably

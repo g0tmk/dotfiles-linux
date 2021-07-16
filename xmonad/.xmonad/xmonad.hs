@@ -22,25 +22,38 @@ bitmapDir = userDir ++ ".xmonad/xbm/"
 
 --autoStart = userDir ++ ".xmonad/bin/autostart.sh"
 
-main = do
 
-    --xmproc <- spawnPipe "xmobar"
-    xmproc <- spawnPipe "PYTHONPATH=/home/$USER/repos python3 -m pystatusbar -c /home/$USER/repos/pystatusbar/config_bxpsd.config 2> /tmp/pystatusbar_stderr 1> /tmp/pystatusbar_stdout"
+-- The main function.
+main = xmonad =<< statusBar myBar myPP toggleStrutsKey myConfig
 
-    --spawn $ "sh " ++ autoStart
+-- Command to launch the bar.
+-- myBar = "xmobar"
+myBar = "PYTHONPATH=/home/$USER/repos python3 -m pystatusbar -c /home/$USER/repos/pystatusbar/config_bxpsd.config 2> /tmp/pystatusbar_stderr 1> /tmp/pystatusbar_stdout"
 
-    xmonad $ defaultConfig
+-- Custom PP, configure it as you like. It determines what is being written to the bar.
+myPP = xmobarPP { ppCurrent = xmobarColor "#ee9a00" ""
+                , ppTitle = xmobarColor "#8bc34a" "" . shorten 70
+                , ppUrgent = xmobarColor "#ff1111" ""
+                , ppSep = "   "
+                }
+
+-- Key binding to toggle the gap for the bar.
+toggleStrutsKey XConfig {XMonad.modMask = modMask} = (modMask, xK_b)
+
+-- Main configuration, override the defaults to your liking.
+myConfig = def
         { manageHook = manageHook defaultConfig <+> manageDocks 
         , layoutHook    = avoidStruts  
                         $ toggleLayouts (noBorders Full)
                         $ smartBorders
                         $ layoutHook defaultConfig
-        , logHook = dynamicLogWithPP xmobarPP
-                        { ppOutput = hPutStrLn xmproc
-                        , ppTitle = xmobarColor "#8bc34a" "" . shorten 70
-                        , ppCurrent = xmobarColor "#ee9a00" ""
-                        , ppSep = "   "
-                        }
+          , logHook = return ()
+--        , logHook = dynamicLogWithPP xmobarPP
+--                        { ppOutput = hPutStrLn xmproc
+--                        , ppTitle = xmobarColor "#8bc34a" "" . shorten 70
+--                        , ppCurrent = xmobarColor "#ee9a00" ""
+--                        , ppSep = "   "
+--                        }
         , workspaces = myWorkspaces
         , modMask = mod4Mask     -- Rebind Mod to the Windows key
         , normalBorderColor = "#444444"

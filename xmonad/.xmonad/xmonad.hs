@@ -74,8 +74,9 @@ myConfig = def
                  -- Mod+b: toggle fullscreen
                  , ((mod4Mask, xK_b     ), sendMessage ToggleStruts)
                  -- Mod+p: yeganesh NOTE: "$()" syntax will execute the output (yeganesh only outputs the binary's name)
-                 --, ((mod4Mask, xK_p), spawn "dmenu_run -fn 'Terminus::pixelsize=12:antialias=0'")
-                 , ((mod4Mask, xK_p), spawn "$(~/bin/yeganesh -x -- -nb \"#000000\" -fn \"Terminus::pixelsize=12:antialias=0\")")
+                 -- , ((mod4Mask, xK_p), spawn "dmenu_run -fn 'Terminus::pixelsize=12:antialias=0'")
+                 -- , ((mod4Mask, xK_p), spawn "$(~/bin/yeganesh -x -- -nb \"#000000\" -fn \"Terminus::pixelsize=12:antialias=0\")")
+                 , ((mod4Mask, xK_p), spawn "rofi -modi combi,window -show combi -combi-modi run,drun -show-icons -markup")
 
                  -- Copy window to all workspaces
                  , ((mod4Mask, xK_v ), windows copyToAll) 

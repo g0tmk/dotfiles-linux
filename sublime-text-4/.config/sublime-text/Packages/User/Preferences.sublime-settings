@@ -1,0 +1,37 @@
+// Settings in here override those in "Default/Preferences.sublime-settings",
+// and are overridden in turn by syntax-specific settings.
+{
+	"auto_complete_commit_on_tab": true,
+	"bold_folder_labels": true,
+	"caret_style": "phase",
+	"fade_fold_buttons": false,
+	"detect_indentation": true,
+	"font_face": "Fira Code",
+	"font_options":
+	[
+	],
+	"font_size": 10,
+	"highlight_line": true,
+	"highlight_modified_tabs": true,
+	"line_padding_bottom": 0,
+	"margin": 0,
+	"rulers":
+	[
+		88
+	],
+	"tab_size": 4,
+	"translate_tabs_to_spaces": true,
+	"ui_scale": 0.9,
+	"use_tab_stops": true,
+	"indent_guide_options": ["draw_normal", "draw_active"],
+	"theme": "Soda Dark 3.sublime-theme",
+	"theme_font_options":
+	[
+		"no_antialias"
+	],
+	"ignored_packages":
+	[
+		"Vintage",
+	],
+	"color_scheme": "Packages/Material Theme/schemes/Material-Theme-Darker.tmTheme",
+}

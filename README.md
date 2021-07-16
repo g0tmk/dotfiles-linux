@@ -27,6 +27,8 @@
     - App switcher: `rofi`
     - Configure wifi: `wicd-curses`
     - Power management: xfce4-power-manager (`xfce4-power-manager-settings` to manage)
+      - handles low-battery notifications
+    - Notifications: dunst (`dunst-reload-config` to reload config and show some test messages)
     - File manager (gui): `nautilus`
 
 #### Custom commands
@@ -159,6 +161,7 @@
 
 - run `sudo apt-get install ntp`
 - add these lines to /etc/ntp.conf (and remove the generic ones)
+
     server 0.north-america.pool.ntp.org
     server 1.north-america.pool.ntp.org
     server 2.north-america.pool.ntp.org
@@ -281,6 +284,7 @@
     - Run `sudo update-grub` to commit changes
 
 0. Quiet boot errors. Probably only useful on xps955 since it has such buggy bios firmware (AE_NOT_FOUND errors)
+
     - Might want to run the system for a week or so before doing this so you have a chance to see intermittent errors.
     - Note you can always run `journalctl -b -p warning` and `journalctl -b -p err` to check for issues
 
@@ -292,7 +296,7 @@
 
     - Run `sudo update-grub` to commit changes
 
-0. Install Powertop to monitor/maximize battery life (laptop only) (check for latest version [here](https://01.org/powertop))
+0. (Optional, skipped on Debian 10 install) Install Powertop to monitor/maximize battery life (laptop only) (check for latest version [here](https://01.org/powertop))
 
     ```bash
     sudo apt install libnl-3-dev libnl-genl-3-dev gettext libgettextpo-dev autopoint libncurses5-dev libncursesw5-dev libtool-bin dh-autoreconf
@@ -306,7 +310,7 @@
     # you can now run `sudo powertop`
     ```
 
-0. Install tlp for decent power management (laptop only) from guide [here](https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#installation)
+0. (Optional, skipped on Debian 10 install) Install tlp for decent power management (laptop only) from guide [here](https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#installation)
 
     - Option 1: install from backports. This is the easiest way to get a fairly recent
       version - but see option 2 for xps9550.
@@ -350,7 +354,7 @@
     sudo tlp-stat -s
     ```
 
-0. Setup Thermald to help with thermals (Intel only, probably only useful on laptops)
+0. (Optional, skipped on Debian 10 install) Setup Thermald to help with thermals (Intel only, probably only useful on laptops)
 
     ```bash
     # Check for the latest version in github releases first
@@ -835,6 +839,33 @@
     cp usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.25 usr/lib/x86_64-linux-gnu/libstdc++.so.6 ~/.minecraft/launcher/
     minecraft-launcher
     ```
+
+0. Set up service to run xfce4-power-manager [IN-DEV / NOT WORKING - currently started via cmdline in .xsessionrc]
+
+ - NOTE: this does not currently work - service attempts to start, but xfce4-power-manager prints
+   an error message "Unable to open display" which probably means it expects to be run inside of
+   an X-session, so when it is started as root (or anyone probably) as a service, X is not available.
+   Not sure if there is a good solution for this; workaround of starting in .xsessionrc works so far.
+ - create `/etc/systemd/system/xfce4-power-manager.service` and fill it with the following contents:
+
+    [Unit]
+    Description=Xfce4 Power Manager
+    Documentation=man:xfce4-power-manager(1) man:xfce4-power-manager-settings(1)
+
+    [Service]
+    Type=dbus
+    BusName=org.xfce.PowerManager
+    ExecStart=/usr/bin/xfce4-power-manager --no-daemon
+    ExecStop=/usr/bin/xfce4-power-manager --quit
+
+    [Install]
+    WantedBy=multi-user.target
+    Alias=dbus-org.xfce.PowerManager.service
+
+ - Run `sudo systemctl daemon-reload` to reload service files
+ - Run `sudo systemctl enable xfce4-power-manager` to enable xfce4-power-manager on boot
+ - Run `sudo systemctl status xfce4-power-manager` to verify service file works and is running
+ - Run `sudo journalctl -u xfce4-power-manager` to check the service logs
 
 0. Install evmlab (NOT YET WORKING)
 

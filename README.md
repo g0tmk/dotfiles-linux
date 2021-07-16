@@ -386,6 +386,40 @@
     # TODO: figure out how to include (or auto-install) my plugins list. Example:
     #   - MarkdownPreview
     ```
+
+0. Install syncthing [from guide here](https://apt.syncthing.net/)
+
+    ```bash
+    # Add the release PGP keys:
+    sudo curl -s -o /usr/share/keyrings/syncthing-archive-keyring.gpg https://syncthing.net/release-key.gpg
+
+    # Add the "stable" channel to your APT sources:
+    echo "deb [signed-by=/usr/share/keyrings/syncthing-archive-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
+
+    # Increase preference of Syncthing's packages ("pinning")
+    printf "Package: *\nPin: origin apt.syncthing.net\nPin-Priority: 990\n" | sudo tee /etc/apt/preferences.d/syncthing
+
+    # Update and install syncthing:
+    sudo apt update
+    sudo apt install syncthing
+
+    # To configure as a systemd service
+    mkdir -p ~/.config/systemd/user/
+    sudo cp /lib/systemd/system/syncthing@.service ~/.config/systemd/user/
+    sudo chown $USER:$USER ~/.config/systemd/user/syncthing@.service
+    # IMPORTANT: edit the file, remove the `User=` line
+    sudo vi ~/.config/systemd/user/syncthing@.service
+    systemctl --user daemon-reload
+    systemctl --user enable "syncthing@$USER.service"
+    systemctl --user start "syncthing@$USER.service"
+    # if everything works, this should contain "Access the GUI via the following URL..."
+    sudo journalctl | grep sync | tail -n 20
+
+    # you can now run `start_syncthing` (a launcher in ~/bin/)
+    # load interface at http://localhost:8384/
+    # later, put a .stignore file at the root of each synced folder that contains `#include .stglobalignore`
+    ```
+
 0. Install virtualbox
 
     - Original guide [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22))
@@ -507,26 +541,6 @@
     # TODO: include tilesets in repo
     # TODO: symlink df_linux/data/saves into syncthing
     # TODO: include instructions for adding dfhack (download latest version, extract over df_linux)
-    ```
-
-0. Install syncthing [from guide here](https://apt.syncthing.net/)
-
-    ```bash
-    # Add the release PGP keys:
-    sudo curl -s -o /usr/share/keyrings/syncthing-archive-keyring.gpg https://syncthing.net/release-key.gpg
-
-    # Add the "stable" channel to your APT sources:
-    echo "deb [signed-by=/usr/share/keyrings/syncthing-archive-keyring.gpg] https://apt.syncthing.net/ syncthing stable" | sudo tee /etc/apt/sources.list.d/syncthing.list
-
-    # Increase preference of Syncthing's packages ("pinning")
-    printf "Package: *\nPin: origin apt.syncthing.net\nPin-Priority: 990\n" | sudo tee /etc/apt/preferences.d/syncthing
-
-    # Update and install syncthing:
-    sudo apt update
-    sudo apt install syncthing
-    # you can now run `start_syncthing` (a launcher in ~/bin/)
-    # load interface at http://localhost:8384/
-    # later, put a .stignore file at the root of each synced folder that contains `#include .stglobalignore`
     ```
 
 0. Install picom, yshui's compton fork [github](https://github.com/yshui/picom)

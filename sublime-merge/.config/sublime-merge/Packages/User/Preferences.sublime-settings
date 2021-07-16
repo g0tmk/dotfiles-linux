@@ -1,6 +1,6 @@
 {
 	"font_face": "Terminus",
 	"font_size": 9,
-	"hide_menu": false,
+	"hide_menu": true,
 	"side_bar_layout": "commit_graph_as_column",
 }

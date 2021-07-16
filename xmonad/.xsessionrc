@@ -30,11 +30,19 @@ xsetroot -cursor_name left_ptr
 
 # apply wallpaper+colorscheme combo
 # TODO: finish this. ideally it will change colors everywhere possible
-wal -R
 #wal -i ~/Downloads/wallpapers/bridge_iceland__micki-spollen-1137994-unsplash__crop_1080p.png --backend colorz
 #wal -i ~/Downloads/wallpapers/aerial_city__JC_Gellidon_unisplash__crop_1080p.png --backend colorz --saturate 0.4
 #wal -i ~/Downloads/wallpapers/alena-aenami-lights1k1.jpg --backend colorz
 #wal --theme sexy-tango
+
+#wal -R
+
+
+
+
+# start network manager in taskbar
+# can also be handled by running wicd-curses occasionally
+# sleep 4 && nm-applet
 
 
 # open desktop panels (after 4s pause - may need to increase in future)
@@ -60,6 +68,8 @@ sleep 4 && trayer --edge top --align right \
     --padding 0 \
     &
 
+# start power manager. do it late so trayer is running when it starts (if you enable icon in xfce4-power-manager-settings)
+sleep 6 && xfce4-power-manager &
 
 exec xmonad
 

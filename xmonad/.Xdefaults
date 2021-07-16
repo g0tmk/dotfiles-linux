@@ -81,11 +81,12 @@ Xcursor.size: 32
 
 ! transparency for urxvt. only psuedo-transparency so no compositing needed
 *transparent: true
-*shading: 25
+*shading: 5
 ! Tint the transparent background with the given colour. Note that a black tint yields a completely black image while a white tint yields the image unchanged.
 *tintColor: white
 
-URxvt*.blurRadius: 11
+! appears to work but uses huge amounts of CPU
+!URxvt*.blurRadius: 11
 
 ! terminal padding. with 1080px high screen, 14px characters, and 16px high xmobar:
 !

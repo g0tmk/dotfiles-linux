@@ -455,8 +455,8 @@
 0. Install firefox stable (from [here](https://wiki.debian.org/Firefox#Firefox_Stable.2C_Beta_and_Nightly))
 
     - If a desktop environment is installed already, you might have the best version of
-      firefox already. Check if firefox-esr and firefox are installed already, if they
-      are, skip the rest of this section.
+      firefox. Check if firefox-esr and firefox are installed already. If they are,
+      skip the rest of this section.
 
     ```bash
     sudo apt show firefox-esr
@@ -641,15 +641,26 @@
 
     - [Debian setup guide](http://pptpclient.sourceforge.net/howto-debian.phtml)
     - [Arch setup guide](https://wiki.archlinux.org/index.php/PPTP_Client)
+    - [troubleshooting tips for pptpclient/pptpsetup](http://pptpclient.sourceforge.net/howto-diagnosis.phtml)
 
     ```bash
+    # assumes new name:    my_tunnel
+    # assumes server url:  vpn.example.com
+    # assumes username:    alice
+    # assumes password:    foo
+    # assumes vpn network: 192.168.10.0/24
     sudo apt install pptp-linux
     sudo pptpsetup --create my_tunnel --server vpn.example.com --username alice --password foo --encrypt
     # test the new connection - it will not exit. If there are no errors, great! To
-    # fully test, you will also need to run the route command that follows.
+    # fully test, you will also need to run the route command that follows. If there
+    # are errors connecing, you may need to add "refuse-eap" to the top of /etc/ppp/options
     sudo pon my_tunnel debug dump logfd 2 nodetach
-    # add a route to access devices on the VPN network (change the IP to match)
+    # Option 1: If you want to route traffic only to devices on vpn network (not
+    # internet traffic) then add this route (change the network's subnet info to match)
     sudo ip route add 192.168.10.0/24 dev ppp0
+    # Option 2: Route all traffic over VPN
+    sudo ip route add default dev ppp0
+
     # start the connection normally
     sudo pon my_tunnel
 
@@ -873,7 +884,34 @@
     minecraft-launcher
     ```
 
-0. Set up service to run xfce4-power-manager [IN-DEV / NOT WORKING - currently started via cmdline in .xsessionrc]
+0. Install Steam (NOT TESTED)
+
+    ```bash
+    sudo usermod -a -G video,audio $USER
+    sudo apt install steam
+    steam
+    ```
+
+0. Install Chrome (NOT TESTED)
+
+ - How to install stable (I picked this one):
+
+   1. Install with `sudo apt install google-chrome-stable`
+   2. Open chrome, sign in
+   3. Go to "Extensions" click "details" on one of the extensions
+   4. if chrome doesn't freeze, congrats! you're done. otherwise go to 5
+   5. re-open chrome, use mod+right-click to resize chrome to 25% the size of the screen
+   6. repeat steps 3-4, chrome shouldn't freeze this time (instead a tiny window will pop up)
+
+ - How to install latest:
+
+    ```bash
+    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    sudo dpkg -i google-chrome-stable_current_amd64.deb
+    sudo apt-get -f install
+    ```
+
+0. Set up service to run xfce4-power-manager (IN-DEV / NOT WORKING - currently started via cmdline in .xsessionrc)
 
  - NOTE: this does not currently work - service attempts to start, but xfce4-power-manager prints
    an error message "Unable to open display" which probably means it expects to be run inside of
@@ -1044,12 +1082,12 @@
     sudo pip uninstall mopidy
     ```
 
-0. ~~Setup yeganesh:~~ Yeganesh is included in `~/bin/`.
+0. ~~Setup yeganesh:~~ Yeganesh is included in `~/bin/`, this can still be followed to
+   update it, if needed.
 
     ```bash
     # Download latest from [here](dmwit.com/yeganesh)
-    wget http://dmwit.com/yeganesh/yeganesh-2.5-bin.tar.gz
-    tar xf yeganesh*
+    curl dmwit.com/yeganesh/yeganesh-2.5-bin.tar.gz | tar xzv
     cp yeganesh-2.5-bin/yeganesh ~/bin/
     # Try app selector (Super+P)
     ```
@@ -1088,6 +1126,7 @@
 
 
 #### TODO:
+- check macbook dotfiles + copy over any useful preferences (at least .vimrc and tmux.conf)
 - replace middle-click paste with something better. It is too easy to accidentally triple-tap with the touchpad and dump a block of text at the cursor. Step 1 is disable middle click with touchpad, then step 2 is merge the x-selection and the standard clipboard with some kind of app or maybe even a custom shortcut with an intelligent paste (or Ctrl+V for one, Ctrl+Shift+V for another). Should google how others have solved this problem.
 - add sublime text 4 themes and colorscheme. Config is saved already
 - replace DynNetwork plugin in xmobar with a new xmobar_network.py file.

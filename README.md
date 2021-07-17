@@ -92,7 +92,7 @@
         echo "deb https://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list
         echo "deb-src https://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list
         apt update
-        apt install -t buster-backports linux-image-amd64
+        apt install -t buster-backports linux-image-amd64 linux-headers-amd64
         exit
         sudo reboot
         # now run the above test again, verify the interrupt rate is normal (100 per sec roughly)
@@ -408,21 +408,101 @@
     sudo cp /lib/systemd/system/syncthing@.service ~/.config/systemd/user/
     sudo chown $USER:$USER ~/.config/systemd/user/syncthing@.service
     # IMPORTANT: edit the file, remove the `User=` line
+    # IMPORTANT: edit the file, change "WantedBy=multi-user.target" to "WantedBy=default.target"
     sudo vi ~/.config/systemd/user/syncthing@.service
     systemctl --user daemon-reload
     systemctl --user enable "syncthing@$USER.service"
     systemctl --user start "syncthing@$USER.service"
     # if everything works, this should contain "Access the GUI via the following URL..."
     sudo journalctl | grep sync | tail -n 20
-
-    # you can now run `start_syncthing` (a launcher in ~/bin/)
-    # load interface at http://localhost:8384/
-    # later, put a .stignore file at the root of each synced folder that contains `#include .stglobalignore`
     ```
+
+    - Now, load interface at `http://localhost:8384/`
+    - Use the web UI to delete the default folder at `~/Sync`
+    - Open settings -> Default Configuration -> Edit Folder Defaults -> Folder Path: `/home/<your_username_here>/Sync/`
+    - Open settings -> GUI -> Use HTTPS For GUI -> Yes
+    - reboot and verify web UI is accessible. NOTE: `start_syncthing` will manually start if needed
+    - later, put a .stignore file at the root of each synced folder that contains `#include .stglobalignore`
+
+0. Install Duplicati (guide [here](https://duplicati.readthedocs.io/en/latest/02-installation/))
+
+    - Install mono (note: uses about 400 MB)
+
+    ```bash
+    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+
+    echo "deb http://download.mono-project.com/repo/debian buster main" | sudo tee /etc/apt/sources.list.d/mono-official.list
+
+    sudo apt update
+    sudo apt install mono-devel
+    ```
+
+    - Install the actual app
+
+    ```bash
+    # maybe optional
+    sudo apt install apt-transport-https nano git-core software-properties-common dirmngr
+
+    # check for latest version here https://www.duplicati.com/download
+    cd ~/Downloads
+    wget https://updates.duplicati.com/beta/duplicati_2.0.6.3-1_all.deb
+    sudo apt install ./duplicati_2.0.6.3-1_all.deb
+    ```
+
+    - Now create a service to start duplicati automatically
+      - Edit `/etc/systemd/system/duplicati.service` and fill it with the following:
+
+        ```
+        [Unit]
+        Description=Duplicati web-server
+        After=network.target
+
+        [Service]
+        Nice=19
+        IOSchedulingClass=idle
+        EnvironmentFile=-/etc/default/duplicati
+        ExecStart=/usr/bin/duplicati-server $DAEMON_OPTS
+        Restart=always
+
+        [Install]
+        WantedBy=multi-user.target
+        ```
+
+      - Edit `/etc/default/duplicati` and change DAEMON_OPTS, file should look like the following:
+
+        ```bash
+        # Defaults for duplicati initscript
+        # sourced by /etc/init.d/duplicati
+        # installed at /etc/default/duplicati by the maintainer scripts
+
+        # Additional options that are passed to the Daemon.
+        DAEMON_OPTS="--webservice-interface=127.0.0.1 --webservice-port=8200"
+        ```
+
+      - Enable the service and verify it is running by running these commands:
+
+        ```bash
+        sudo systemctl daemon-reload
+        sudo systemctl enable duplicati.service
+        sudo systemctl start duplicati.service
+        sudo systemctl status duplicati.service
+        ```
+
+      - Open web UI at http://localhost:8200
+      - Reboot and verify web UI is still accessible
+      - In web UI change some settings:
+        - Access to Interface -> Set a password
+        - Pause after startup or hibernation -> 30 seconds
+        - Display and color theme -> Dark theme
+        - Donation messages -> click to hide
+        - Usage statistics -> None/disabled
+          - NOTE: if you want to set a password, then you must also edit .xsessionrc and 
+            modify the `duplicati` launch line to include a password, like this:
+            `duplicati --no-hosted-server --webserver-password=MYPASSWORD`
 
 0. Install virtualbox
 
-    - Original guide [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22))
+    - Original guide [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22)
     - Info on integration with tiling WM [here](http://kissmyarch.blogspot.com/2012/01/hiding-menu-and-statusbar-of-virtualbox.html)
 
     ```bash
@@ -451,6 +531,17 @@
     # - (Optional) View -> Status Bar -> Hide
     # - (Optional, show with Host+Home) View -> Menu Bar -> Hide
     ```
+
+0. Install redshift
+
+    - If you installed the minimal app list, this is installed already, but it can't hurt to run.
+
+            sudo apt install redshift
+
+    - Enable the user service
+
+            systemctl --user enable redshift
+            systemctl --user start redshift
 
 0. Install firefox stable (from [here](https://wiki.debian.org/Firefox#Firefox_Stable.2C_Beta_and_Nightly))
 
@@ -515,13 +606,36 @@
     - Run `barrier` again - this time, the window will not appear but it should
       immediately connect to the server and the icon will show up in the taskbar.
 
+0. (Optional, skipped on Debian 10 install) Install a compositor (picom, yshui's compton fork [github](https://github.com/yshui/picom))
+
+    - NOTE: This branch of compton is much newer, and actually maintained, but may have
+      bugs. If you are not interested in helping develop compton, simply run
+      `sudo apt install compton` to get the (4+yr old) mainstream version. If you use
+      the mainstream version you will likely need to modify .xsessionrc.
+      Another option is to install a recent release from yshui's github (v6.2 when this
+      was written).
+    - NOTE: during the "ninja -C build" step, I got an error like "FAILED: needed xcb-render ['>=1.12.0'] found 1.12"
+      To fix, edit src/meson.build and change this: "'>=1.12.0'" with this: "'>=1.12'"
+
+    ```bash
+    # from guide in README.md
+    sudo apt install meson ninja-build libx11-dev libx11-xcb-dev libxext-dev x11proto-core-dev xcb libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-xinerama0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libxdg-basedir-dev libpcre2-dev libev-dev uthash-dev
+    cd ~/repos
+    git clone https://github.com/yshui/picom.git
+    cd picom
+    git submodule update --init --recursive
+    meson --buildtype=release . build
+    ninja -C build
+    sudo ninja -C build install
+    ```
+
 0. Install discord
 
     ```bash
     # Download latest deb from https://discordapp.com/download
-    wget https://dl.discordapp.net/apps/linux/0.0.9/discord-0.0.9.deb
-    sudo dpkg -i discord-0.0.9.deb
-    sudo apt install -f
+    cd ~/Downloads
+    wget -O discord.deb "https://discord.com/api/download?platform=linux&format=deb"
+    sudo apt install ./discord.deb
     # you can now run `discord`
     ```
 
@@ -549,36 +663,13 @@
     # TODO: include instructions for adding dfhack (download latest version, extract over df_linux)
     ```
 
-0. Install picom, yshui's compton fork [github](https://github.com/yshui/picom)
-
-    - NOTE: This branch of compton is much newer, and actually maintained, but may have
-      bugs. If you are not interested in helping develop compton, simply run
-      `sudo apt install compton` to get the (4+yr old) mainstream version. If you use
-      the mainstream version you will likely need to modify .xsessionrc.
-      Another option is to install a recent release from yshui's github (v6.2 when this
-      was written).
-    - NOTE: during the "ninja -C build" step, I got an error like "FAILED: needed xcb-render ['>=1.12.0'] found 1.12"
-      To fix, edit src/meson.build and change this: "'>=1.12.0'" with this: "'>=1.12'"
-
-    ```bash
-    # from guide in README.md
-    sudo apt install meson ninja-build libx11-dev libx11-xcb-dev libxext-dev x11proto-core-dev xcb libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-xinerama0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libxdg-basedir-dev libpcre2-dev libev-dev uthash-dev
-    cd ~/repos
-    git clone https://github.com/yshui/picom.git
-    cd picom
-    git submodule update --init --recursive
-    meson --buildtype=release . build
-    ninja -C build
-    sudo ninja -C build install
-    ```
-
 0. Setup Franz (messenger)
 
     - Download .deb from [here](https://www.meetfranz.com/download?platform=linux&type=deb)
     - `sudo dpkg -i file.deb`
     - you can now run `franz`
 
-0. Setup Dell Command | Configure (Dell hardware only)
+0. Setup `Dell Command | Configure` (Dell hardware only)
 
     - This allows for control over some BIOS settings from the OS, ie keyboard
       backlight timeout.
@@ -894,16 +985,15 @@
 
 0. Install Chrome (NOT TESTED)
 
- - How to install stable (I picked this one):
+    - How to install stable (I picked this one):
+      1. Install with `sudo apt install google-chrome-stable`
+      2. Open chrome, sign in
+      3. Go to "Extensions" click "details" on one of the extensions
+      4. if chrome doesn't freeze, congrats! you're done. otherwise go to 5
+      5. re-open chrome, use mod+right-click to resize chrome to 25% the size of the screen
+      6. repeat steps 3-4, chrome shouldn't freeze this time (instead a tiny window will pop up)
 
-   1. Install with `sudo apt install google-chrome-stable`
-   2. Open chrome, sign in
-   3. Go to "Extensions" click "details" on one of the extensions
-   4. if chrome doesn't freeze, congrats! you're done. otherwise go to 5
-   5. re-open chrome, use mod+right-click to resize chrome to 25% the size of the screen
-   6. repeat steps 3-4, chrome shouldn't freeze this time (instead a tiny window will pop up)
-
- - How to install latest:
+    - How to install latest:
 
     ```bash
     wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
@@ -913,30 +1003,27 @@
 
 0. Set up service to run xfce4-power-manager (IN-DEV / NOT WORKING - currently started via cmdline in .xsessionrc)
 
- - NOTE: this does not currently work - service attempts to start, but xfce4-power-manager prints
-   an error message "Unable to open display" which probably means it expects to be run inside of
-   an X-session, so when it is started as root (or anyone probably) as a service, X is not available.
-   Not sure if there is a good solution for this; workaround of starting in .xsessionrc works so far.
- - create `/etc/systemd/system/xfce4-power-manager.service` and fill it with the following contents:
+    - NOTE: this does not currently work - service attempts to start, but xfce4-power-manager prints an error message "Unable to open display" which probably means it expects to be run inside of an X-session, so when it is started as root (or anyone probably) as a service, X is not available. Not sure if there is a good solution for this; workaround of starting in .xsessionrc works so far.
+    - create `/etc/systemd/system/xfce4-power-manager.service` and fill it with the following contents:
 
-    [Unit]
-    Description=Xfce4 Power Manager
-    Documentation=man:xfce4-power-manager(1) man:xfce4-power-manager-settings(1)
+        [Unit]
+        Description=Xfce4 Power Manager
+        Documentation=man:xfce4-power-manager(1) man:xfce4-power-manager-settings(1)
 
-    [Service]
-    Type=dbus
-    BusName=org.xfce.PowerManager
-    ExecStart=/usr/bin/xfce4-power-manager --no-daemon
-    ExecStop=/usr/bin/xfce4-power-manager --quit
+        [Service]
+        Type=dbus
+        BusName=org.xfce.PowerManager
+        ExecStart=/usr/bin/xfce4-power-manager --no-daemon
+        ExecStop=/usr/bin/xfce4-power-manager --quit
 
-    [Install]
-    WantedBy=multi-user.target
-    Alias=dbus-org.xfce.PowerManager.service
+        [Install]
+        WantedBy=multi-user.target
+        Alias=dbus-org.xfce.PowerManager.service
 
- - Run `sudo systemctl daemon-reload` to reload service files
- - Run `sudo systemctl enable xfce4-power-manager` to enable xfce4-power-manager on boot
- - Run `sudo systemctl status xfce4-power-manager` to verify service file works and is running
- - Run `sudo journalctl -u xfce4-power-manager` to check the service logs
+    - Run `sudo systemctl daemon-reload` to reload service files
+    - Run `sudo systemctl enable xfce4-power-manager` to enable xfce4-power-manager on boot
+    - Run `sudo systemctl status xfce4-power-manager` to verify service file works and is running
+    - Run `sudo journalctl -u xfce4-power-manager` to check the service logs
 
 0. Install evmlab (NOT YET WORKING)
 

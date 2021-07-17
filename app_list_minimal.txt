@@ -17,6 +17,7 @@ conky
 coreutils
 curl
 debian-handbook
+dkms
 dmenu
 dos2unix
 dunst
@@ -48,12 +49,15 @@ iotop
 less
 libghc-xmonad-dev
 libnotify-bin
+linux-headers-amd64
+linux-image-amd64
 lm-sensors
 lshw
 lxappearance
 make
 mercurial
 mtr
+ncdu
 nmap
 ntp
 openssh-client

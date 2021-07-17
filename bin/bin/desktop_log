@@ -39,7 +39,7 @@ load_average=$(cat /proc/loadavg | cut -d ' ' -f 1,2,3)
 
 garbage_files=$(garbage | wc -l)
 if [ "$garbage_files" -gt 0 ]; then
-    echo "${garbage_files} garbage files in /home"
+    echo "${garbage_files} garbage files in /home (run 'garbage')"
 fi
 
 # sudo apt update  # not enabled because updating needs sudo
@@ -96,8 +96,8 @@ if ! systemctl --user status redshift.service > /dev/null 2>&1; then
     echo "redshift is not running"
 fi
 
-if ! systemctl --user status arq.service > /dev/null 2>&1; then
-    echo "arq is not running"
+if ! systemctl status duplicati.service > /dev/null 2>&1; then
+    echo "duplicati is not running"
 fi
 
 #######################################################################################

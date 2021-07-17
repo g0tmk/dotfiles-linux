@@ -68,10 +68,20 @@ sleep 4 && trayer --edge top --align right \
     --padding 0 \
     &
 
-# start power manager. do it late so trayer is running when it starts (if you enable icon in xfce4-power-manager-settings)
+
+# Start power manager. Start late so trayer is running when it starts (only matters 
+# if you enable the tray icon in xfce4-power-manager-settings)
 # TODO: would be better as a service
 sleep 6 && xfce4-power-manager &
 
+
+# Duplicati tray icon (note: duplicati backup jobs are handled by a service)
+# if the web UI has a password, this line should look like this:
+#     sleep 6 && duplicati --no-hosted-server --webserver-password=MYPASSWORD &
+sleep 6 && duplicati --no-hosted-server &
+
+
+# start WM
 exec xmonad
 
 

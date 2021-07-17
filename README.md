@@ -1199,18 +1199,9 @@
 
 
 #### Favorite Firefox Add-ons
-- [uBlock Origin](https://addons.mozilla.org/pt-br/firefox/addon/ublock-origin/)
+- [uBlock Origin](https://addons.mozilla.org/en-us/firefox/addon/ublock-origin/)
 - [HTTPS Everywhere](https://www.eff.org/https-everywhere)
-- [Self Destruction Cookies](https://addons.mozilla.org/pt-br/firefox/addon/self-destructing-cookies/)
-- [Random Agent Spoofer](https://addons.mozilla.org/pt-br/firefox/addon/random-agent-spoofer/)
-- [Tree Style Tab](https://addons.mozilla.org/pt-br/firefox/addon/tree-style-tab/)
-- [Vimperator](https://addons.mozilla.org/en-us/firefox/addon/vimperator/)
-- [Tile Tabs](https://addons.mozilla.org/en-us/firefox/addon/tile-tabs/)
-- [DownThemAll!](https://addons.mozilla.org/en-us/firefox/addon/downthemall/)
-- [Session Manager](https://addons.mozilla.org/en-us/firefox/addon/session-manager/)
-- [Send to XBMC/Kodi](https://addons.mozilla.org/en-US/firefox/addon/send-to-xbmc/)
-- [Open in VLC media player](https://addons.mozilla.org/en-US/firefox/addon/open-in-vlc/)
-
+- [Privacy Badger](https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17/)
 
 #### TODO:
 - check macbook dotfiles + copy over any useful preferences (at least .vimrc and tmux.conf)

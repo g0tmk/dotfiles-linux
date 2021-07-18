@@ -246,22 +246,26 @@
       - If still no sound - Run `alsamixer`, hit F6,  select sound card (probably "HDA Intel PCH"), set all channels to 0dB, unmute channels if needed with 'm'. I left Master and Speaker enabled, all other channels muted.
     - Test basic lock
       - Press lock hotkey. Screen should blank, brightness should decrease to zero, and pressing any key should show system is locked (using `slock` which shows a blue or red screen)
+    - Test basic sleep + lock
+      - run `systemctl suspend`
+      - Laptop should have slept, and is now locked with `slock`
+      - If screen did not lock then check `systemctl status screenlock.service` for errors. The service file at `/etc/systemd/system/screenlock.service` may need to be modified.
     - Test lid sleep + lock
       - Close lid. Wait 30 seconds. Open lid.
       - Laptop should have slept, and is now locked with `slock`
-      - If screen did not lock then check `systemctl status screenlock.service` for errors. The service file at `/etc/systemd/system/screenlock.service` may need to be modified.
     - Test auto-screen lock on idle
       - Open `xfce4-power-manager-settings`
-      - Set System -> System sleep mode -> when inactive for: 16 minutes (the minimum)
+      - Set System -> System sleep mode -> on battery -> when inactive for: 16 minutes (the minimum)
       - Close `xfce4-power-manager-settings`
-      - Wait 16 minutes (you can run `stopwatch` in a terminal to keep track)
-      - Set System -> System sleep mode -> when inactive for: 30 minutes
+      - Unplug the AC adapter
+      - Wait 16 minutes, system should sleep + lock (you can run `stopwatch` in a terminal to keep track)
+      - Set System -> System sleep mode -> on battery -> when inactive for: 30 minutes
     - Test low battery auto-sleep
       - Open `xfce4-power-manager-settings`
       - Set System -> Critical battery power level -> 90 (the maximum)
       - Close `xfce4-power-manager-settings`
       - Unplug the AC adapter
-      - Wait until the battery is below 90% (run `watch -n 15 sudo /home/$USER/bin/battery` for status)
+      - Wait until battery is under 90%, system should sleep + lock (run `watch -n 15 sudo /home/$USER/bin/battery` for status)
       - Set System -> Critical battery power level -> 10
 
 0. Improve graphics performance (for intel embedded gpus)
@@ -490,7 +494,7 @@
     #   - MarkdownPreview
     ```
 
-0. Install syncthing [from guide here](https://apt.syncthing.net/)
+0. Install syncthing [from guide here](https://apt.syncthing.net/)<span id="syncthing-install"></span>
 
     ```bash
     # Add the release PGP keys:
@@ -522,9 +526,9 @@
 
     - Now, load interface at `http://localhost:8384/`
     - Use the web UI to delete the default folder at `~/Sync`
-    - Open settings -> Default Configuration -> Edit Folder Defaults -> Folder Path: `/home/<your_username_here>/Sync/`
+    - Open settings -> Default Configuration -> Edit Folder Defaults -> Folder Path: `/home/<YOUR_USERNAME>/Sync/`
     - Open settings -> GUI -> Use HTTPS For GUI -> Yes
-    - reboot and verify web UI is accessible. NOTE: `start_syncthing` will manually start if needed
+    - reboot and verify web UI is accessible. NOTE: run `start_syncthing` to manually start if needed
     - later, put a .stignore file at the root of each synced folder that contains `#include .stglobalignore`
 
 0. Install Duplicati (guide [here](https://duplicati.readthedocs.io/en/latest/02-installation/))<span id="duplicati-install"></span>
@@ -691,8 +695,8 @@
 
             sudo apt install redshift
 
-    - Enable the user service (TODO: the service file could be added to the dotfiles repo, need to research what happens when there is both a user and system service file)
-    - NOTE: you may need to add `Environment=DISPLAY=:0` to the `[Service]` section of `/usr/lib/systemd/user/redshift.service`, if these commands don't work.
+    - Note: Since redshift fails to start if X is not running, add `RestartSec=5` to the `[Service]` section of `/usr/lib/systemd/user/redshift.service`. Systemd retries 5 times if it fails, so this workaround should be fine as long as X always starts within 25 seconds. TODO: switch to an equally hacky, but more reliable, solution like [this](https://unix.stackexchange.com/a/537848)
+    - Enable the user service (TODO: the service file could be added to the dotfiles repo; need to research what happens when there are multiple service files with the same name)
 
             systemctl --user enable redshift
             systemctl --user start redshift
@@ -1414,7 +1418,8 @@
 
 
 #### TODO:
-- launching different barrier configurations is troublesome. Should switch to a method of saving configurations and laumching a specific config file each time
+- Some of the user services start programs that require an X session. Apparently, if you create the services the naive way, they will usually start before X (even though the user services depend on default.target, the latest-ending built in target). The lack of X causes them to fail to start. Currently, I added RestartSec=5 to those services, which causes them to wait long enough after a failure that X is ususlly running. Should replace this with a more reliable way of starting them like [this](https://unix.stackexchange.com/a/537848) which uses a one-liner in .xsessionrc to trigger a custom target which all the service files are waiting on. Need more research since this shouldn't be this difficult.
+- launching different barrier configurations is complicated. Should switch to a method of saving configurations and laumching a specific config file each time
 - enable hibernation - it would be better for low battery action. Or hybrid sleep.
 - check macbook dotfiles + copy over any useful preferences (at least .vimrc and tmux.conf)
 - replace middle-click paste with something better. It is too easy to accidentally triple-tap with the touchpad and dump a block of text at the cursor. Step 1 is disable middle click with touchpad, then step 2 is merge the x-selection and the standard clipboard with some kind of app or maybe even a custom shortcut with an intelligent paste (or Ctrl+V for one, Ctrl+Shift+V for another). Should google how others have solved this problem.
@@ -1429,17 +1434,12 @@
 - colorscheme update: dark blue is too dark
 - finish copying info from documents/xps/debian_notes.txt to this repo
 - add aliases to yeganesh with [this](https://github.com/8carlosf/dotfiles/blob/master/bin/dmenui)
-- get syncthing working and autostart it (maybe)
-- edit start_syncthing
-  - needs a better name, too bad `syncthing` is taken by the default install
-  - if service running, opens a browser. otherwise it opens after ~4 seconds
-- get something going that will run slock automatically after ~20 mins of inactivity
+- get something going that will run slock automatically after ~20 mins of inactivity (edit: should be implemented, need to test)
 - add more stuff to left side of xmobar
 - Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed
 - Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
 - modify tmux config to not show stats on bottom bar that are already in xmobar
 - check out fasd (and jetho's repo)
-- check out [rofi](https://github.com/davatorium/rofi) (dmenu/yeganesh replacement)
 - check out YouCompleteMe (https://github.com/Valloric/YouCompleteMe)
 - check out freerdp-x11
 - check out nemo - it has a better compact mode than nautilus
@@ -1455,42 +1455,22 @@
   - [Fantome](https://github.com/addy-dclxvi/gtk-theme-collections)
 - maybe make a new games.md for the install instructions for games
   - include lutris since it used to be in app_list_extras.txt
-- setup auto install for redshift; two manual steps needed after installing via apt:
-  - add `Environment=DISPLAY=:0` to `/usr/lib/systemd/user/redshift.service` under 
-    the [Service] header
-  - run `systemctl --user enable redshift` then `systemctl --user start redshift`
 - Make some kind of automatic color scheme management that reads from a single location
   - conky can execute a shell script which returns current terminal colors
     - see [this stackoverflow answer](https://stackoverflow.com/a/37285624)
   - xmobar's configuration could be edited with sed before starting
     - could be more obvious/explicit, like importing colors.hs from pywal
-- enable DRI3 to improve graphics performance. I tried guides online which suggest to
-  create a 20-intel.conf and add a line to enable, but it seems to already be enabled,
-  just not in use.
-    - `cat /var/log/Xorg.0.log | egrep -i "DRI[2-3]"` shows both DRI2 and DRI3 is
-      loaded, but only DRI2 is enabled.
-    - Outout of `LIBGL_DEBUG=verbose glxinfo | grep libgl` shows only DRI2 in use
 
 
 #### BUGS
-- volume controls do not work on bluetooth (or any non-built-in-speaker) headphones
+- volume controls do not work on bluetooth (or any non-built-in-speaker) headphones (edit: possibly fixed, need to test)
   - the slider that changes in pavucontrol is named "Built-in Audio Analog Stereo"
-- after boot, volume controls will not work until something tries to use the speakers
+- after boot, volume controls will not work until something tries to use the speakers (edit: possibly fixed, need to test)
 - occasionally tmux prefix hotkey stops working in urxvt. Seems to be a urxvt issue.
   - workaround for now is close urxvt, open a new one, and reattach with `tmux a`
-- setxkbmap remappings are unbound after wake from sleep ~50% of the time
-  - note: I have not seen this for ~ 2 months, maybe not an issue anymore? as of 8-22-19
-  - workaround for now is run `remap` when this happens
-  - seems to be a known bug, one of the comments has a workaround that may work
-    - [comment](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=633849#92)
-    - [workaround script](https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=633849;filename=40xkb-save-restore;msg=92)
 - xmobar temperature readout glitches after wake from suspend
   - happened twice in a row within two days, but hasen't happened in > 2 weeks. will
     make temperature script if the bug happens again.
-- ~~Figure out why xmobar is hidden by windows by default~~
-  - New windows apparently cover xmobar but not trayer - once trayer opens, the layout
-    automatically reconfigures to show trayer (and xmobar since it is the same height
-    as trayer). Improving trayer startup delay in .xsessionrc will fix this for good.
 
 
 #### Notes

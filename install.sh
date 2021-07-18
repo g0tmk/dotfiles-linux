@@ -4,10 +4,15 @@
 # g0tmk's dotfiles install script
 #
 # what this does:
-#  - install apps via apt
+#  - install app list via apt
 #  - link all dotfiles into home
-#  - change shell 
-#  - detect sensors
+#  - change shell to zsh
+#  - change terminal to urxvt
+#  - installs custom fonts
+#  - detect hardware sensors with sensors-detect
+#
+# assumes:
+#  - you want repositories installed to ~/repos/
 #
 
 set -eEuo pipefail

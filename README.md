@@ -151,6 +151,27 @@
     - alt+shift+enter to open terminal
     - if xmonad fails to start, you might need to run this (but try not to, it is worse than the built-in xorg driver)`sudo apt install xserver-xorg-video-intel`
 
+0. Set up service to run xfce4-power-manager (NOTE: while this would be better run as a system service, xfce4-power-manager appears to required an x-window session, so we run it as a user service. This is good reason to switch to something else... I'm not sure what will happen if the system runs out of battery at the login screen.)<span id="xfce4-power-manager-install"></span>
+    - create `~/.config/systemd/user/xfce4-power-manager.service` and fill it with the following contents (TODO: add this file to dotfiles):
+
+        [Unit]
+        Description=Xfce4 Power Manager
+        Documentation=man:xfce4-power-manager(1) man:xfce4-power-manager-settings(1)
+
+        [Service]
+        Type=dbus
+        BusName=org.xfce.PowerManager
+        ExecStart=/usr/bin/xfce4-power-manager --no-daemon
+        ExecStop=/usr/bin/xfce4-power-manager --quit
+
+        [Install]
+        WantedBy=multi-user.target
+        Alias=dbus-org.xfce.PowerManager.service
+
+    - Run `systemctl --user daemon-reload` to reload service files
+    - Run `systemctl --user enable xfce4-power-manager` to enable xfce4-power-manager on boot
+    - Run `systemctl --user status xfce4-power-manager` to verify service file works and is running
+    - Run `sudo journalctl -u xfce4-power-manager` to check the service logs (Note: no messages are printed on success)
 0. Improve graphics performance (for intel embedded gpus)
 
     sudo apt remove xserver-xorg-video-intel
@@ -1000,30 +1021,6 @@
     sudo dpkg -i google-chrome-stable_current_amd64.deb
     sudo apt-get -f install
     ```
-
-0. Set up service to run xfce4-power-manager (IN-DEV / NOT WORKING - currently started via cmdline in .xsessionrc)
-
-    - NOTE: this does not currently work - service attempts to start, but xfce4-power-manager prints an error message "Unable to open display" which probably means it expects to be run inside of an X-session, so when it is started as root (or anyone probably) as a service, X is not available. Not sure if there is a good solution for this; workaround of starting in .xsessionrc works so far.
-    - create `/etc/systemd/system/xfce4-power-manager.service` and fill it with the following contents:
-
-        [Unit]
-        Description=Xfce4 Power Manager
-        Documentation=man:xfce4-power-manager(1) man:xfce4-power-manager-settings(1)
-
-        [Service]
-        Type=dbus
-        BusName=org.xfce.PowerManager
-        ExecStart=/usr/bin/xfce4-power-manager --no-daemon
-        ExecStop=/usr/bin/xfce4-power-manager --quit
-
-        [Install]
-        WantedBy=multi-user.target
-        Alias=dbus-org.xfce.PowerManager.service
-
-    - Run `sudo systemctl daemon-reload` to reload service files
-    - Run `sudo systemctl enable xfce4-power-manager` to enable xfce4-power-manager on boot
-    - Run `sudo systemctl status xfce4-power-manager` to verify service file works and is running
-    - Run `sudo journalctl -u xfce4-power-manager` to check the service logs
 
 0. Install evmlab (NOT YET WORKING)
 

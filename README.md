@@ -197,17 +197,19 @@
         [Service]
         Type=dbus
         BusName=org.xfce.PowerManager
+        RestartSec=5
         ExecStart=/usr/bin/xfce4-power-manager --no-daemon
         ExecStop=/usr/bin/xfce4-power-manager --quit
 
         [Install]
-        WantedBy=multi-user.target
+        WantedBy=default.target
         Alias=dbus-org.xfce.PowerManager.service
 
     - Run `systemctl --user daemon-reload` to reload service files
     - Run `systemctl --user enable xfce4-power-manager` to enable xfce4-power-manager on boot
     - Run `systemctl --user status xfce4-power-manager` to verify service file works and is running
-    - Run `sudo journalctl -u xfce4-power-manager` to check the service logs (Note: no messages are printed on success)
+    - Run `sudo journalctl | egrep "xfce4" | less` to check the service logs
+    - Reboot and run `ps aux | grep xfce4-power-manager` to check if autostart is working
 
 0. Set up screen lock on sleep<span id="screen-lock-on-sleep-install"></span>
 
@@ -233,7 +235,8 @@
         ```
 
     - Enable the new service by running `sudo systemctl enable screenlock.service`
-    - Reboot, wait 30 seconds, close lid, wait 30 seconds, open lid, verify its locked.
+    - Reboot, wait 30 seconds, run `systemctl suspend`
+    - Laptop should have slept, and is now locked with `slock`
     - If you have issues, check the output of `sudo systemctl status screenlock.service` for errors
 
 0. Functionality tests

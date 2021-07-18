@@ -1273,43 +1273,6 @@
     mkchromecast --video -i videofile.mp4
     ```
 
-0. ~~Install tizonia~~
-
-    - NOTE: Latest (0.18.0) isn't worth using for soundcloud. Loads at most 10 songs with --soundcloud-user-stream, maybe a soundcloud API limitation. It also misses some tracks, but not as many as mopidy-soundcloud. Check again after some major version updates
-
-    - guide from [here](http://tizonia.org/docs/debian/)
-    - NOTE: I disagree with some of the actions take in the standard install script.
-      Since I don't want to hose my system by running this, download the script and
-      make the following changes:
-      - Modify the two calls to tee /etc/apt/sources.list: The new sources should
-        be added to /etc/apt/sources.list.d/mopidy.list and tizonia.list
-      - Remove --force-yes from the apt install call
-
-    ```bash
-    curl 'https://bintray.com/user/downloadSubjectPublicKey?username=tizonia' | sudo apt-key add - 
-    echo "deb https://dl.bintray.com/tizonia/debian stretch main" | sudo tee /etc/apt/sources.list.d/tizonia.list
-    curl 'http://apt.mopidy.com/mopidy.gpg' | sudo apt-key add -
-    echo "deb http://apt.mopidy.com/ stable main contrib non-free" | sudo tee -a /etc/apt/sources.list.d/mopidy.list
-
-    cd /tmp
-    wget https://github.com/tizonia/tizonia-openmax-il/raw/master/tools/install.sh
-    vi install.sh
-    # make changes listed above
-    ./install-edited.sh
-    tizonia --soundcloud-user-stream
-    ```
-
-    - Removing:
-
-    ```bash
-    sudo apt remove tizonia-all
-    sudo apt remove libspotify12
-    sudo rm /etc/apt/sources.list.d/tizonia.list
-    sudo rm /etc/apt/sources.list.d/mopidy.list
-    sudo apt update
-    sudo apt autoremove
-    ```
-
 0. ~~Install pywal to enable colorschemes based on the wallpaper~~ skipped
 
     ```bash
@@ -1369,11 +1332,49 @@
     sudo gem install tmuxinator
     ```
 
+0. ~~Install tizonia~~
+
+    - NOTE: Latest (0.18.0) isn't worth using for soundcloud. Loads at most 10 songs with --soundcloud-user-stream, maybe a soundcloud API limitation. It also misses some tracks, but not as many as mopidy-soundcloud. Check again after some major version updates
+
+    - guide from [here](http://tizonia.org/docs/debian/)
+    - NOTE: I disagree with some of the actions take in the standard install script.
+      Since I don't want to hose my system by running this, download the script and
+      make the following changes:
+      - Modify the two calls to tee /etc/apt/sources.list: The new sources should
+        be added to /etc/apt/sources.list.d/mopidy.list and tizonia.list
+      - Remove --force-yes from the apt install call
+
+    ```bash
+    curl 'https://bintray.com/user/downloadSubjectPublicKey?username=tizonia' | sudo apt-key add - 
+    echo "deb https://dl.bintray.com/tizonia/debian stretch main" | sudo tee /etc/apt/sources.list.d/tizonia.list
+    curl 'http://apt.mopidy.com/mopidy.gpg' | sudo apt-key add -
+    echo "deb http://apt.mopidy.com/ stable main contrib non-free" | sudo tee -a /etc/apt/sources.list.d/mopidy.list
+
+    cd /tmp
+    wget https://github.com/tizonia/tizonia-openmax-il/raw/master/tools/install.sh
+    vi install.sh
+    # make changes listed above
+    ./install-edited.sh
+    tizonia --soundcloud-user-stream
+    ```
+
+    - Removing:
+
+    ```bash
+    sudo apt remove tizonia-all
+    sudo apt remove libspotify12
+    sudo rm /etc/apt/sources.list.d/tizonia.list
+    sudo rm /etc/apt/sources.list.d/mopidy.list
+    sudo apt update
+    sudo apt autoremove
+    ```
+
 
 #### Favorite Firefox Add-ons
 - [uBlock Origin](https://addons.mozilla.org/en-us/firefox/addon/ublock-origin/)
 - [HTTPS Everywhere](https://www.eff.org/https-everywhere)
 - [Privacy Badger](https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17/)
+
 
 #### TODO:
 - launching different barrier configurations is troublesome. Should switch to a method of saving configurations and laumching a specific config file each time

@@ -884,20 +884,6 @@
     sudo pptpsetup --delete my_tunnel
     ```
 
-0. Firmware update manager [not working yet]
-
-    ```bash
-    sudo apt install fwupd
-    # show candidate devices
-    fwupdmgr get-devices
-    # pull latest metadata from lvfs
-    fwupdmgr refresh
-    >>> Failed to download
-    sudo apt remove fwupd
-
-    # need to try latest version (https://github.com/hughsie/fwupd)
-    ```
-
 0. Install PyCharm + CLion
 
     - Download the latest version of JetBrains Toolbox from [here](https://www.jetbrains.com/toolbox/app/).
@@ -1170,6 +1156,20 @@
                 Device "DiscreteNvidia"
             EndSection
             ```
+
+0. Firmware update manager [not working yet]
+
+    ```bash
+    sudo apt install fwupd
+    # show candidate devices
+    fwupdmgr get-devices
+    # pull latest metadata from lvfs
+    fwupdmgr refresh
+    >>> Failed to download
+    sudo apt remove fwupd
+
+    # need to try latest version (https://github.com/hughsie/fwupd)
+    ```
 
 0. Install Steam (NOT TESTED)
 

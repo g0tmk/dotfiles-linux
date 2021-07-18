@@ -1,11 +1,17 @@
 #!/usr/bin/env bash
 
+candidate_files=""
 # vim swapfiles. sw[a-p] would be more complete, but match swf files
-for file in $(find ~ | egrep -e "\.sw[g-p]$" -e "\.DS_Store$"); do
+# "read -r file" splits the input into lines (instead of splitting by spaces)
+find ~ | egrep -e "\.sw[g-p]$" -e "\.DS_Store$" |  while read -r file; do
     # skip open files
-    if lsof $file > /dev/null 2>&1; then
+    if lsof "$file" > /dev/null 2>&1; then
         continue
     fi
-    echo "file: $file"
+    candidate_files="${file}\n${candidate_files}"
+    last_accessed_date=$(find "$file" -printf "%Ac")
+    echo "$file"
+    echo "$last_accessed_date"
+    echo
 done
 

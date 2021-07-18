@@ -37,7 +37,9 @@ THRESHOLD_LOAD_AVG=1.49
 # grab load first since the following commands will use cpu and affect the values
 load_average=$(cat /proc/loadavg | cut -d ' ' -f 1,2,3)
 
-garbage_files=$(garbage | wc -l)
+garbage_file_lines=$(garbage | wc -l)
+# 3 lines per file are output by the garbage binary
+garbage_files=$(("$garbage_file_lines" / 3))
 if [ "$garbage_files" -gt 0 ]; then
     echo "${garbage_files} garbage files in /home (run 'garbage')"
 fi

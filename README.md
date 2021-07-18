@@ -63,9 +63,9 @@
 
 #### Install steps on a fresh Debian (Stable) machine
 
-0. If installing on a Dell XPS 9550, follow this first `guide_xps9550_hardware_install_notes.txt`.
+0. If installing on a Dell XPS 9550, follow this first `guide_xps9550_hardware_install_notes.md`.
 
-0. Install Debian minimal system (see guide_xxx_hardware_install_notes), install only "Standard System Utilities". Optionally select "Debian desktop environment" which will install Gnome 3.
+0. Install Debian minimal system (see guide_xxx_hardware_install_notes), install only "Standard System Utilities". Optionally select "Debian desktop environment" which will install Gnome 3 - this will result in a better lock screen (gnome) and a well-supported fallback WM.
 
 0. Fix apt sources list
 
@@ -97,7 +97,7 @@
         sudo reboot
         # now run the above test again, verify the interrupt rate is normal (100 per sec roughly)
 
-0. (Optional) If using Gnome 3 as a fallback window manager, change a few settings after booting into it. The majority of these settings will not be used when booting int xmonad, however, some will persist (for example - theme).
+0. (Optional) If using Gnome 3 as a fallback window manager, change a few settings after booting into it. The majority of these settings will not be used when booting int xmonad, however, some will persist (for example - theme and autologin).
 
    - click "super" key, un-favorite the unused apps on the left (help, rythmbox, etc)
    - open "Tweaks" app -> Appearance -> Application Theme -> Adwaita-dark
@@ -172,6 +172,32 @@
     - Run `systemctl --user enable xfce4-power-manager` to enable xfce4-power-manager on boot
     - Run `systemctl --user status xfce4-power-manager` to verify service file works and is running
     - Run `sudo journalctl -u xfce4-power-manager` to check the service logs (Note: no messages are printed on success)
+
+0. Functionality tests
+
+    - Run `speaker-test` to generate white noise for the speakers. Verify sound + volume keys work.
+      - If no sound - run `sudo alsactl init`
+      - If still no sound - Run `alsamixer`, hit F6,  select sound card (probably "HDA Intel PCH"), set all channels to 0dB, unmute channels if needed with 'm'. I left Master and Speaker enabled, all other channels muted.
+    - Test basic lock
+      - Press lock hotkey. Screen should blank, brightness should decrease to zero, and pressing any key should show system is locked (using `slock` which shows a blue or red screen)
+    - Test lid sleep + lock
+      - Close lid. Wait 30 seconds. Open lid.
+      - Laptop should have slept, and is now locked with `slock`
+      - If screen did not lock then check `systemctl status screenlock.service` for errors. The service file at `/etc/systemd/system/screenlock.service` may need to be modified.
+    - Test auto-screen lock on idle
+      - Open `xfce4-power-manager-settings`
+      - Set System -> System sleep mode -> when inactive for: 16 minutes (the minimum)
+      - Close `xfce4-power-manager-settings`
+      - Wait 16 minutes (you can run `stopwatch` in a terminal to keep track)
+      - Set System -> System sleep mode -> when inactive for: 30 minutes
+    - Test low battery auto-sleep
+      - Open `xfce4-power-manager-settings`
+      - Set System -> Critical battery power level -> 90 (the maximum)
+      - Close `xfce4-power-manager-settings`
+      - Unplug the AC adapter
+      - Wait until the battery is below 90% (run `watch -n 15 sudo /home/$USER/bin/battery` for status)
+      - Set System -> Critical battery power level -> 10
+
 0. Improve graphics performance (for intel embedded gpus)
 
     sudo apt remove xserver-xorg-video-intel
@@ -180,22 +206,13 @@
 
 0. Install NTP
 
-- run `sudo apt-get install ntp`
-- add these lines to /etc/ntp.conf (and remove the generic ones)
+    - run `sudo apt-get install ntp`
+    - add these lines to /etc/ntp.conf (and remove the generic ones)
 
     server 0.north-america.pool.ntp.org
     server 1.north-america.pool.ntp.org
     server 2.north-america.pool.ntp.org
     server 3.north-america.pool.ntp.org
-
-0. Configure sound (optional)
-
-    - run `speaker-test` (or make a sound some other way)
-      - if no sound, run `sudo alsactl init`
-    - Run `alsamixer` 
-    - Hit F6 and select sound card (probably "HDA Intel PCH")
-    - set all channels to 0db. Unmute channels with 'm'. I left all muted except
-      "Master" and "Speaker". ("OO" is enabled, "MM" is muted).
 
 0. Reverse touchpad scroll direction + enable tap-to-click
 
@@ -308,11 +325,10 @@
 
     - Might want to run the system for a week or so before doing this so you have a chance to see intermittent errors.
     - Note you can always run `journalctl -b -p warning` and `journalctl -b -p err` to check for issues
+    - To quiet errors, edit `/etc/default/grub` and edit GRUB_CMDLINE_LINUX_DEFAULT and add `loglevel=3` to the end. It will look similar to the following:
 
-    ```bash
-    sudo vi /etc/default/grub
-    # edit GRUB_CMDLINE_LINUX_DEFAULT and add `loglevel=3` to the end
-    # ie         GRUB_CMDLINE_LINUX_DEFAULT="quiet loglevel=3"
+    ```
+    GRUB_CMDLINE_LINUX_DEFAULT="quiet loglevel=3"
     ```
 
     - Run `sudo update-grub` to commit changes
@@ -627,7 +643,7 @@
     - Run `barrier` again - this time, the window will not appear but it should
       immediately connect to the server and the icon will show up in the taskbar.
 
-0. (Optional, skipped on Debian 10 install) Install a compositor (picom, yshui's compton fork [github](https://github.com/yshui/picom))
+0. (Optional, skipped on Debian 10 install and commented-out of .xsessionrc) Install a compositor (picom, yshui's compton fork [github](https://github.com/yshui/picom))
 
     - NOTE: This branch of compton is much newer, and actually maintained, but may have
       bugs. If you are not interested in helping develop compton, simply run
@@ -743,9 +759,11 @@
 
     # test connectivity by pinging the VPN server's gateway IP
     ping 10.8.0.1
-    # verify route through VPN server exists
+    # verify route through VPN server exists (something like "10.8.0.1 dev tun0")
+    # "default via IP_ADDRESS" tells you where your "default" (aka internet) traffic is going
     ip route
-    # verify this outputs the public IP of the VPN server
+    # If using this VPN for privacy, verify this outputs the public IP of the VPN server
+    sudo apt install dnsutils
     dig TXT +short o-o.myaddr.l.google.com @ns1.google.com 
     ```
 
@@ -1201,6 +1219,8 @@
 - [Privacy Badger](https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17/)
 
 #### TODO:
+- launching different barrier configurations is troublesome. Should switch to a method of saving configurations and laumching a specific config file each time
+- enable hibernation - it would be better for low battery action. Or hybrid sleep.
 - check macbook dotfiles + copy over any useful preferences (at least .vimrc and tmux.conf)
 - replace middle-click paste with something better. It is too easy to accidentally triple-tap with the touchpad and dump a block of text at the cursor. Step 1 is disable middle click with touchpad, then step 2 is merge the x-selection and the standard clipboard with some kind of app or maybe even a custom shortcut with an intelligent paste (or Ctrl+V for one, Ctrl+Shift+V for another). Should google how others have solved this problem.
 - add sublime text 4 themes and colorscheme. Config is saved already
@@ -1291,3 +1311,7 @@
 - External display names (in xrandr):
   - x220: HDMI-1 (and probably also VGA-1)
   - xps9550: HDMI1 and DP1
+- GithubMarkdown
+  - [Relative links in markup files](https://github.blog/2013-01-31-relative-links-in-markup-files/)
+  - [Adding Footnotes to GFM With a Return Feature](https://github.com/seamusdemora/seamusdemora.github.io/blob/master/GFM_FootnotesWithReturnFeature.md#f1)
+

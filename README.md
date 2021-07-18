@@ -129,6 +129,8 @@
     # Install apps and link dotfiles. See install.sh for details.
     git clone git://github.com/g0tmk/dotfiles-linux.git ~/dotfiles
     cd ~/dotfiles
+    git config user.name YOUR_USERNAME
+    git config user.email YOUR_EMAIL
     # say yes to everything
     ./install.sh
     # reboot, make sure enerything looks OK

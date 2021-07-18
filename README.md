@@ -175,6 +175,33 @@
     - Run `systemctl --user status xfce4-power-manager` to verify service file works and is running
     - Run `sudo journalctl -u xfce4-power-manager` to check the service logs (Note: no messages are printed on success)
 
+0. Set up screen lock on sleep<span id="screen-lock-on-sleep-install"></span>
+
+    - xfce4-power-manager is not able to lock screen on sleep, so we have to set it up manually:
+    - Create a new file `/etc/systemd/system/screenlock.service` and fill it with the following:
+
+        ```
+        # source: https://unix.stackexchange.com/questions/81692/suspend-and-lock-screen-on-closing-lid-in-arch-systemd
+        # 
+        # automatically run slock whenever computer sleeps
+        #
+        [Unit]
+        Description=slock on sleep
+
+        [Service]
+        User=g0tmk
+        Environment=DISPLAY=:0
+        ExecStart=/usr/bin/slock
+
+        [Install]
+        WantedBy=sleep.target
+
+        ```
+
+    - Enable the new service by running `sudo systemctl enable screenlock.service`
+    - Reboot, wait 30 seconds, close lid, wait 30 seconds, open lid, verify its locked.
+    - If you have issues, check the output of `sudo systemctl status screenlock.service` for errors
+
 0. Functionality tests
 
     - Run `speaker-test` to generate white noise for the speakers. Verify sound + volume keys work.

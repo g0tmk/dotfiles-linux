@@ -1071,6 +1071,77 @@
     minecraft-launcher
     ```
 
+0. (INCOMPLETE) (Optional) Install and configure `bumblebee` to allow using nvidia GPU on-demand (saving power when it is not in use). NOTE: If you won't use the GPU and only want the power savings, this may not be necessary; Debian 10 w backports kernel (5.10.0) appears to leave the nvidia GPU off by default. TODO: figure out how to verify this is the case.
+
+    - `sudo dpkg --add-architecture i386`
+    - `sudo apt-get update`
+    - NOTE: when you run the next command, it will ask you at some point if you want to create a xorg.conf file. Do NOT let the installer run nvidia-xconfig, it will break things.
+    - `sudo apt-get install bumblebee-nvidia primus primus-libs:i386 `
+    - `sudo adduser $USER bumblebee`
+    - NOTE: at this point, `sudo optirun nvidia-smi` did not work (prints error "Cannot access secondary GPU - Failed to open DRM device for pci:..."), site here "https://github.com/Bumblebee-Project/Bumblebee/issues/749" mentions that bumblebee is incompatible with xserver-xorg-legacy.. steps taken:
+      - `sudo apt remove xserver-xorg-legacy` and reboot: not fixed
+      - `sudo apt install nvidia-driver` and reboot: not fixed
+      - add dummy screen to /etc/bumblebee/xorg.conf.nvidia via (https://bbs.archlinux.org/viewtopic.php?id=185894) and reboot: no change
+      - in `/etc/bumblebee/bumblebee.conf`, change `Driver=` to `Driver=nvidia`, reboot: not fixed
+      - add nouveau.modeset=0 to GRUB cmdline
+    - Several months later, I went back to fixing this issue, and it randomly worked without me changing anything that I know of. Steps taken:
+      - in `/etc/bumblebee/bumblebee.conf`, change `Driver=` to `Driver=nvidia` and reboot.
+      - `optirun nvidia-smi` Works! Why...
+        - Currently running services:
+          - `systemctl status bumblebeed` -> active (running)
+        - Currently installed apt applications:
+          - bumblebee-nvidia version 3.2.1-14
+          - primus version 0~20150328-4
+          - primus-libs:i386 version 0~20150328-4
+          - xserver-xorg-legacy version 2:1.19.2-1+deb9u
+          - nvidia-driver version 390.116-1
+        - Current configs:
+          - /etc/bumblebee/xorg.conf does not exist
+          - contents of /etc/bumblebee/xorg.conf.nvidia:
+
+            ```bash
+            Section "ServerLayout"
+                Identifier  "Layout0"
+                Option      "AutoAddDevices" "false"
+                Option      "AutoAddGPU" "false"
+            EndSection
+
+            Section "Device"
+                Identifier  "DiscreteNvidia"
+                Driver      "nvidia"
+                VendorName  "NVIDIA Corporation"
+
+            #   If the X server does not automatically detect your VGA device,
+            #   you can manually set it here.
+            #   To get the BusID prop, run `lspci | egrep 'VGA|3D'` and input the data
+            #   as you see in the commented example.
+            #   This Setting may be needed in some platforms with more than one
+            #   nvidia card, which may confuse the proprietary driver (e.g.,
+            #   trying to take ownership of the wrong device). Also needed on Ubuntu 13.04.
+            #   BusID "PCI:01:00:0"
+
+            #   Setting ProbeAllGpus to false prevents the new proprietary driver
+            #   instance spawned to try to control the integrated graphics card,
+            #   which is already being managed outside bumblebee.
+            #   This option doesn't hurt and it is required on platforms running
+            #   more than one nvidia graphics card with the proprietary driver.
+            #   (E.g. Macbook Pro pre-2010 with nVidia 9400M + 9600M GT).
+            #   If this option is not set, the new Xorg may blacken the screen and
+            #   render it unusable (unless you have some way to run killall Xorg).
+
+                Option "ProbeAllGpus" "false"
+
+                Option "NoLogo" "true"
+                Option "UseEDID" "false"
+                Option "UseDisplayDevice" "none"
+            EndSection
+
+            Section "Screen"
+                Identifier "Default Screen"
+                Device "DiscreteNvidia"
+            EndSection
+            ```
+
 0. Install Steam (NOT TESTED)
 
     ```bash

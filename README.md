@@ -14,22 +14,54 @@
 #### Basics
  - Xmonad interface using Alt as the mod key
  - Hotkeys
-   - Open terminal: Alt+Shift+Enter
-   - Open app launcher: Alt+P
-   - Lock screen: Alt+Shift+Z
-   - Reload configs and restart xmonad: Alt+Q
-   - Logout: Alt+Shift+Q
-   - Sleep: Power button or close lid
-   - Save screenshot to `~/screenshots`: PrtScr
-   - Save selection of the screen to `~/screenshots`: Shift+PrtScr`
+   - Open terminal: **Alt+Shift+Enter** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
+     - App: `urxvt` - automatically installed, configuration [.Xdefaults](xmonad/.Xdefaults)
+   - Open app launcher: **Alt+P** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
+     - App: `rofi` - automatically installed, configuration [config](rofi/.config/rofi/config)
+   - Lock screen: **Alt+Shift+Z** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
+     - App: `slock` - [❌ setup required for auto-lock on sleep](#screen-lock-on-sleep-install), default configuration
+   - Reload configs and restart xmonad: **Alt+Q** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
+     - App: `xmonad` - automatically installed, configuration [xmonad.hs](xmonad/.xmonad/xmonad.hs)
+   - Logout: **Alt+Shift+Q** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
+     - App: `xmonad` - automatically installed, configuration [xmonad.hs](xmonad/.xmonad/xmonad.hs)
+   - Save screenshot to `~/screenshots`: **PrtScr** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
+     - App: `scrot` - automatically installed, configuration [xmonad.hs](xmonad/.xmonad/xmonad.hs)
+   - Save screenshot selection to `~/screenshots`: **Shift+PrtScr** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
+     - App: `scrot` - automatically installed, configuration [xmonad.hs](xmonad/.xmonad/xmonad.hs)
+   - Sleep: **Power button** / close lid hotkey configured with `xfce4-power-manager-settings`
+     - App: `systemd` (I think) - automatically installed, configured with `xfce4-power-manager-settings`
+   - Volume up/down: **Volume keys** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
+     - App: [bin/volume](bin/bin/volume) - automatically installed, configuration [xmonad.hs](xmonad/.xmonad/xmonad.hs)
+   - Brightness up/down: **Brightness keys** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
+     - App: [bin/brightness](bin/bin/brightness) - [❌ setup required](#brightness-install), configuration [xmonad.hs](xmonad/.xmonad/xmonad.hs)
  - Apps
-    - File manager: `ranger`
-    - App switcher: `rofi`
-    - Configure wifi: `wicd-curses`
-    - Power management: xfce4-power-manager (`xfce4-power-manager-settings` to manage)
-      - handles low-battery notifications
-    - Notifications: dunst (`dunst-reload-config` to reload config and show some test messages)
-    - File manager (gui): `nautilus`
+   - File manager: `ranger` - automatically installed, configuration [rc.conf](ranger/.config/ranger/rc.conf)
+   - File manager (gui): `nautilus` - automatically installed, default config
+   - Configure wifi: `wicd-curses` - automatically installed, default config
+   - Power management: `xfce4-power-manager` - [❌ setup required](#xfce4-power-manager-install)
+     - launched at login with service file (see setup)
+     - configured with `xfce4-power-manager-settings`
+     - handles notifications (low battery, plug and unplug)
+     - handles idle screen dimming
+     - handles suspend on low battery (10%)
+     - configures power button action
+   - Notifications: `dunst` - automatically installed, configuration [dunstrc](dunst/.config/dunst/dunstrc)
+     - launched at login with service file
+     - run `dunst-reload-config` to reload config and show some test messages
+   - Status bar: `pystatusbar` - automatically installed, configuration in [pystatusbar repository](https://github.com/g0tmk/pystatusbar) is used ([link](https://github.com/g0tmk/pystatusbar/config_bxpsd.config))
+     - launched at login via [xmonad.hs](xmonad/.xmonad/xmonad.hs)
+     - TODO: improve pystatusbar to look for a default config somewhere, like `~/.config/pystatusbar/pystatusbar.config`, then add that config to this repository
+   - System tray: `trayer` - automatically installed, configured with paramaters in [.xsessionrc](xmonad/.xsessionrc)
+     - launched at login via [.xsessionrc](xmonad/.xsessionrc)
+   - Desktop status panel: `conky` - automatically installed, configuration [conky.log](conky/.conky/conky.log)
+     - launched via [.xsessionrc](xmonad/.xsessionrc)
+   - Wallpaper: `feh` - automatically installed, configuration [conky.log](conky/.conky/conky.log)
+     - launched via [.xsessionrc](xmonad/.xsessionrc)
+   - Screen auto-darkening (night light): `redshift` - [❌ setup required](#redshift-install), configuration [redshift.conf](redshift/.config/redshift.conf)
+     - launched at login with service file (see setup)
+   - Backups: `duplicati` - [❌ setup required](#duplicati-install), default configuration
+     - launched at boot with service file (see setup)
+
 
 #### Custom commands
  - `barrier` starts barrier to allow control from another computer's keyboard/mouse
@@ -291,7 +323,7 @@
     add `Option "ButtonMapping" "1 2 3 5 4 6 7 8"` between `Section` and `EndSection`
     ```
 
-0. Setup brightness control (not needed on x220). Add to /etc/sudoers with `sudo visudo`:
+0. Setup brightness control (not needed on x220). Add to /etc/sudoers with `sudo visudo`:<span id="brightness-install"></span>
 
     - First try brightness controls (Fn+F11 on xps9550). If it works, skip this section.
 
@@ -490,7 +522,7 @@
     - reboot and verify web UI is accessible. NOTE: `start_syncthing` will manually start if needed
     - later, put a .stignore file at the root of each synced folder that contains `#include .stglobalignore`
 
-0. Install Duplicati (guide [here](https://duplicati.readthedocs.io/en/latest/02-installation/))
+0. Install Duplicati (guide [here](https://duplicati.readthedocs.io/en/latest/02-installation/))<span id="duplicati-install"></span>
 
     - Install mono (note: uses about 400 MB)
 

@@ -540,7 +540,6 @@
 0. Install virtualbox
 
     - Original guide [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22)
-    - Info on integration with tiling WM [here](http://kissmyarch.blogspot.com/2012/01/hiding-menu-and-statusbar-of-virtualbox.html)
 
     ```bash
     # install virtualbox using their apt source:
@@ -555,30 +554,88 @@
 
     # add yourself to vboxusers group
     sudo usermod -a -G vboxusers $USER
-
-    # you can now run `virtualbox`
-    # NOTE: On first run it will prompt to install an extension pack. This will probably
-    #       fail unless you run virtualbox with sudo. Once installed, you can run it
-    #       normally again (without sudo).
-
-    # configure virtualbox to allow tiling WM hotkeys
-    # see https://askubuntu.com/questions/144905/virtualbox-windows-key-pass-through-to-gnome
-    # - in VirtualBox go to File->Preferences
-    # - Under "Input" uncheck "Auto Capture Keyboard"
-    # - (Optional) View -> Status Bar -> Hide
-    # - (Optional, show with Host+Home) View -> Menu Bar -> Hide
     ```
 
-0. Install redshift
+    - If secure boot is enabled, the install log probably reported an issue loading vboxdrv. You'll have to self-generate a key, sign the modules yourself, then add the key to your BIOS "machine owner key" store. Here we go! (Module signing notes from guides [here](https://unix.stackexchange.com/questions/327240/virtualbox-not-working-modules-not-working) and [here](https://stegard.net/2016/10/virtualbox-secure-boot-ubuntu-fail/) and [here](https://stegard.net/2016/10/virtualbox-secure-boot-ubuntu-fail/))
+      - Generate a key. If you have one (ie from a previous OS install), use it instead.
+
+        ```bash
+        sudo apt install mokutil
+        sudo -i
+        mkdir /root/module-signing
+        cd /root/module-signing
+        openssl req -new -x509 -newkey rsa:2048 -keyout MOK.priv -outform DER -out MOK.der -nodes -days 36500 -subj "/CN=VirtualBox/"
+        chmod 600 MOK.priv
+        exit
+        ````
+      - Sign the modules. NOTE: this command must be run **EVERY TIME** the kernel is updated 
+    
+        ```bash
+        # reboot into a new kernel before running this
+        sign-virtualbox-modules
+        ````
+
+      - Register the new key in BIOS MOK store (do this once per machine). After this, reboot, and when it asks select "Enroll MOK" and enter the password. Choose something simple because it is temporary (you only need it the one time)
+
+        ```bash
+        sudo mokutil --import /root/module-signing/MOK.der
+        ````
+
+      - After reboot verify the key was loaded with `sudo dmesg | grep 'certificate' | grep MOK`
+      - Load kernel module (Note: this taints the kernel) `sudo modprobe vboxdrv`
+      - You can verify module is loaded with `sudo dmesg | grep vboxdrv`
+    - Install extension pack
+      - Download the latest - change this to match the virtualbox version that is installed:
+
+            wget https://download.virtualbox.org/virtualbox/6.1.22/Oracle_VM_VirtualBox_Extension_Pack-6.1.22.vbox-extpack
+
+      - Run `sudo virtualbox` to run it as root
+      - Go to Preferences -> Extensions -> Add new package -> Select .vbox-extpack file
+      - You can close the root virtualbox window after the extension is installed
+    - Run `virtualbox` to start it normally
+    - (Optional) Configure virtualbox to allow tiling WM hotkeys (see guides [here](https://askubuntu.com/questions/144905/virtualbox-windows-key-pass-through-to-gnome) and [here](http://kissmyarch.blogspot.com/2012/01/hiding-menu-and-statusbar-of-virtualbox.html)
+      - in VirtualBox go to File->Preferences->"Input" -> "Auto Capture Keyboard" -> No
+      - View -> Status Bar -> Hide
+      - View -> Menu Bar -> Hide (show with Host+Home)
+    - (Optional) (Note: this step does not work for me) If you want to load the kernel module on-demand, instead of starting automatically:
+
+      0. Notes that may help with this:
+        - [debian documentation](https://wiki.debian.org/KernelModuleBlacklisting)
+        - [arch kernel module notes](https://wiki.archlinux.org/title/Kernel_module#Manually_at_load_time_using_modprobe)
+        - [virtualbox kernel module notes](https://wiki.archlinux.org/title/VirtualBox#Load_the_VirtualBox_kernel_modules)
+        - [gentoo forums user that was able to blacklist vboxdrv](https://forums.gentoo.org/viewtopic-t-1065418-start-0.html)
+
+      1. run these commands to add modules to blacklist:
+
+      ```bash
+      echo "blacklist vboxdrv" | sudo tee /etc/modprobe.d/vboxdrv.conf
+      echo "blacklist vboxnetadp" | sudo tee /etc/modprobe.d/vboxnetadp.conf
+      echo "blacklist vboxnetflt" | sudo tee /etc/modprobe.d/vboxnetflt.conf
+      sudo depmod -a
+      sudo update-initramfs -u
+      ```
+
+      2. (NOTE: for me this always shows vboxsf in initramfs for some reason) Check that vboxdrv is no longer in initramfs with this: `lsinitramfs /boot/initrd.img-5.10.0-0.bpo.7-amd64 | grep vbox`
+      3. Reboot and verify the module is not loaded with `sudo dmesg | grep vboxdrv`
+      4. Load the kernel module with `sudo modprobe vboxdrv` before using virtualbox. This could be done with a script in bin (it isnt yet).
+
+0. Install redshift<span id="redshift-install"></span>
 
     - If you installed the minimal app list, this is installed already, but it can't hurt to run.
 
             sudo apt install redshift
 
-    - Enable the user service
+    - Enable the user service (TODO: the service file could be added to the dotfiles repo, need to research what happens when there is both a user and system service file)
+    - NOTE: you may need to add `Environment=DISPLAY=:0` to the `[Service]` section of `/usr/lib/systemd/user/redshift.service`, if these commands don't work.
 
             systemctl --user enable redshift
             systemctl --user start redshift
+            systemctl --user status redshift
+
+    - Now, redshift should automatically adjust the display (at night only, with the
+      current config).
+    - Run `togred` or `toggle-redshift` to toggle the adjustments on or off.
+      - TODO: It would be nice if the togred script printed whether it was enabling or disabling the effects, so for example you could tell if it was enabled or disabled during the day. As far as I can tell, the only way to tell (without a code change) is running redshift in verbose mode with `-v` and checking stdout of the binary started by the service. Print them with `sudo journalctl | egrep "redshift.+Status" | tail`.
 
 0. Install firefox stable (from [here](https://wiki.debian.org/Firefox#Firefox_Stable.2C_Beta_and_Nightly))
 

@@ -21,8 +21,6 @@ NOTES ON SETUP INSIDE NEW DEBIAN INSTALL
    - note: it seems syncthing is using ~/.config/syncthing as config folder, will monitor this
 
 
-
-
 #### how to build xmobar (info only)
 - `sudo aptitude install cabal-install`
 - `sudo aptitude install libxpm-dev libasound2-dev libghc-libxml-sax-dev c2hs libiw-dev`

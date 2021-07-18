@@ -103,33 +103,40 @@
 
 0. Fix apt sources list
 
-    # edit /etc/apt/sources.list and comment-out the "cdrom" line, you may also need to add more lines - for debian buster it should look like:
+    - edit `/etc/apt/sources.list` and comment-out the "cdrom" line, you may also need to add more lines - for debian buster it should look like:
 
+    ```
     deb http://deb.debian.org/debian buster main contrib non-free
     deb-src http://deb.debian.org/debian buster main contrib non-free
     deb http://deb.debian.org/debian-security/ buster/updates main contrib non-free
     deb-src http://deb.debian.org/debian-security/ buster/updates main contrib non-free
     deb http://deb.debian.org/debian buster-updates main contrib non-free
     deb-src http://deb.debian.org/debian buster-updates main contrib non-free
+    ```
 
-    # now switch apt over to using HTTPS
+    - now switch apt over to using HTTPS
+
+    ```bash
     sudo apt install git apt-transport-https
     sudo sed -i 's/http:/https:/g' /etc/apt/sources.list
+    ```
 
 0. Health checks
- - First need to check some common issues that - if they are present - we should fix early.
-   - Check suspend by running `systemctl suspend`. The system should go to S3 sleep if bios is configured correctly (power will apppear to turn off, all fans stop).
-   - Check for extra interrupts - this made me reinstall my Debian 9 OS because I could not figure out what was wrong. After replacing it with Debian 10, the issue eventually became apparent.
-     - Run `watch -n 1 sudo cat /proc/interrupts` to show counters for all interrupts - in my case, IRQ 16 was incrementing by about 15,000 per second. To upgrade to a newer kernel using backports (WARNING: while newer, using a kernel from backports is actually worse for security. Backports are not officially supported, so they will not receive security updates like stable packages.
+    - First need to check some common issues that - if they are present - we should fix early.
+      - Check suspend by running `systemctl suspend`. The system should go to S3 sleep if bios is configured correctly (power will apppear to turn off, all fans stop).
+      - Check for extra interrupts - this made me reinstall my Debian 9 OS because I could not figure out what was wrong. After replacing it with Debian 10, the issue eventually became apparent.
+        - Run `watch -n 1 sudo cat /proc/interrupts` to show counters for all interrupts - in my case, IRQ 16 was incrementing by about 15,000 per second. To upgrade to a newer kernel using backports: (WARNING: while newer, using a kernel from backports is actually worse for security. Backports are not officially supported, so they will not receive security updates like stable packages.)
 
-        sudo -i
-        echo "deb https://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list
-        echo "deb-src https://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list
-        apt update
-        apt install -t buster-backports linux-image-amd64 linux-headers-amd64
-        exit
-        sudo reboot
-        # now run the above test again, verify the interrupt rate is normal (100 per sec roughly)
+            ```
+            sudo -i
+            echo "deb https://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list
+            echo "deb-src https://deb.debian.org/debian buster-backports main" >> /etc/apt/sources.list
+            apt update
+            apt install -t buster-backports linux-image-amd64 linux-headers-amd64
+            exit
+            sudo reboot
+            # now run the above test again, verify the interrupt rate is normal (100 per sec roughly)
+            ```
 
 0. (Optional) If using Gnome 3 as a fallback window manager, change a few settings after booting into it. The majority of these settings will not be used when booting int xmonad, however, some will persist (for example - theme and autologin).
 
@@ -190,6 +197,7 @@
 0. Set up service to run xfce4-power-manager (NOTE: while this would be better run as a system service, xfce4-power-manager appears to required an x-window session, so we run it as a user service. This is good reason to switch to something else... I'm not sure what will happen if the system runs out of battery at the login screen.)<span id="xfce4-power-manager-install"></span>
     - create `~/.config/systemd/user/xfce4-power-manager.service` and fill it with the following contents (TODO: add this file to dotfiles):
 
+        ```
         [Unit]
         Description=Xfce4 Power Manager
         Documentation=man:xfce4-power-manager(1) man:xfce4-power-manager-settings(1)
@@ -204,6 +212,7 @@
         [Install]
         WantedBy=default.target
         Alias=dbus-org.xfce.PowerManager.service
+        ```
 
     - Run `systemctl --user daemon-reload` to reload service files
     - Run `systemctl --user enable xfce4-power-manager` to enable xfce4-power-manager on boot

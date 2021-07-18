@@ -44,7 +44,6 @@
  - `setup_external_monitor` to handle enabling/disabling of secondary monitors
  - `show_osd_message "message"` shows a message onscreen. Used for shortcut feedback
  - `ssht` to connect to ssh clients and auto-tmux
- - `start_syncthing` starts the syncthing user service
  - `time_shell_command` runs a shell command 1000 times and shows its average runtime
  - `volume [set | increase | decrease] percent` or `volume toggle` to set volume
  - some more niche ones
@@ -60,6 +59,7 @@
    - `xmobar_battery.py` is used by xmobar to show battery info
    - `xmobar_wireless.py` is used by xmobar to show wireless info
    - `umount_cifs_lazy` will unmount a cifs mount regardless of its state (ie timed out)
+ - ~~`start_syncthing` starts the syncthing user service~~ (deprecated, now always running)
 
 #### Install steps on a fresh Debian (Stable) machine
 

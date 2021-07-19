@@ -1431,62 +1431,64 @@
 
 
 #### TODO:
-- Some of the user services start programs that require an X session. Apparently, if you create the services the naive way, they will usually start before X (even though the user services depend on default.target, the latest-ending built in target). The lack of X causes them to fail to start. Currently, I added RestartSec=5 to those services, which causes them to wait long enough after a failure that X is ususlly running. Should replace this with a more reliable way of starting them like [this](https://unix.stackexchange.com/a/537848) which uses a one-liner in .xsessionrc to trigger a custom target which all the service files are waiting on. Need more research since this shouldn't be this difficult.
-- launching different barrier configurations is complicated. Should switch to a method of saving configurations and laumching a specific config file each time
+- finish copying info from documents/xps/debian_notes.txt to this repo
+- Screen sleep on idle (after 5 minutes) does not lock the screen
+- add alias support to yeganesh/rofi, this way we can run `pycharm` or `win10vm` via launcher
+  - workaround: could add a binary to launch pycharm in ~/bin
+  - add aliases to yeganesh with [this](https://github.com/8carlosf/dotfiles/blob/master/bin/dmenui) (note: this sources bash aliases, not zsh ones)
+- check out some new/alternative apps
+  - [udiskie](https://github.com/coldfix/udiskie) to auto-mount drives + add a taskbar icon to manage drives (there is also a rofi extension to control this)
+  - fasd (and jetho's repo)
+  - YouCompleteMe (https://github.com/Valloric/YouCompleteMe)
+  - freerdp-x11
+  - nemo - it has a better compact mode than nautilus. After install run `gsettings set org.nemo.desktop show-desktop-icons false` to disable desktop window
+  - Improve rofi functionality
+    - Check out [rofi-lpass](https://github.com/Mange/rofi-lpass)
+    - Check out [rofi-bluetooth](https://github.com/nickclyde/rofi-bluetooth) because blueman-manager is horrible
+    - [This repo](https://github.com/adi1090x/rofi) and [this repo](https://github.com/cjbassi/awesome-rofi) have a lot of useful rofi configs
+  - check out polybar [here](https://github.com/jaagr/polybar)
+    - [screenshot](https://old.reddit.com/r/unixporn/comments/bjq866/bspwm_first_time_posting_i_hope_you_guys_like_it_3/) [dotfiles]( https://raw.githubusercontent.com/jaagr/dots/master/.local/etc/themer/themes/darkpx/polybar)
+    - [screenshot](https://i.imgur.com/A6spiZZ.png)
+    - [screenshot](https://i.imgur.com/xvlw9iH.png)
 - Migrate to Debian 11 [link](https://www.debian.org/releases/bullseye/amd64/release-notes/ch-whats-new.en.html)<span id="migrate-to-debian-11-todo"></span>
   - Remove `exfat-fuse` and `exfat-utils` from app_list_minimal.txt, and add `exfatprogs`
   - Check out driverless printing ([link](https://www.debian.org/releases/bullseye/amd64/release-notes/ch-whats-new.en.html#driverless-operation)) - is it setup automatically when choosing 'print server' in the Debian installer?
+- Some of the user services start programs that require an X session. Apparently, if you create the services the naive way, they will usually start before X (even though the user services depend on default.target, the latest-ending built in target). The lack of X causes them to fail to start. Currently, I added RestartSec=5 to those services, which causes them to wait long enough that on the second try X is running. Should replace this with a more reliable way of starting them like [this](https://unix.stackexchange.com/a/537848) which uses a one-liner in .xsessionrc to trigger a custom target which all the service files are waiting on. Need more research since this shouldn't be this difficult.
+- switching between different barrier configurations is complicated. Should switch to a method of saving configurations and laumching a specific config file each time
 - enable hibernation - it would be better for low battery action. Or hybrid sleep.
 - check macbook dotfiles + copy over any useful preferences (at least .vimrc and tmux.conf)
 - replace middle-click paste with something better. It is too easy to accidentally triple-tap with the touchpad and dump a block of text at the cursor. Step 1 is disable middle click with touchpad, then step 2 is merge the x-selection and the standard clipboard with some kind of app or maybe even a custom shortcut with an intelligent paste (or Ctrl+V for one, Ctrl+Shift+V for another). Should google how others have solved this problem.
 - add sublime text 4 themes and colorscheme. Config is saved already
-- replace DynNetwork plugin in xmobar with a new xmobar_network.py file.
-  - allow minimum units with `--smallestunit K`
-  - option to use shorter units (K instead of K/s) with `--shortunits True`
-- Can't launch pycharm via Mod+p. Need to do one of the following:
-  - add alias support to yeganesh (better)
-  - add a binary to launch pycharm in ~/bin
 - use hostname_colorized in PS1 and remove its TODO in binary section above
 - colorscheme update: dark blue is too dark
-- finish copying info from documents/xps/debian_notes.txt to this repo
-- add aliases to yeganesh with [this](https://github.com/8carlosf/dotfiles/blob/master/bin/dmenui)
-- get something going that will run slock automatically after ~20 mins of inactivity (edit: should be implemented, need to test)
-- add more stuff to left side of xmobar
 - Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed
-- Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
 - modify tmux config to not show stats on bottom bar that are already in xmobar
-- check out fasd (and jetho's repo)
-- check out YouCompleteMe (https://github.com/Valloric/YouCompleteMe)
-- check out freerdp-x11
-- check out nemo - it has a better compact mode than nautilus
-  - after install run `gsettings set org.nemo.desktop show-desktop-icons false` to disable desktop window
 - login to firefox to sync maybe? its a pain to re-setup
 - figure out a good way to save some of fstab's contents (NASes etc). maybe have a file that you append to current fstab during setup?
-- figure out where fieryturk comes from (it is used in .xmobarrc)
-- check out polybar [here](https://github.com/jaagr/polybar)
-  - [screenshot](https://old.reddit.com/r/unixporn/comments/bjq866/bspwm_first_time_posting_i_hope_you_guys_like_it_3/) [dotfiles]( https://raw.githubusercontent.com/jaagr/dots/master/.local/etc/themer/themes/darkpx/polybar)
-  - [screenshot](https://i.imgur.com/A6spiZZ.png)
-  - [screenshot](https://i.imgur.com/xvlw9iH.png)
+- potentially remove Fiery Turk font (unless its used somewhere but I dont think so)
 - eventually add gtk theme
   - [Fantome](https://github.com/addy-dclxvi/gtk-theme-collections)
 - maybe make a new games.md for the install instructions for games
   - include lutris since it used to be in app_list_extras.txt
 - Make some kind of automatic color scheme management that reads from a single location
+  - design all programs to use colors stored in .Xdefaults
   - conky can execute a shell script which returns current terminal colors
     - see [this stackoverflow answer](https://stackoverflow.com/a/37285624)
-  - xmobar's configuration could be edited with sed before starting
-    - could be more obvious/explicit, like importing colors.hs from pywal
+  - pystatusbar colors are defined in the pystatusbar config.
+    - could add functionality to pystatusbar to define color scheme in pystatusbar config, and potentially pick where to load it from (like .Xdefaults)
+    - could write a wrapper bash script that dumps colors into a templated pystatusbar config
+- Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
+  - create a few scripts to make controlling via rofi easy
+    - `openssh-server-enable`
+    - `openssh-server-disable`
+    - `openssh-server-status` - prints "running" or "stopped"
+  - add an icon/warning to pystatusbar config which shows when `openssh-server-status` returns "running"
 
 
 #### BUGS
 - volume controls do not work on bluetooth (or any non-built-in-speaker) headphones (edit: possibly fixed, need to test)
   - the slider that changes in pavucontrol is named "Built-in Audio Analog Stereo"
 - after boot, volume controls will not work until something tries to use the speakers (edit: possibly fixed, need to test)
-- occasionally tmux prefix hotkey stops working in urxvt. Seems to be a urxvt issue.
-  - workaround for now is close urxvt, open a new one, and reattach with `tmux a`
-- xmobar temperature readout glitches after wake from suspend
-  - happened twice in a row within two days, but hasen't happened in > 2 weeks. will
-    make temperature script if the bug happens again.
 
 
 #### Notes

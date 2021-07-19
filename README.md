@@ -266,7 +266,11 @@
     - Test lid sleep + lock
       - Close lid. Wait 30 seconds. Open lid.
       - Laptop should have slept, and is now locked with `slock`
-    - Test auto-screen lock on idle
+    - Test idle lock
+      - Unplug the AC adapter
+      - Wait 6 minutes (note: screen will sleep at 5 minutes)
+      - Laptop should have slept, and is now locked with `slock`
+    - Test auto-sleep + lock on idle
       - Open `xfce4-power-manager-settings`
       - Set System -> System sleep mode -> on battery -> when inactive for: 16 minutes (the minimum)
       - Close `xfce4-power-manager-settings`

@@ -97,11 +97,13 @@
 
 #### Install steps on a fresh Debian (Stable) machine
 
-0. If installing on a Dell XPS 9550, follow this first `guide_xps9550_hardware_install_notes.md`.
+0. If installing on a Dell XPS 9550, follow this first [guide_xps9550_hardware_install_notes.md](guide_xps9550_hardware_install_notes.md)
 
-0. Install Debian minimal system (see guide_xxx_hardware_install_notes), install only "Standard System Utilities". Optionally select "Debian desktop environment" which will install Gnome 3 - this will result in a better lock screen (gnome) and a well-supported fallback WM.
+0. Install Debian minimal system, install only "Standard System Utilities". Optionally select "Debian desktop environment" which will install Gnome 3 - this will result in a better lock screen (gnome) and a well-supported fallback WM.
 
 0. Fix apt sources list
+
+    - NOTE: This file will change for Debian 11. 'For APT source lines referencing the security archive, the format has changed slightly along with the release name, going from buster/updates to bullseye-security; see Section 5.1.3, “Changed security archive layout”' [link](https://www.debian.org/releases/bullseye/amd64/release-notes/ch-upgrading.en.html#bullseye-security)
 
     - edit `/etc/apt/sources.list` and comment-out the "cdrom" line, you may also need to add more lines - for debian buster it should look like:
 
@@ -119,6 +121,35 @@
     ```bash
     sudo apt install git apt-transport-https
     sudo sed -i 's/http:/https:/g' /etc/apt/sources.list
+    ```
+
+0. Install base software
+
+    - WARNING: If migrating to Debian 11, see this first: [TODO entry on Debian 11](#migrate-to-debian-11-todo)
+
+    ```bash
+    sudo apt update
+    # optional: copy ~/.ssh/id_rsa key from somewhere, or generate a new one with `ssh-keygen -t rsa -b 4096`
+
+    # Install apps and link dotfiles. See install.sh for details.
+    git clone git://github.com/g0tmk/dotfiles-linux.git ~/dotfiles
+    cd ~/dotfiles
+    git config user.name YOUR_USERNAME
+    git config user.email YOUR_EMAIL
+    # say yes to everything
+    ./install.sh
+    # reboot, make sure enerything looks OK
+
+    # sensors-detect will probably tell you to add coretemp to /etc/modules - instead do this:
+    # run this command, if you see output then coretemp is enabled already
+    cat /proc/modules | grep coretemp
+    # if you see no output, add coretemp to /etc/modules
+
+    # optional; run this if some hardware does not work and reboot (I did not need it for debian 10 on xps9550)
+    sudo apt install firmware-misc-nonfree
+
+    # optional; if default apps are fine with you then skip this
+    sudo update-alternatives --all
     ```
 
 0. Health checks
@@ -160,33 +191,6 @@
      - open "Tweaks" app -> Fonts -> Document Text -> Ubuntu Regular (size: 11)
      - open "Tweaks" app -> Fonts -> Monospace Text -> Terminus Regular (size: 11)
      - open "Tweaks" app -> Fonts -> Legacy Window Titles -> Ubuntu Medium (size: 11)
-
-0. Install base software
-
-    ```bash
-    sudo apt update
-    # optional: copy ~/.ssh/id_rsa key from somewhere, or generate a new one with `ssh-keygen -t rsa -b 4096`
-
-    # Install apps and link dotfiles. See install.sh for details.
-    git clone git://github.com/g0tmk/dotfiles-linux.git ~/dotfiles
-    cd ~/dotfiles
-    git config user.name YOUR_USERNAME
-    git config user.email YOUR_EMAIL
-    # say yes to everything
-    ./install.sh
-    # reboot, make sure enerything looks OK
-
-    # sensors-detect will probably tell you to add coretemp to /etc/modules - instead do this:
-    # run this command, if you see output then coretemp is enabled already
-    cat /proc/modules | grep coretemp
-    # if you see no output, add coretemp to /etc/modules
-
-    # optional; run this if some hardware does not work and reboot (I did not need it for debian 10 on xps9550)
-    sudo apt install firmware-misc-nonfree
-
-    # optional; if default apps are fine with you then skip this
-    sudo update-alternatives --all
-    ```
 
 0. Xmonad
 
@@ -1429,6 +1433,9 @@
 #### TODO:
 - Some of the user services start programs that require an X session. Apparently, if you create the services the naive way, they will usually start before X (even though the user services depend on default.target, the latest-ending built in target). The lack of X causes them to fail to start. Currently, I added RestartSec=5 to those services, which causes them to wait long enough after a failure that X is ususlly running. Should replace this with a more reliable way of starting them like [this](https://unix.stackexchange.com/a/537848) which uses a one-liner in .xsessionrc to trigger a custom target which all the service files are waiting on. Need more research since this shouldn't be this difficult.
 - launching different barrier configurations is complicated. Should switch to a method of saving configurations and laumching a specific config file each time
+- Migrate to Debian 11 [link](https://www.debian.org/releases/bullseye/amd64/release-notes/ch-whats-new.en.html)<span id="migrate-to-debian-11-todo"></span>
+  - Remove `exfat-fuse` and `exfat-utils` from app_list_minimal.txt, and add `exfatprogs`
+  - Check out driverless printing ([link](https://www.debian.org/releases/bullseye/amd64/release-notes/ch-whats-new.en.html#driverless-operation)) - is it setup automatically when choosing 'print server' in the Debian installer?
 - enable hibernation - it would be better for low battery action. Or hybrid sleep.
 - check macbook dotfiles + copy over any useful preferences (at least .vimrc and tmux.conf)
 - replace middle-click paste with something better. It is too easy to accidentally triple-tap with the touchpad and dump a block of text at the cursor. Step 1 is disable middle click with touchpad, then step 2 is merge the x-selection and the standard clipboard with some kind of app or maybe even a custom shortcut with an intelligent paste (or Ctrl+V for one, Ctrl+Shift+V for another). Should google how others have solved this problem.
@@ -1491,10 +1498,10 @@
   - xps9550: wlp2s0
 - Onboard display names (in xrandr):
   - x220: LVDS-1
-  - xps9550: eDP1
+  - xps9550: eDP1 on Debian 8, eDP-1 on Debian 10
 - External display names (in xrandr):
   - x220: HDMI-1 (and probably also VGA-1)
-  - xps9550: HDMI1 and DP1
+  - xps9550: HDMI1 and DP1 on Debian 8, HDMI-1 and DP-1 on Debian 10
 - GithubMarkdown
   - [Relative links in markup files](https://github.blog/2013-01-31-relative-links-in-markup-files/)
   - [Adding Footnotes to GFM With a Return Feature](https://github.com/seamusdemora/seamusdemora.github.io/blob/master/GFM_FootnotesWithReturnFeature.md#f1)

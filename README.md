@@ -156,7 +156,9 @@
     - First need to check some common issues that - if they are present - we should fix early.
       - Check suspend by running `systemctl suspend`. The system should go to S3 sleep if bios is configured correctly (power will apppear to turn off, all fans stop).
       - Check for extra interrupts - this made me reinstall my Debian 9 OS because I could not figure out what was wrong. After replacing it with Debian 10, the issue eventually became apparent.
-        - Run `watch -n 1 sudo cat /proc/interrupts` to show counters for all interrupts - in my case, IRQ 16 was incrementing by about 15,000 per second. To upgrade to a newer kernel using backports: (WARNING: while newer, using a kernel from backports is actually worse for security. Backports are not officially supported, so they will not receive security updates like stable packages.)
+        - Symptom #1: run `watch -n 1 sudo cat /proc/interrupts` to show counters for all interrupts - in my case, IRQ 16 was incrementing by about 15,000 per second. 
+        - Symptom #2: high idle cpu clock speed. CPU usage still shows as low, but `powertop` frequency stats page shows all CPU cores stuck at full speed (3.5 GHz on my XPS 9550) when idle. After fixing the issue I see all cores 900-1000MHz at idle.
+        - Fix: Upgrade to a newer kernel using backports: (WARNING: while newer, using a kernel from backports is actually worse for security. Backports are not officially supported, so they will not receive security updates like stable packages.)
 
             ```
             sudo -i
@@ -1214,6 +1216,15 @@
                 Device "DiscreteNvidia"
             EndSection
             ```
+
+0. How to build xmobar (info only; xmobar version in apt should be fine)
+
+    ```bash
+    sudo aptitude install cabal-install
+    sudo aptitude install libxpm-dev libasound2-dev libghc-libxml-sax-dev c2hs libiw-dev
+    cabal update
+    cabal install xmobar --flags="all_extensions"
+    ````
 
 0. Firmware update manager [not working yet]
 

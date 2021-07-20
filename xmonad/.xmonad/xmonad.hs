@@ -26,8 +26,8 @@ bitmapDir = userDir ++ ".xmonad/xbm/"
 -- The main function.
 main = xmonad =<< statusBar myBar myPP toggleStrutsKey myConfig
 
--- Command to launch the bar.
--- myBar = "xmobar"
+-- Command to launch the bar. Can switch to plain xmobar if you have issues with pystatusbar
+--myBar = "xmobar"
 myBar = "PYTHONPATH=/home/$USER/repos python3 -m pystatusbar -c /home/$USER/repos/pystatusbar/config_bxpsd.config 2> /tmp/pystatusbar_stderr 1> /tmp/pystatusbar_stdout"
 
 -- Custom PP, configure it as you like. It determines what is being written to the bar.

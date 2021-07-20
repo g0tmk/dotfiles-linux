@@ -5,7 +5,21 @@
 - 7/13/2021: updated guide during reinstall of debian partition with Debian 10.10 stable. Enabled secure boot.
 - 7/13/2021 update: BIOS ver 1.14.0 released.
 
-## First, windows
+#### General notes on xps 9550
+- Backlight power draw (need more samples, very variable. Samples taken with powertop 2.12)
+  - 2.90 3.00 1.70 1.71 3.24 3.25 3.25 3.97 3.88 W at 100% brightness
+  - 1.65 1.54 1.56 1.84 1.87 1.97 2.10 2.84 2.88 W at 90% brightness
+  - 1.44 2.10 2.09 2.15 2.17 2.16 2.15 2.73 2.80 W at 80% brightness
+  - 1.40 1.52 1.51 1.51 1.58 1.59 1.60 2.23 2.24 W at 70% brightness
+  - 1.65 1.65 1.66 1.64 1.63 2.09 2.12 2.20 2.21 W at 60% brightness
+  - 1.00 1.20 1.64 1.68 1.66 1.66 1.65 2.19 2.19 W at 50% brightness
+  - 1.65 1.66 1.65 1.66 2.13 2.13 2.11 2.13 W at 40% brightness
+  - 1.51 1.51 1.49 1.28 1.43 1.43 1.47 W at 30% brightness
+  - 1.53 1.46 1.43 1.29 1.42 1.43 W at 20% brightness
+  - 1.35 1.34 1.34 1.27 1.24 1.33 1.42 1.42 W at 10% brightness
+  - 1.19 1.20 1.22 1.24 1.25 1.31 1.44 1.45 W at 0% brightness (actually 1/1500 or 0.07%)
+
+## First, install Windows
 
 #### Re-install windows to remove all crapware (taken/modified from https://www.reddit.com/r/Dell/comments/3sr1jh/windows_10_clean_install_guide/)
 1.  Get yourself a USB flash drive with at least 8.0GB of storage space. I used a USB 3.0 flash drive, but any others should work fine.

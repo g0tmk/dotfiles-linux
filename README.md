@@ -19,7 +19,7 @@
    - Open app launcher: **Alt+P** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
      - App: `rofi` - automatically installed, configuration [config](rofi/.config/rofi/config)
    - Lock screen: **Alt+Shift+Z** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
-     - App: `slock` - [❌ setup required for auto-lock on sleep](#screen-lock-on-sleep-install), default configuration
+     - App: `slock` - [❌ setup required for auto-lock on sleep](#screen-lock-on-suspend-install), default configuration
    - Reload configs and restart xmonad: **Alt+Q** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
      - App: `xmonad` - automatically installed, configuration [xmonad.hs](xmonad/.xmonad/xmonad.hs)
    - Logout: **Alt+Shift+Q** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
@@ -226,18 +226,18 @@
     - Run `sudo journalctl | egrep "xfce4" | less` to check the service logs
     - Reboot and run `ps aux | grep xfce4-power-manager` to check if autostart is working
 
-0. Set up screen lock on sleep<span id="screen-lock-on-sleep-install"></span>
+0. Set up screen lock on suspend<span id="screen-lock-on-suspend-install"></span>
 
-    - xfce4-power-manager is not able to lock screen on sleep, so we have to set it up manually:
+    - xfce4-power-manager is not able to lock screen on suspend, so we have to set it up manually:
     - Create a new file `/etc/systemd/system/screenlock.service` and fill it with the following:
 
         ```
         # source: https://unix.stackexchange.com/questions/81692/suspend-and-lock-screen-on-closing-lid-in-arch-systemd
         # 
-        # automatically run slock whenever computer sleeps
+        # automatically run slock whenever computer suspends (goes to S3 sleep)
         #
         [Unit]
-        Description=slock on sleep
+        Description=slock on suspend
 
         [Service]
         User=g0tmk

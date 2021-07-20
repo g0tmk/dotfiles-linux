@@ -257,4 +257,10 @@ Install games if the comp can take it
        - WIFI is connected!
 
 
+## (Optional / skipped for Debian 10) disable bluetooth to help with battery:
+[NOTE: disabling more kernel modules may help, but btusb was reported as a problem with iotop. For example, the bluetooth module is still installed/loaded]
+- `sudo touch /etc/modprobe.d/btusb.conf`
+- `echo 'blacklist btusb' >> /etc/modprobe.d/btusb.conf`
+
+
 ## continue to README.md for debian setup notes

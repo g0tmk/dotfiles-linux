@@ -549,6 +549,8 @@
     - Open settings -> GUI -> Use HTTPS For GUI -> Yes
     - reboot and verify web UI is accessible. NOTE: run `start_syncthing` to manually start if needed
     - later, put a .stignore file at the root of each synced folder that contains `#include .stglobalignore`
+    - (Optional / only if you have problems starting) May need to edit /lib/systemd/system/syncthing@.service, add `-home=/home/g0tmk/.config/syncthing` to the exec line
+      - note: it seems syncthing is using the correct config (`~/.config/syncthing`) without that change; will monitor this
 
 0. Install Duplicati (guide [here](https://duplicati.readthedocs.io/en/latest/02-installation/))<span id="duplicati-install"></span>
 
@@ -1465,6 +1467,12 @@
     - [screenshot](https://old.reddit.com/r/unixporn/comments/bjq866/bspwm_first_time_posting_i_hope_you_guys_like_it_3/) [dotfiles]( https://raw.githubusercontent.com/jaagr/dots/master/.local/etc/themer/themes/darkpx/polybar)
     - [screenshot](https://i.imgur.com/A6spiZZ.png)
     - [screenshot](https://i.imgur.com/xvlw9iH.png)
+- Add notes for apps
+  - veracrypt
+  - steam
+  - mpd
+  - ufw
+  - audacious
 - Migrate to Debian 11 [link](https://www.debian.org/releases/bullseye/amd64/release-notes/ch-whats-new.en.html)<span id="migrate-to-debian-11-todo"></span>
   - Remove `exfat-fuse` and `exfat-utils` from app_list_minimal.txt, and add `exfatprogs`
   - Check out driverless printing ([link](https://www.debian.org/releases/bullseye/amd64/release-notes/ch-whats-new.en.html#driverless-operation)) - is it setup automatically when choosing 'print server' in the Debian installer?

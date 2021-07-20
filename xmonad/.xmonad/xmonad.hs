@@ -65,15 +65,22 @@ myConfig = def
     where 
         myKeys = 
                  [ 
-                 -- Ctrl+Shift+Z: Lock screen with slock
-                   ((mod4Mask .|. shiftMask, xK_z), spawn "sudo ~/bin/brightness set 0; slock; sudo ~/bin/brightness restore")
+                 -- Mod+Shift+Z: Lock screen with slock
+                 -- ((mod4Mask .|. shiftMask, xK_z), spawn "sudo ~/bin/brightness set 0; slock; sudo ~/bin/brightness restore")
+                 -- turn off screen and lock it. bin/brightness is not necessary, but it dims the screen so when unlocking a dim red/blue screen is shown instead of a (potentially) blinding one
+                   ((mod4Mask .|. shiftMask, xK_z), spawn "sleep 0.1; xset dpms force off; sudo ~/bin/brightness set 0; slock; sleep 0.1; sudo ~/bin/brightness restore")
+                 -- Ctrl+Mod+Shift+Z: Suspend to RAM
+                 , ((mod4Mask .|. shiftMask .|. controlMask, xK_z), spawn "systemctl suspend")
+
                  -- screenshot (select area)
                  , ((controlMask, xK_Print), spawn "mkdir -p ~/screenshots; sleep 0.2; scrot -s --exec 'mv $f ~/screenshots' && echo 'Took screenshot!' | show_osd_message")
                  -- screenshot (fullscreen)
                  , ((0, xK_Print), spawn "mkdir -p ~/screenshots; scrot --exec 'mv $f ~/screenshots' && echo 'Took screenshot!' | show_osd_message")
+
                  -- Mod+b: toggle fullscreen
                  , ((mod4Mask, xK_b     ), sendMessage ToggleStruts)
-                 -- Mod+p: yeganesh NOTE: "$()" syntax will execute the output (yeganesh only outputs the binary's name)
+                 -- Mod+p: app search + launchere
+                 -- Note: for yeganesh, "$()" syntax will execute the output (yeganesh only outputs the binary's name)
                  -- , ((mod4Mask, xK_p), spawn "dmenu_run -fn 'Terminus::pixelsize=12:antialias=0'")
                  -- , ((mod4Mask, xK_p), spawn "$(~/bin/yeganesh -x -- -nb \"#000000\" -fn \"Terminus::pixelsize=12:antialias=0\")")
                  , ((mod4Mask, xK_p), spawn "rofi -modi combi,window -show combi -combi-modi run,drun -show-icons -markup")

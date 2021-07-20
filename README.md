@@ -28,7 +28,7 @@
      - App: `scrot` - automatically installed, configuration [xmonad.hs](xmonad/.xmonad/xmonad.hs)
    - Save screenshot selection to `~/screenshots`: **Shift+PrtScr** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
      - App: `scrot` - automatically installed, configuration [xmonad.hs](xmonad/.xmonad/xmonad.hs)
-   - Sleep: **Power button** / close lid hotkey configured with `xfce4-power-manager-settings`
+   - Sleep: **Power button** / **Close lid** / **Ctrl+Shift+Alt+Z**`xfce4-power-manager-settings`, hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs) and `xfce4-power-manager-settings`
      - App: `systemd` (I think) - automatically installed, configured with `xfce4-power-manager-settings`
    - Volume up/down: **Volume keys** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
      - App: [bin/volume](bin/bin/volume) - automatically installed, configuration [xmonad.hs](xmonad/.xmonad/xmonad.hs)

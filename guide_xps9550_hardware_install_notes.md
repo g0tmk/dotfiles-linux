@@ -19,7 +19,25 @@
   - 1.35 1.34 1.34 1.27 1.24 1.33 1.42 1.42 W at 10% brightness
   - 1.19 1.20 1.22 1.24 1.25 1.31 1.44 1.45 W at 0% brightness (actually 1/1500 or 0.07%)
 
-## First, install Windows
+## First, configure BIOS
+- ACHI Mode: OFF
+- Performance
+  - C-state: OFF
+- Virt. support: Disabled both
+- Sys config
+  - USB/Thunder
+    - Always allow
+    - Dell docks: uncheck
+  - Drives
+    - SATA0: uncheck
+    - SATA1: uncheck
+- Webcam: disabled
+- Auto OS recovery threshold: OFF
+- BIOS recover from HD & downgrade: both uncheck
+- Fastboot: minimal
+- Disable dell SupportAssist
+
+## Next: Install Windows
 
 #### Re-install windows to remove all crapware (taken/modified from https://www.reddit.com/r/Dell/comments/3sr1jh/windows_10_clean_install_guide/)
 1.  Get yourself a USB flash drive with at least 8.0GB of storage space. I used a USB 3.0 flash drive, but any others should work fine.

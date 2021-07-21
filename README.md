@@ -1483,6 +1483,7 @@
 - check macbook dotfiles + copy over any useful preferences (at least .vimrc and tmux.conf)
 - replace middle-click paste with something better. It is too easy to accidentally triple-tap with the touchpad and dump a block of text at the cursor. Step 1 is disable middle click with touchpad, then step 2 is merge the x-selection and the standard clipboard with some kind of app or maybe even a custom shortcut with an intelligent paste (or Ctrl+V for one, Ctrl+Shift+V for another). Should google how others have solved this problem.
 - add sublime text 4 themes and colorscheme. Config is saved already
+  - also add colorscheme customization file (it sets background to pure black)
 - use hostname_colorized in PS1 and remove its TODO in binary section above
 - colorscheme update: dark blue is too dark
 - Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed

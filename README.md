@@ -13,6 +13,7 @@
 
 #### Basics
  - Xmonad interface using Alt as the mod key
+   - Note: Alt and super are swapped at a low level. So while the xmonad hotkeys here are listed as Alt and you press Alt to use them, the system is interpreting it as super and all configurations use super. To send "real" Alt, press super. This is configured in the [remap binary](bin/bin/remap).
  - Hotkeys
    - Open terminal: **Alt+Shift+Enter** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
      - App: `urxvt` - automatically installed, configuration [.Xdefaults](xmonad/.Xdefaults)

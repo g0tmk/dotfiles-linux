@@ -765,6 +765,34 @@
     ./shadowfox_linux_x64
     ```
 
+    - Configure firefox
+      - Settings -> General -> Ctrl+Tab cycles through tabs in recently used order -> No
+      - Settings -> Home -> New tabs -> set to open "Blank page"
+      - Settings -> Search -> Default search engine -> DuckDuckGo
+      - Settings -> Privacy & Security -> Enhanced Tracking Protection -> Custom -> Cookies -> block All third-party cookies
+      - Settings -> Privacy & Security -> Enhanced Tracking Protection -> Custom -> Tracking Content -> block in all windows
+      - Settings -> Privacy & Security -> Enhanced Tracking Protection -> Custom -> Crypto miners -> check
+      - Settings -> Privacy & Security -> Enhanced Tracking Protection -> Custom -> Fingerprinters -> check
+      - Settings -> Privacy & Security -> Send websites "Do Not Track" -> Always (TODO: might be better to turn this off, since fingerprinters are just using this as a single bit of personal data)
+      - Settings -> Privacy & Security -> Logins and passwords -> Ask to save logins and passwords for websites -> No
+      - Settings -> Privacy & Security -> Logins and passwords -> Show alerts about passwords for breached websites -> No
+      - Settings -> Privacy & Security -> Forms and autofill -> Autofill addresses -> No
+      - Settings -> Privacy & Security -> Permissions -> Notifications -> Block new requests asking to allow notifications -> Yes
+      - Settings -> Privacy & Security -> Firefox collection and use -> uncheck all
+      - Settings -> Extensions & Themes -> Themes -> Dark
+      - Settings -> Privacy & Security -> Permissions -> Prevent accessibility services from accessing your browser -> Yes (note: must restart firefox after changing this one)
+      - Right-click buttons on top bar -> Customize -> make the following changes:
+        - remove home button
+        - remove sidebar button
+        - move most extensions to overflow menu
+        - remove flexible
+        - select Density -> Compact
+      
+    - Install extensions
+      - [uBlock Origin](https://addons.mozilla.org/en-us/firefox/addon/ublock-origin/)
+      - [HTTPS Everywhere](https://www.eff.org/https-everywhere)
+      - [Privacy Badger](https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17/)
+
 0. Install barrier (instructions from [here](https://github.com/debauchee/barrier/releases/tag/v2.1.2))
 
     ```bash
@@ -1440,12 +1468,6 @@
     sudo apt update
     sudo apt autoremove
     ```
-
-
-#### Favorite Firefox Add-ons
-- [uBlock Origin](https://addons.mozilla.org/en-us/firefox/addon/ublock-origin/)
-- [HTTPS Everywhere](https://www.eff.org/https-everywhere)
-- [Privacy Badger](https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17/)
 
 
 #### TODO:

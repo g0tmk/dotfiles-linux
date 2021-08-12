@@ -23,9 +23,6 @@ alias hgrep='history 0 | egrep '
 # VMs
 alias win10vm='VBoxManage startvm "Windows 10"'
 
-alias toggle-redshift='pkill -USR1 redshift'
-alias togred='toggle-redshift'
-
 # typos
 alias cd..='cd ..'
 alias ls-la='ls -la'

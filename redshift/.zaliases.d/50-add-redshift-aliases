@@ -1,0 +1,4 @@
+
+alias toggle-redshift='pkill -USR1 redshift'
+alias togred='toggle-redshift'
+

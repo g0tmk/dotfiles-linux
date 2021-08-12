@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+#
+#   stay_awake: prevent automatic screen sleep for a number of minutes
+
+DEFAULT_SLEEP_TIME_MINUTES=30
+
+function usage {
+    echo "usage:"
+    echo "  $0         : default (prevent sleep for ${DEFAULT_SLEEP_TIME_MINUTES} minutes)"
+    echo "  $0 N       : prevent screen blank for N minutes"
+    echo "  $0 0       : allow sleep"
+    echo "  $0 --false : allow sleep"
+    echo "  $0 --read  : prints 'staying awake' or 'sleep allowed'"
+    echo "  $0 --help  : show help"
+    exit 1
+}
+
+function stop_other_processes {
+    # kill other instances of this script to prevent them from acting anymore
+    killall -q $(basename $0)
+}
+
+function stay_awake {
+    stop_other_processes
+    minutes="$1"
+    xset s off -dpms
+    echo "staying awake for $minutes minutes"
+    (sleep ${minutes}m && xset s on +dpms) &
+}
+
+function allow_sleep {
+    stop_other_processes
+    # allow sleep
+    xset s on +dpms
+    read_status
+}
+
+function read_status {
+    if xset q | grep "DPMS is Disabled" > /dev/null; then
+        echo "staying awake"
+    else
+        echo "sleep allowed"
+    fi
+}
+
+# if no paramaters, do 'default' action of sleeping for 30 minutes
+if [[ $# -eq 0 ]]; then
+    stay_awake "${DEFAULT_SLEEP_TIME_MINUTES}"
+    exit 0
+fi
+
+while test $# -gt 0
+do
+    case "$1" in
+        --false|--sleep) 
+            allow_sleep
+            ;;
+        --read|--status)
+            read_status
+            ;;
+        --help)
+            usage
+            ;;
+        --*)
+            echo "bad option $1"
+            usage
+            ;;
+        *)
+            if [[ $1 =~ ^0$ ]]; then
+                # 0 means allow sleep now.
+                allow_sleep
+            elif ! [[ $1 =~ ^[0-9]+$ ]]; then
+                echo "bad argument $1"
+                usage
+            else
+                # number of minutes to stay awake
+                stay_awake "$1"
+            fi
+            ;;
+        #*) echo "argument $1"
+        #    ;;
+    esac
+    shift
+done
+

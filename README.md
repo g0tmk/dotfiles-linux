@@ -94,6 +94,7 @@
    - `xmobar_battery.py` is used by xmobar to show battery info
    - `xmobar_wireless.py` is used by xmobar to show wireless info
    - `umount_cifs_lazy` will unmount a cifs mount regardless of its state (ie timed out)
+   - `stay_awake` will prevent system sleep for a certain amount of time
  - ~~`start_syncthing` starts the syncthing user service~~ (deprecated, now always running)
 
 #### Install steps on a fresh Debian (Stable) machine

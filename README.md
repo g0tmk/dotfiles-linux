@@ -65,6 +65,7 @@
    - Automatic folder sync: `syncthing` - [❌ setup required](#syncthing-install), default configuration
      - launched at login with service file (see setup)
    - View logs: `lnav` - automatically installed, default config
+   - OCR documents: `ocrmypdf` - automatically installed, default config
 
 
 #### Custom commands

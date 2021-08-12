@@ -61,6 +61,7 @@ mtr
 ncdu
 nmap
 ntp
+ocrmypdf
 openssh-client
 openssh-server
 p7zip-full

@@ -75,7 +75,7 @@
  - `colortable` shows all terminal color text/background combinations and their codes
  - `colortable256` shows all 256 terminal colors
  - `pc` runs a python-compatible cli calculator
- - `qrcode` to display text from the terminal as a qrcode
+ - `qrcode` to display text from the terminal as a qrcode (`echo 'hello' | qrcode`)
  - `remap` applies keyboard remappings. sometimes needed after a wake from suspend
  - `setup_external_monitor` to handle enabling/disabling of secondary monitors
  - `show_osd_message "message"` shows a message onscreen. Used for shortcut feedback
@@ -677,6 +677,7 @@
 
       - After reboot verify the key was loaded with `sudo dmesg | grep 'certificate' | grep MOK`
       - Load kernel module (Note: this taints the kernel) `sudo modprobe vboxdrv`
+        - If you get an error, you may need to sign (again) and reboot (again), i'm not sure why.
       - You can verify module is loaded with `sudo dmesg | grep vboxdrv`
     - Install extension pack
       - Download the latest - change this to match the virtualbox version that is installed:

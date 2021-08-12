@@ -6,6 +6,17 @@
 - 7/13/2021 update: BIOS ver 1.14.0 released.
 
 #### General notes on xps 9550
+- Replacement parts:
+  - Battery: Dell Part # 6GTPY (replaced 3 times)
+    - Note: 6GTPY is a 97Wh battery designed for xps 9560 but is compatible. From factory the 9550 is shipped with 84Wh battery 4GVGH.
+  - Palmrest: Dell Part # JK1FY (replaced 2 times)
+  - DC Power Jack Harness (replaced once)
+  - Case screws M2x3mm Torx T5 (replaced 4 screws)
+  - Heatsink screws (replaced 2 screws)
+    - M2x10mm nylon screw
+    - M2 plastic washer
+    - M2 nylon nuts
+
 - Backlight power draw (need more samples, very variable. Samples taken with powertop 2.12)
   - 2.90 3.00 1.70 1.71 3.24 3.25 3.25 3.97 3.88 W at 100% brightness
   - 1.65 1.54 1.56 1.84 1.87 1.97 2.10 2.84 2.88 W at 90% brightness

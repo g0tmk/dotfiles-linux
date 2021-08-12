@@ -1480,6 +1480,8 @@
 
 
 #### TODO:
+- phase out/replace p7zip - it is old and complex
+- replace imagemagick with graphicsmagick and probably install `graphicsmagick-imagemagick-compat` to add convert and the other binaries
 - finish copying info from documents/xps/debian_notes.txt to this repo
 - Screen sleep on idle (after 5 minutes) does not lock the screen
 - add alias support to yeganesh/rofi, this way we can run `pycharm` or `win10vm` via launcher

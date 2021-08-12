@@ -1,5 +1,8 @@
 # How to reinstall / upgrade debian partition
 
+- get data out of programs that are difficult to extract from an image:
+  - firefox: export bookmarks
+  - sublime text: save all open but unsaved files
 - clone entire drive image to a usb hdd with ddrescue
 - verify it works with the guide "guide_how_to_mount_cloned_encrypted_linux_partition.md"
 - while the clone is open, copy a few files out that will help with the new install:

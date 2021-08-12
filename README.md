@@ -250,13 +250,33 @@
 
         [Install]
         WantedBy=sleep.target
+        ```
 
+    - TODO: this is better. merge it into the above and apply it with `sudo systemctl enable screenlock@$USER.service`
+
+        ```
+        # /etc/systemd/system/screenlock@.service
+
+        [Unit]
+        Description=Autolock screen before sleep, hibernate and hybrid-sleep
+        Before=sleep.target hibernate.target hybrid-sleep.target
+
+        [Service]
+        User=%i                       # may also hardcode username here
+        Type=forking
+        Environment=DISPLAY=:0        # replace this with your $DISPLAY value
+        ExecStart=/usr/bin/slock      # use whatever lock command
+        ExecStartPost=/bin/sleep 1
+
+        [Install]
+        WantedBy=sleep.target hibernate.target hybrid-sleep.target
         ```
 
     - Enable the new service by running `sudo systemctl enable screenlock.service`
     - Reboot, wait 30 seconds, run `systemctl suspend`
     - Laptop should have slept, and is now locked with `slock`
     - If you have issues, check the output of `sudo systemctl status screenlock.service` for errors
+    - Bonus: run `cat /sys/power/mem_sleep`, verify you see "[deep]", indicating you are using the correct sleep mode
 
 0. Functionality tests
 

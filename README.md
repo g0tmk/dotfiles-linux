@@ -779,7 +779,7 @@
       - Settings -> Privacy & Security -> Forms and autofill -> Autofill addresses -> No
       - Settings -> Privacy & Security -> Permissions -> Notifications -> Block new requests asking to allow notifications -> Yes
       - Settings -> Privacy & Security -> Firefox collection and use -> uncheck all
-      - Settings -> Extensions & Themes -> Themes -> Dark
+      - Settings -> Extensions & Themes -> Themes -> "Complete Black Theme for Firefox"
       - Settings -> Privacy & Security -> Permissions -> Prevent accessibility services from accessing your browser -> Yes (note: must restart firefox after changing this one)
       - Right-click buttons on top bar -> Customize -> make the following changes:
         - remove home button
@@ -792,6 +792,11 @@
       - [uBlock Origin](https://addons.mozilla.org/en-us/firefox/addon/ublock-origin/)
       - [HTTPS Everywhere](https://www.eff.org/https-everywhere)
       - [Privacy Badger](https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17/)
+      - [Dark Reader](https://addons.mozilla.org/en-US/firefox/addon/darkreader/)
+      - [Custom Scrollbars](https://addons.mozilla.org/en-US/firefox/addon/custom-scrollbars/)
+        - Scrollbar width: thin
+        - Scrollbar thumb color: #807e7eff
+        - Scrollbar track color: #282828ff
 
 0. Install barrier (instructions from [here](https://github.com/debauchee/barrier/releases/tag/v2.1.2))
 

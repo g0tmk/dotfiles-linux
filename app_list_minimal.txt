@@ -52,6 +52,7 @@ libnotify-bin
 linux-headers-amd64
 linux-image-amd64
 lm-sensors
+lnav
 lshw
 lxappearance
 make

@@ -278,6 +278,18 @@
     - If you have issues, check the output of `sudo systemctl status screenlock.service` for errors
     - Bonus: run `cat /sys/power/mem_sleep`, verify you see "[deep]", indicating you are using the correct sleep mode
 
+0. Set up screen lock on display sleep (NOT YET WORKING, maybe it doesn't call xflock4..?)
+
+    - xfce4-power-manager does not know what locker to use, so symlink slock to a file that it *does* look for, xflock4
+    - NOTE: the real xflock4 is provided by xfce4-session, so if you have that installed... this will probably cause issues
+
+        ```bash
+        sudo ln -s /usr/bin/slock /usr/local/bin/xflock4
+        ```
+
+    - Wait 6 minutes (screen will blank at 5 minutes), then press any key
+    - Laptop screen should wake and is now locked with `slock`
+
 0. Functionality tests
 
     - Run `speaker-test` to generate white noise for the speakers. Verify sound + volume keys work.

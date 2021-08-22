@@ -66,6 +66,8 @@ openssh-client
 openssh-server
 p7zip-full
 pv
+python3
+python3-pip
 ranger
 rdesktop
 redshift

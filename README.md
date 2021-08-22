@@ -1565,6 +1565,7 @@
 
 
 #### BUGS
+- when using a custom charge profile on xps 9550 (ie charge to 85% max), it seems that xfce power manager thinks the system is on battery power when its actually plugged in. This 
 - volume controls do not work on bluetooth (or any non-built-in-speaker) headphones (edit: possibly fixed, need to test)
   - the slider that changes in pavucontrol is named "Built-in Audio Analog Stereo"
 - after boot, volume controls will not work until something tries to use the speakers (edit: possibly fixed, need to test)

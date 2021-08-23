@@ -545,8 +545,17 @@
     sudo apt install sublime-text sublime-merge
     # you can now run `subl` and `smerge`
 
-    # TODO: figure out how to include (or auto-install) my plugins list. Example:
-    #   - MarkdownPreview
+    # Manually set theme and color scheme (if dotfiles don't set them already)
+    # - Theme: Soda Dark 3.sublime-theme
+    # - Color Scheme: Material-Theme-Darker-Modified-g0tmk.tmTheme
+
+    # Install plugins:
+    # - Package Control
+    # - A File Icon
+    # - Color Highlight
+    # - Markdown Preview
+
+    # TODO: figure out how to include (or auto-install) my plugins list
     ```
 
 0. Install syncthing [from guide here](https://apt.syncthing.net/)<span id="syncthing-install"></span>

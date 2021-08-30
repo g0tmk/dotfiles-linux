@@ -1227,6 +1227,23 @@
     minecraft-launcher
     ```
 
+0. Install and run Ledger Live
+
+    ```bash
+    # TODO: make a launcher for this
+
+    # download latest appimage from the website, then run it like this
+    sudo ./ledger-live-desktop-2.31.1-linux-x86_64.AppImage --no-sandbox -v
+
+    # you may need to run these udev rules to allow USB device access
+    wget -q -O - https://raw.githubusercontent.com/LedgerHQ/udev-rules/master/add_udev_rules.sh > add_udev_rules.sh
+    # NOTE: probably a good idea to inspect before running
+    cat add_udev_rules.sh | sudo bash
+
+    # if launching ledger live via browser does not work (which it likely will not, if running as an appimage) then open the websocket server manually by running this, after ledger live is already running:
+    sudo ./ledger-live-desktop-2.31.1-linux-x86_64.AppImage --no-sandbox "ledgerlive://bridge?appName=Ethereum"
+    ```
+
 0. (INCOMPLETE) (Optional) Install and configure `bumblebee` to allow using nvidia GPU on-demand (saving power when it is not in use). NOTE: If you won't use the GPU and only want the power savings, this may not be necessary; Debian 10 w backports kernel (5.10.0) appears to leave the nvidia GPU off by default. TODO: figure out how to verify this is the case.
 
     - `sudo dpkg --add-architecture i386`

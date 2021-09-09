@@ -27,7 +27,7 @@
 #}
 
 getdefaultsinkvol() {
-    amixer sget Master | egrep -o "Front Left.+[0-9]+%" | egrep -o "[0-9]+%" | egrep -o "[0-9]+"
+    amixer sget Master | egrep -o "(Mono|Front Left).+[0-9]+%" | egrep -o "[0-9]+%" | egrep -o "[0-9]+"
     #pacmd list-sinks |
     #    awk '/^\s+name: /{indefault = $2 == "<'$(getdefaultsinkname)'>"}
     #        /^\s+volume: / && indefault {print $5; exit}' |
@@ -58,7 +58,7 @@ toggledefaultsink() {
 }
 
 isdefaultsinkmuted() {
-    amixer sget Master | egrep -o "Front Left.+\[(on|off)\]" | egrep -o "\[(on|off)\]" | grep off > /dev/null
+    amixer sget Master | egrep -o "(Mono|Front Left).+\[(on|off)\]" | egrep -o "\[(on|off)\]" | grep off > /dev/null
     #pacmd list-sinks |
     #    awk '/^\s+name: /{indefault = $2 == "<'$(getdefaultsinkname)'>"}
     #        /^\s+muted: / && indefault {print $2; exit}' | grep yes > /dev/null

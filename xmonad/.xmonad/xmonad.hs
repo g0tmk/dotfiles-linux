@@ -68,7 +68,7 @@ myConfig = def
                  -- Mod+Shift+Z: Lock screen with slock
                  -- ((mod4Mask .|. shiftMask, xK_z), spawn "sudo ~/bin/brightness set 0; slock; sudo ~/bin/brightness restore")
                  -- turn off screen and lock it. bin/brightness is not necessary, but it dims the screen so when unlocking a dim red/blue screen is shown instead of a (potentially) blinding one
-                   ((mod4Mask .|. shiftMask, xK_z), spawn "sleep 0.1; xset dpms force off; sudo ~/bin/brightness set 0; slock; sleep 0.1; sudo ~/bin/brightness restore")
+                   ((mod4Mask .|. shiftMask, xK_z), spawn "sleep 0.1; sudo ~/bin/brightness set 0; xset dpms force off; slock; sleep 0.1; sudo ~/bin/brightness restore")
                  -- Ctrl+Mod+Shift+Z: Suspend to RAM
                  , ((mod4Mask .|. shiftMask .|. controlMask, xK_z), spawn "systemctl suspend")
 

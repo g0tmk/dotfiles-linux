@@ -9,6 +9,7 @@ aria2
 automake
 bc
 binutils
+brightnessctl
 build-essential
 cifs-utils
 cmake

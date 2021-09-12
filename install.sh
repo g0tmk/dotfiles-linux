@@ -102,7 +102,7 @@ stow_dotfiles () {
 font_setup () {
     echo "Updating font cache..."
     fc-cache
-    ask "Hit enter to open font wizard. Choose Native, Slight, Automatic, Yes." stow_dotfiles
+    read -p "Hit enter to open font wizard. Choose Native, Slight, Automatic, Yes."
     sudo dpkg-reconfigure fontconfig-config
 }
 

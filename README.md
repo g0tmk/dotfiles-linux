@@ -291,7 +291,6 @@
 
 0. Set up screen lock on suspend<span id="screen-lock-on-suspend-install"></span>
 
-    - xfce4-power-manager is not able to lock screen on sleep, so we have to set it up manually:
     - Create a new file `/etc/systemd/system/screenlock@.service` and fill it with the following:
 
         ```
@@ -421,7 +420,7 @@
 0. Allow power commands without sudo password. Add to /etc/sudoers with `sudo visudo`:
 
     ```bash
-    Cmnd_Alias    POWERCMDS = /sbin/shutdown, /sbin/reboot
+    Cmnd_Alias    POWERCMDS = /sbin/shutdown, /usr/sbin/shutdown, /sbin/reboot, /usr/sbin/reboot
     <your_username> ALL = NOPASSWD: POWERCMDS
     ```
 
@@ -620,28 +619,27 @@
 
 0. Install Duplicati (guide [here](https://duplicati.readthedocs.io/en/latest/02-installation/))<span id="duplicati-install"></span>
 
-    - Install mono (note: uses about 400 MB)
+    - Install mono (note: uses about 400 MB) - TODO: investigate installing the mono docker image instead
 
-    ```bash
-    sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
-
-    echo "deb http://download.mono-project.com/repo/debian buster main" | sudo tee /etc/apt/sources.list.d/mono-official.list
-
-    sudo apt update
-    sudo apt install mono-devel
-    ```
+        ```bash
+        sudo apt install apt-transport-https dirmngr gnupg ca-certificates
+        sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+        echo "deb https://download.mono-project.com/repo/debian stable-buster main" | sudo tee /etc/apt/sources.list.d/mono-official.list
+        sudo apt update
+        sudo apt install mono-devel
+        ```
 
     - Install the actual app
 
-    ```bash
-    # maybe optional
-    sudo apt install apt-transport-https nano git-core software-properties-common dirmngr
+        ```bash
+        # maybe optional
+        sudo apt install apt-transport-https nano git-core software-properties-common dirmngr
 
-    # check for latest version here https://www.duplicati.com/download
-    cd ~/Downloads
-    wget https://updates.duplicati.com/beta/duplicati_2.0.6.3-1_all.deb
-    sudo apt install ./duplicati_2.0.6.3-1_all.deb
-    ```
+        # check for latest version here https://www.duplicati.com/download
+        cd ~/Downloads
+        wget https://github.com/duplicati/duplicati/releases/download/v2.0.6.100-2.0.6.100_canary_2021-08-11/duplicati_2.0.6.100-1_all.deb
+        sudo apt install ./duplicati_2.0.6.3-1_all.deb
+        ```
 
     - Now create a service to start duplicati automatically
       - Edit `/etc/systemd/system/duplicati.service` and fill it with the following:
@@ -693,6 +691,7 @@
           - NOTE: if you want to set a password, then you must also edit .xsessionrc and 
             modify the `duplicati` launch line to include a password, like this:
             `duplicati --no-hosted-server --webserver-password=MYPASSWORD`
+      - Note: when creating a new SFTP backup job w SFTP, make sure to click 'Test' button in the setup wizard. Otherwise it will fail due to unrecognised fingerprint.
 
 0. Install virtualbox
 
@@ -833,8 +832,17 @@
 
     - Configure firefox
       - Settings -> General -> Ctrl+Tab cycles through tabs in recently used order -> No
-      - Settings -> Home -> New tabs -> set to open "Blank page"
+      - Settings -> Home -> Homepage -> set to open "Firefox Home"
+      - Settings -> Home -> New tabs -> set to open "Firefox Home"
+      - Settings -> Home -> Firefox Home Content -> Top Sites -> Off
+      - Settings -> Home -> Firefox Home Content -> Recommended by Pocket -> Off
+      - Settings -> Home -> Firefox Home Content -> Highlights -> Off
+      - Settings -> Home -> Firefox Home Content -> Snippets -> Off
       - Settings -> Search -> Default search engine -> DuckDuckGo
+      - Settings -> Search -> One-Click Search Engines -> Bing -> Off
+      - Settings -> Search -> One-Click Search Engines -> DuckDuckGo -> Off
+      - Settings -> Search -> One-Click Search Engines -> Google -> Off
+      - Settings -> Search -> One-Click Search Engines -> Wikipedia -> Off
       - Settings -> Privacy & Security -> Enhanced Tracking Protection -> Custom -> Cookies -> block All third-party cookies
       - Settings -> Privacy & Security -> Enhanced Tracking Protection -> Custom -> Tracking Content -> block in all windows
       - Settings -> Privacy & Security -> Enhanced Tracking Protection -> Custom -> Crypto miners -> check
@@ -843,6 +851,7 @@
       - Settings -> Privacy & Security -> Logins and passwords -> Ask to save logins and passwords for websites -> No
       - Settings -> Privacy & Security -> Logins and passwords -> Show alerts about passwords for breached websites -> No
       - Settings -> Privacy & Security -> Forms and autofill -> Autofill addresses -> No
+      - Settings -> Privacy & Security -> Address Bar -> Top Sites -> No
       - Settings -> Privacy & Security -> Permissions -> Notifications -> Block new requests asking to allow notifications -> Yes
       - Settings -> Privacy & Security -> Firefox collection and use -> uncheck all
       - Settings -> Extensions & Themes -> Themes -> "Complete Black Theme for Firefox"
@@ -850,8 +859,9 @@
       - Right-click buttons on top bar -> Customize -> make the following changes:
         - remove home button
         - remove sidebar button
+        - remove firefox account button
         - move most extensions to overflow menu
-        - remove flexible
+        - remove flexible spaces on the sides of the url bar
         - select Density -> Compact
       
     - Install extensions

@@ -501,8 +501,8 @@
 0. (Optional, skipped on Debian 10 install) Install Powertop to monitor/maximize battery life (laptop only) (check for latest version [here](https://01.org/powertop))
 
     ```bash
-    sudo apt install libnl-3-dev libnl-genl-3-dev gettext libgettextpo-dev autopoint libncurses5-dev libncursesw5-dev libtool-bin dh-autoreconf
-    wget https://01.org/sites/default/files/downloads//powertop-v2.12.tar.gz
+    sudo apt install libnl-3-dev libnl-genl-3-dev gettext libgettextpo-dev autopoint libncurses5-dev libncursesw5-dev libtool-bin dh-autoreconf autoconf-archive
+    wget https://github.com/fenrus75/powertop/archive/refs/tags/v2.14.tar.gz
     tar xvf powertop-v2.12.tar.gz
     cd powertop-v2.12
     ./autogen.sh

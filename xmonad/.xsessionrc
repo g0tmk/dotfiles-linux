@@ -11,6 +11,12 @@ sh ~/.fehbg &
 # set the cursor (get rid of weird X)
 xsetroot -cursor_name left_ptr
 
+# set screen to turn off after 10 mins (600 sec) - for now this is handled by xfce4-power-manager
+# xset s 600
+# start xss-lock, which will automatically run slock when the screen blanks or the system goes to sleep
+# TODO: replace xss-lock with xidlehook because it handles multiple timers (one for screen blank, one for suspend)
+# xss-lock -- /usr/bin/slock
+
 
 # fix screen tear with compton (yshui's fork required for experimental-backends)
 # NOTE: needs to start _after_ xmonad, and only sleeps for 4 seconds,

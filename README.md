@@ -1586,6 +1586,12 @@
 
 
 #### TODO:
+- fix some folders which get stowed automatically during install
+  - sublime-text-4 folder gets symlinked in its entirety - maybe not what we want
+  - sublime-merge
+- steps to automate install further:
+  - add etc folder to dotfiles. not sure best way to do this, maybe each program folder gets a subfolder 'files-for-etc'?
+  - switch from manually-installed apps to debian packaged apps, where possible
 - phase out/replace p7zip - it is old and complex
 - replace imagemagick with graphicsmagick and probably install `graphicsmagick-imagemagick-compat` to add convert and the other binaries
 - finish copying info from documents/xps/debian_notes.txt to this repo

@@ -272,6 +272,7 @@
         [Service]
         Type=dbus
         BusName=org.xfce.PowerManager
+        Restart=on-failure
         RestartSec=5
         ExecStart=/usr/bin/xfce4-power-manager --no-daemon
         ExecStop=/usr/bin/xfce4-power-manager --quit
@@ -309,26 +310,6 @@
 
         [Install]
         WantedBy=sleep.target
-        ```
-
-    - TODO: this is better. merge it into the above and apply it with `sudo systemctl enable screenlock@$USER.service`
-
-        ```
-        # /etc/systemd/system/screenlock@.service
-
-        [Unit]
-        Description=Autolock screen before sleep, hibernate and hybrid-sleep
-        Before=sleep.target hibernate.target hybrid-sleep.target
-
-        [Service]
-        User=%i                       # may also hardcode username here
-        Type=forking
-        Environment=DISPLAY=:0        # replace this with your $DISPLAY value
-        ExecStart=/usr/bin/slock      # use whatever lock command
-        ExecStartPost=/bin/sleep 1
-
-        [Install]
-        WantedBy=sleep.target hibernate.target hybrid-sleep.target
         ```
 
     - Enable the new service by running `systemctl enable screenlock@$USER`

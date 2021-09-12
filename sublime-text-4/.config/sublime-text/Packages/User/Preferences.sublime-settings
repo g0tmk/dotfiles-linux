@@ -24,7 +24,6 @@
 	"ui_scale": 0.9,
 	"use_tab_stops": true,
 	"indent_guide_options": ["draw_normal", "draw_active"],
-	"theme": "Soda Dark 3.sublime-theme",
 	"theme_font_options":
 	[
 		"no_antialias"

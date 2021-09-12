@@ -12,7 +12,7 @@
 
 
 if readlink /proc/$$/fd/0 | grep -q "^pipe:"; then
-    # Pipe input (echo abc | myscript)
+    # Input is a pipe so save it (echo abc | myscript)
     cat | xclip -sel clip
 elif readlink /proc/$$/fd/0 | grep -q "^/dev"; then
     # Terminal input (keyboard) means no pipe/file input; so output clipboard

@@ -5,33 +5,76 @@
 - 7/13/2021: updated guide during reinstall of debian partition with Debian 10.10 stable. Enabled secure boot.
 - 7/13/2021 update: BIOS ver 1.14.0 released.
 
-## First, windows
+#### General notes on xps 9550
+- Replacement parts:
+  - Battery: Dell Part # 6GTPY (replaced 3 times)
+    - Note: 6GTPY is a 97Wh battery designed for xps 9560 but is compatible. From factory the 9550 is shipped with 84Wh battery 4GVGH.
+  - Palmrest: Dell Part # JK1FY (replaced 2 times)
+  - DC Power Jack Harness (replaced once)
+  - Case screws M2x3mm Torx T5 (replaced 4 screws)
+  - Heatsink screws (replaced 2 screws)
+    - M2x10mm nylon screw
+    - M2 plastic washer
+    - M2 nylon nuts
+
+- Backlight power draw (need more samples, very variable. Samples taken with powertop 2.12)
+  - 2.90 3.00 1.70 1.71 3.24 3.25 3.25 3.97 3.88 W at 100% brightness
+  - 1.65 1.54 1.56 1.84 1.87 1.97 2.10 2.84 2.88 W at 90% brightness
+  - 1.44 2.10 2.09 2.15 2.17 2.16 2.15 2.73 2.80 W at 80% brightness
+  - 1.40 1.52 1.51 1.51 1.58 1.59 1.60 2.23 2.24 W at 70% brightness
+  - 1.65 1.65 1.66 1.64 1.63 2.09 2.12 2.20 2.21 W at 60% brightness
+  - 1.00 1.20 1.64 1.68 1.66 1.66 1.65 2.19 2.19 W at 50% brightness
+  - 1.65 1.66 1.65 1.66 2.13 2.13 2.11 2.13 W at 40% brightness
+  - 1.51 1.51 1.49 1.28 1.43 1.43 1.47 W at 30% brightness
+  - 1.53 1.46 1.43 1.29 1.42 1.43 W at 20% brightness
+  - 1.35 1.34 1.34 1.27 1.24 1.33 1.42 1.42 W at 10% brightness
+  - 1.19 1.20 1.22 1.24 1.25 1.31 1.44 1.45 W at 0% brightness (actually 1/1500 or 0.07%)
+
+## First, configure BIOS
+- ACHI Mode: OFF
+- Performance
+  - C-state: OFF
+- Virt. support: Disabled both
+- Sys config
+  - USB/Thunder
+    - Always allow
+    - Dell docks: uncheck
+  - Drives
+    - SATA0: uncheck
+    - SATA1: uncheck
+- Webcam: disabled
+- Auto OS recovery threshold: OFF
+- BIOS recover from HD & downgrade: both uncheck
+- Fastboot: minimal
+- Disable dell SupportAssist
+
+## Next: Install Windows
 
 #### Re-install windows to remove all crapware (taken/modified from https://www.reddit.com/r/Dell/comments/3sr1jh/windows_10_clean_install_guide/)
 1.  Get yourself a USB flash drive with at least 8.0GB of storage space. I used a USB 3.0 flash drive, but any others should work fine.
 2.  Create a Windows Recovery Media on your USB flash drive. To do this, download the [64-bit Media Creation Tool here]( http://www.microsoft.com/en-us/software-download/windows10) and save it to your desktop, for convenience. Run it --> choose "Create installation media for another PC" ; then click "Next" --> Choose your language, "Windows 10 Home", and "64-bit (x64)" Architecture ; then click "Next" --> select "USB flash drive" ; then click "Next" --> select your USB 3.0 flash drive ; then click "Next". The tool will then download and install the program on your USB. This will take a while, so get up and stretch your legs. Maybe do some cleaning, or use the time for **Step 3**. When the tool is done, it will show you a window that says "Your USB flash drive is ready". Click "Finish".
 3.  Make sure to back up all your files that you need to an external drive of some sort, probably something other than USB flash drive with the Windows Recovery Media. Re-installing Windows 10 will completely erase your hard drive, so back up all those embarrassing snapshots of you at that Christmas party.
 4.  After the Windows Recovery Media tool has completely finished in step #2, create a new folder on the flash drive and call it something like "Drivers" for convenience. The Media Creation tool may have renamed the flash drive "ESD-USB"
-5.  Download the x64 version (currently called "f6flpy-x64.zip") of the [driver for the PCIe SSD here]( https://downloadcenter.intel.com/download/25165/Intel-Rapid-Storage-Technology-Intel-RST-RAID-Driver) and save it to the "Drivers" folder you just made on the flash drive. This is the driver for the XPS’s hard drive (storage).
+5.  Download the x64 version (currently called "f6flpy-x64.zip") of the [driver for the PCIe SSD here]( https://downloadcenter.intel.com/download/25165/Intel-Rapid-Storage-Technology-Intel-RST-RAID-Driver) and save it to the "Drivers" folder you just made on the flash drive. This is the driver for the XPSâ€™s hard drive (storage).
 6.  Unzip the the driver file within the "Drivers" folder you just created.
-7.  Download the [driver for the WiFi module here]( http://www.dell.com/support/home/us/en/19/product-support/product/xps-13-9350-laptop/drivers) under the "Network" tab - it’s currently called "Dell Wireless 1820A WiFi Driver". Save it to the "Drivers" folder on the flash drive.
+7.  Download the [driver for the WiFi module here]( http://www.dell.com/support/home/us/en/19/product-support/product/xps-13-9350-laptop/drivers) under the "Network" tab - itâ€™s currently called "Dell Wireless 1820A WiFi Driver". Save it to the "Drivers" folder on the flash drive.
 8.  Now comes the fun part. Keep the USB drive plugged in. We are going to boot from the USB flash drive. So - Restart your computer, but be prepared and press the f12 key over and over once you see the Dell logo appear. You can stop pressing f12 once you see the words "Preparing one-time boot menu" in the upper right corner of the screen. The boot menu will then launch.
 9.  Once in the boot menu again, use the arrow key to navigate to where the USB is listed, and hit the Enter key to launch from the flash drive.
 10. A window for the Windows 10 installer will pop up against a blue screen. If you have the QHD, 3200x1800 resolution screen model of the XPS 13 you better go get your reading glasses because the text will be small as shit.  Click "Install Now" <sup><sup>if you can see it ;P</sup></sup>.
 11. Accept the software license agreement by and clicking the checkbox, then click "Next"
 12. Of the two options now shown, click "Custom Install Windows only (advanced)".
 13. If your computer is like mine, you should be greeted with a window that is searching for a hard drive to install Windows 10 to, but no hard drive will be listed. Click the icon/button that says "Load Driver"
-14. There will be a popup window that says something like "To install the device driver…". You’ll now want to *Browse* the flash drive, find the "Drivers" folder, select the driver for the PCIe SSD you saved in the folder (it is probably the only thing listed). Click "Next".
-15. I can’t remember if there are any intermediary popups or windows here, but just click "Ok" or "Next" through them until the driver starts installing. This will take a few minutes.
+14. There will be a popup window that says something like "To install the device driverâ€¦". Youâ€™ll now want to *Browse* the flash drive, find the "Drivers" folder, select the driver for the PCIe SSD you saved in the folder (it is probably the only thing listed). Click "Next".
+15. I canâ€™t remember if there are any intermediary popups or windows here, but just click "Ok" or "Next" through them until the driver starts installing. This will take a few minutes.
 16. After the driver has been installed you will be brought back to the "Where do you want to install Windows" window. In the box that was empty before, there should now be several drive partitions listed. Select each partition and click the "Delete" icon/button. This will create a "Drive 1 Unallocated Space" partition in the box thing. Continue selecting all the other partitions that are not "Drive 1 Unallocated Space" and delete them. When you are done, there should only be the "Drive 1 Unallocated Space" with a size indicative of the SSD of your system (I have a 256GB SSD so had a "Drive 1 Unallocated Space" size of 238.5GB). 
 17. Select the "Drive 1 Unallocated Space" and click "New". Leave the MB size the same (mine was 244197). Click "Apply", then on the next window click "OK", then click "Next". (Windows has created a special partition for itself, leave it be).
-18. Windows 10 will now start reinstalling. This process took about 7 minutes for me. When done, you can choose or "Customize settings" (or whatever the button is) to set up Windows 10. Then there’s about another minute’s worth of waiting.
+18. Windows 10 will now start reinstalling. This process took about 7 minutes for me. When done, you can choose or "Customize settings" (or whatever the button is) to set up Windows 10. Then thereâ€™s about another minuteâ€™s worth of waiting.
 19. Congrats! You should now be back in a vanilla form of Windows 10 without any of that useless Dell bloatware! The next thing to do is to navigate to the "Drivers" folder and launch the .exe to install the driver for the Wifi module.
-20. Once you are connected to your WiFi network, open Windows Update and install all the updates it finds. You may need to restart several times. After each restart, go back to Windows Update and "check for updates" again until it comes back with "Your device is up to date". **You may experience screen freezing after the computer restarts. This is a problem I am currently investigating.** If you don’t know how to access Windows Update, click the Start menu button and type "updates", for example. Then click the "Check for updates" option that appears from the search results to open the utility.  
+20. Once you are connected to your WiFi network, open Windows Update and install all the updates it finds. You may need to restart several times. After each restart, go back to Windows Update and "check for updates" again until it comes back with "Your device is up to date". **You may experience screen freezing after the computer restarts. This is a problem I am currently investigating.** If you donâ€™t know how to access Windows Update, click the Start menu button and type "updates", for example. Then click the "Check for updates" option that appears from the search results to open the utility.  
 21. This would be a good opportunity to *create a restore point*, in case something happens in the future. Type "restore" in the start menu to quickly find the program. 
 22. In the System Properties window for the system restore click "Configure" --> select "Turn on system protection" --> set the slider to something like 5% --> click "Apply" --> back at the previous window click "Create" and name it something.
-23. Reboot your computer, then go to the device manager and make sure all devices look OK. In my case, windows update seems to have taken care of all drivers. If not OK, head over to [Dell’s driver download page]( http://www.dell.com/support/home/us/en/19/product-support/product/xps-13-9350-laptop/drivers). Install drivers for any devices with a yellow (!) symbol.
-24. You made it! This is all I have to offer now it terms of help. Windows is unable to sleep correctly on my XPS 9550, and I doubt it ever will. (It always wakes up with an unresponsive keyboard). There used to be screen freezing that I have not seen in a while so it may be fixed - it only occurs after the computer has been restarted, but doesn’t occur when the computer has been started from a completely off state. Happy XPS’ing!!!
+23. Reboot your computer, then go to the device manager and make sure all devices look OK. In my case, windows update seems to have taken care of all drivers. If not OK, head over to [Dellâ€™s driver download page]( http://www.dell.com/support/home/us/en/19/product-support/product/xps-13-9350-laptop/drivers). Install drivers for any devices with a yellow (!) symbol.
+24. You made it! This is all I have to offer now it terms of help. Windows is unable to sleep correctly on my XPS 9550, and I doubt it ever will. (It always wakes up with an unresponsive keyboard). There used to be screen freezing that I have not seen in a while so it may be fixed - it only occurs after the computer has been restarted, but doesnâ€™t occur when the computer has been started from a completely off state. Happy XPSâ€™ing!!!
 
 #### Install some tools
  - GOW (GNU-on-windows) - a set of unix tools that takes up 10MB vs cygwin's 100MB ([link](https://github.com/bmatzelle/gow))
@@ -241,6 +284,12 @@ Install games if the comp can take it
        - `sudo ip link set wlan0 up`
        - `sudo ifup wlan0`
        - WIFI is connected!
+
+
+## (Optional / skipped for Debian 10) disable bluetooth to help with battery:
+[NOTE: disabling more kernel modules may help, but btusb was reported as a problem with iotop. For example, the bluetooth module is still installed/loaded]
+- `sudo touch /etc/modprobe.d/btusb.conf`
+- `echo 'blacklist btusb' >> /etc/modprobe.d/btusb.conf`
 
 
 ## continue to README.md for debian setup notes

@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# stopwatch: print elapsed time in terminal at 1-second resolution.
+#
+# NOTE: Probably not very accurate; it repeatedly sleeps for 1 second and
+#       does not account for drift.
+#
+# output uses 6 chars per timestamp * 10 timestamps = 60 char width 
+#
+#   00:00 00:01 00:02 00:03 00:04 00:05 00:06 00:07 00:08 00:09
+#   00:10 00:11 00:12 00:13 00:14 00:15 00:16 00:17 00:18 00:19
+#   00:20 00:21 00:22 00:23 00:24 00:25 00:26 00:27 00:28 00:29
+#   ...
+
+function print_seconds_as_time {
+    minutes=$(($1 / 60))
+    seconds=$(($1 - (minutes * 60)))
+    printf "%02d:%02d" "$minutes" "$seconds"
+
+    # print newline if timestamp is 9, 19, 29, ...
+    if (( ($1+1) % 10 == 0 )); then
+        printf "\n"
+    else
+        printf " "
+    fi
+}
+
+function count_up {
+    timestamp=0
+    while true
+    do
+        print_seconds_as_time "$timestamp"
+        (( timestamp++ ))
+        sleep 1
+    done
+}
+
+count_up
+

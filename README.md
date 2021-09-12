@@ -13,13 +13,14 @@
 
 #### Basics
  - Xmonad interface using Alt as the mod key
+   - Note: Alt and super are swapped at a low level. So while the xmonad hotkeys here are listed as Alt and you press Alt to use them, the system is interpreting it as super and all configurations use super. To send "real" Alt, press super. This is configured in the [remap binary](bin/bin/remap).
  - Hotkeys
    - Open terminal: **Alt+Shift+Enter** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
      - App: `urxvt` - automatically installed, configuration [.Xdefaults](xmonad/.Xdefaults)
    - Open app launcher: **Alt+P** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
      - App: `rofi` - automatically installed, configuration [config](rofi/.config/rofi/config)
    - Lock screen: **Alt+Shift+Z** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
-     - App: `slock` - [❌ setup required for auto-lock on sleep](#screen-lock-on-sleep-install), default configuration
+     - App: `slock` - [❌ setup required for auto-lock on sleep](#screen-lock-on-suspend-install), default configuration
    - Reload configs and restart xmonad: **Alt+Q** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
      - App: `xmonad` - automatically installed, configuration [xmonad.hs](xmonad/.xmonad/xmonad.hs)
    - Logout: **Alt+Shift+Q** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
@@ -28,7 +29,7 @@
      - App: `scrot` - automatically installed, configuration [xmonad.hs](xmonad/.xmonad/xmonad.hs)
    - Save screenshot selection to `~/screenshots`: **Shift+PrtScr** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
      - App: `scrot` - automatically installed, configuration [xmonad.hs](xmonad/.xmonad/xmonad.hs)
-   - Sleep: **Power button** / close lid hotkey configured with `xfce4-power-manager-settings`
+   - Sleep: **Power button** / **Close lid** / **Ctrl+Shift+Alt+Z**`xfce4-power-manager-settings`, hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs) and `xfce4-power-manager-settings`
      - App: `systemd` (I think) - automatically installed, configured with `xfce4-power-manager-settings`
    - Volume up/down: **Volume keys** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
      - App: [bin/volume](bin/bin/volume) - automatically installed, configuration [xmonad.hs](xmonad/.xmonad/xmonad.hs)
@@ -63,6 +64,8 @@
      - launched at boot with service file (see setup)
    - Automatic folder sync: `syncthing` - [❌ setup required](#syncthing-install), default configuration
      - launched at login with service file (see setup)
+   - View logs: `lnav` - automatically installed, default config
+   - OCR documents: `ocrmypdf` - automatically installed, default config
 
 
 #### Custom commands
@@ -73,7 +76,7 @@
  - `colortable` shows all terminal color text/background combinations and their codes
  - `colortable256` shows all 256 terminal colors
  - `pc` runs a python-compatible cli calculator
- - `qrcode` to display text from the terminal as a qrcode
+ - `qrcode` to display text from the terminal as a qrcode (`echo 'hello' | qrcode`)
  - `remap` applies keyboard remappings. sometimes needed after a wake from suspend
  - `setup_external_monitor` to handle enabling/disabling of secondary monitors
  - `show_osd_message "message"` shows a message onscreen. Used for shortcut feedback
@@ -93,15 +96,18 @@
    - `xmobar_battery.py` is used by xmobar to show battery info
    - `xmobar_wireless.py` is used by xmobar to show wireless info
    - `umount_cifs_lazy` will unmount a cifs mount regardless of its state (ie timed out)
+   - `stay_awake` will prevent system sleep for a certain amount of time
  - ~~`start_syncthing` starts the syncthing user service~~ (deprecated, now always running)
 
 #### Install steps on a fresh Debian (Stable) machine
 
-0. If installing on a Dell XPS 9550, follow this first `guide_xps9550_hardware_install_notes.md`.
+0. If installing on a Dell XPS 9550, follow this first [guide_xps9550_hardware_install_notes.md](guide_xps9550_hardware_install_notes.md)
 
-0. Install Debian minimal system (see guide_xxx_hardware_install_notes), install only "Standard System Utilities". Optionally select "Debian desktop environment" which will install Gnome 3 - this will result in a better lock screen (gnome) and a well-supported fallback WM.
+0. Install Debian minimal system, install only "Standard System Utilities". Optionally select "Debian desktop environment" which will install Gnome 3 - this will result in a better lock screen (gnome) and a well-supported fallback WM.
 
 0. Fix apt sources list
+
+    - NOTE: This file will change for Debian 11. 'For APT source lines referencing the security archive, the format has changed slightly along with the release name, going from buster/updates to bullseye-security; see Section 5.1.3, “Changed security archive layout”' [link](https://www.debian.org/releases/bullseye/amd64/release-notes/ch-upgrading.en.html#bullseye-security)
 
     - edit `/etc/apt/sources.list` and comment-out the "cdrom" line, you may also need to add more lines - for debian buster it should look like:
 
@@ -121,11 +127,42 @@
     sudo sed -i 's/http:/https:/g' /etc/apt/sources.list
     ```
 
+0. Install base software
+
+    - WARNING: If migrating to Debian 11, see this first: [TODO entry on Debian 11](#migrate-to-debian-11-todo)
+
+    ```bash
+    sudo apt update
+    # optional: copy ~/.ssh/id_rsa key from somewhere, or generate a new one with `ssh-keygen -t rsa -b 4096`
+
+    # Install apps and link dotfiles. See install.sh for details.
+    git clone git://github.com/g0tmk/dotfiles-linux.git ~/dotfiles
+    cd ~/dotfiles
+    git config user.name YOUR_USERNAME
+    git config user.email YOUR_EMAIL
+    # say yes to everything
+    ./install.sh
+    # reboot, make sure enerything looks OK
+
+    # sensors-detect will probably tell you to add coretemp to /etc/modules - instead do this:
+    # run this command, if you see output then coretemp is enabled already
+    cat /proc/modules | grep coretemp
+    # if you see no output, add coretemp to /etc/modules
+
+    # optional; run this if some hardware does not work and reboot (I did not need it for debian 10 on xps9550)
+    sudo apt install firmware-misc-nonfree
+
+    # optional; if default apps are fine with you then skip this
+    sudo update-alternatives --all
+    ```
+
 0. Health checks
     - First need to check some common issues that - if they are present - we should fix early.
       - Check suspend by running `systemctl suspend`. The system should go to S3 sleep if bios is configured correctly (power will apppear to turn off, all fans stop).
       - Check for extra interrupts - this made me reinstall my Debian 9 OS because I could not figure out what was wrong. After replacing it with Debian 10, the issue eventually became apparent.
-        - Run `watch -n 1 sudo cat /proc/interrupts` to show counters for all interrupts - in my case, IRQ 16 was incrementing by about 15,000 per second. To upgrade to a newer kernel using backports: (WARNING: while newer, using a kernel from backports is actually worse for security. Backports are not officially supported, so they will not receive security updates like stable packages.)
+        - Symptom #1: run `watch -n 1 sudo cat /proc/interrupts` to show counters for all interrupts - in my case, IRQ 16 was incrementing by about 15,000 per second. 
+        - Symptom #2: high idle cpu clock speed. CPU usage still shows as low, but `powertop` frequency stats page shows all CPU cores stuck at full speed (3.5 GHz on my XPS 9550) when idle. After fixing the issue I see all cores 900-1000MHz at idle.
+        - Fix: Upgrade to a newer kernel using backports: (WARNING: while newer, using a kernel from backports is actually worse for security. Backports are not officially supported, so they will not receive security updates like stable packages.)
 
             ```
             sudo -i
@@ -250,7 +287,7 @@
     - Run `sudo journalctl | egrep "xfce4" | less` to check the service logs
     - Reboot and run `ps aux | grep xfce4-power-manager` to check if autostart is working
 
-0. Set up screen lock on sleep<span id="screen-lock-on-sleep-install"></span>
+0. Set up screen lock on suspend<span id="screen-lock-on-suspend-install"></span>
 
     - xfce4-power-manager is not able to lock screen on sleep, so we have to set it up manually:
     - Create a new file `/etc/systemd/system/screenlock@.service` and fill it with the following:
@@ -272,13 +309,45 @@
 
         [Install]
         WantedBy=sleep.target
+        ```
 
+    - TODO: this is better. merge it into the above and apply it with `sudo systemctl enable screenlock@$USER.service`
+
+        ```
+        # /etc/systemd/system/screenlock@.service
+
+        [Unit]
+        Description=Autolock screen before sleep, hibernate and hybrid-sleep
+        Before=sleep.target hibernate.target hybrid-sleep.target
+
+        [Service]
+        User=%i                       # may also hardcode username here
+        Type=forking
+        Environment=DISPLAY=:0        # replace this with your $DISPLAY value
+        ExecStart=/usr/bin/slock      # use whatever lock command
+        ExecStartPost=/bin/sleep 1
+
+        [Install]
+        WantedBy=sleep.target hibernate.target hybrid-sleep.target
         ```
 
     - Enable the new service by running `systemctl enable screenlock@$USER`
     - Reboot, wait 30 seconds, run `systemctl suspend`
     - Laptop should have slept, and is now locked with `slock`
     - If you have issues, check the output of `sudo systemctl status screenlock@$USER` for errors
+    - Bonus: run `cat /sys/power/mem_sleep`, verify you see "[deep]", indicating you are using the correct sleep mode
+
+0. Set up screen lock on display sleep (NOT YET WORKING, maybe it doesn't call xflock4..?)
+
+    - xfce4-power-manager does not know what locker to use, so symlink slock to a file that it *does* look for, xflock4
+    - NOTE: the real xflock4 is provided by xfce4-session, so if you have that installed... this will probably cause issues
+
+        ```bash
+        sudo ln -s /usr/bin/slock /usr/local/bin/xflock4
+        ```
+
+    - Wait 6 minutes (screen will blank at 5 minutes), then press any key
+    - Laptop screen should wake and is now locked with `slock`
 
 0. Functionality tests
 
@@ -294,7 +363,11 @@
     - Test lid sleep + lock
       - Close lid. Wait 30 seconds. Open lid.
       - Laptop should have slept, and is now locked with `slock`
-    - Test auto-screen lock on idle
+    - Test idle lock
+      - Unplug the AC adapter
+      - Wait 6 minutes (note: screen will sleep at 5 minutes)
+      - Laptop should have slept, and is now locked with `slock`
+    - Test auto-sleep + lock on idle
       - Open `xfce4-power-manager-settings`
       - Set System -> System sleep mode -> on battery -> when inactive for: 16 minutes (the minimum)
       - Close `xfce4-power-manager-settings`
@@ -531,8 +604,17 @@
     sudo apt install sublime-text sublime-merge
     # you can now run `subl` and `smerge`
 
-    # TODO: figure out how to include (or auto-install) my plugins list. Example:
-    #   - MarkdownPreview
+    # Manually set theme and color scheme (if dotfiles don't set them already)
+    # - Theme: Soda Dark 3.sublime-theme
+    # - Color Scheme: Material-Theme-Darker-Modified-g0tmk.tmTheme
+
+    # Install plugins:
+    # - Package Control
+    # - A File Icon
+    # - Color Highlight
+    # - Markdown Preview
+
+    # TODO: figure out how to include (or auto-install) my plugins list
     ```
 
 0. Install syncthing [from guide here](https://apt.syncthing.net/)<span id="syncthing-install"></span>
@@ -571,6 +653,8 @@
     - Open settings -> GUI -> Use HTTPS For GUI -> Yes
     - reboot and verify web UI is accessible. NOTE: run `start_syncthing` to manually start if needed
     - later, put a .stignore file at the root of each synced folder that contains `#include .stglobalignore`
+    - (Optional / only if you have problems starting) May need to edit /lib/systemd/system/syncthing@.service, add `-home=/home/g0tmk/.config/syncthing` to the exec line
+      - note: it seems syncthing is using the correct config (`~/.config/syncthing`) without that change; will monitor this
 
 0. Install Duplicati (guide [here](https://duplicati.readthedocs.io/en/latest/02-installation/))<span id="duplicati-install"></span>
 
@@ -694,6 +778,7 @@
 
       - After reboot verify the key was loaded with `sudo dmesg | grep 'certificate' | grep MOK`
       - Load kernel module (Note: this taints the kernel) `sudo modprobe vboxdrv`
+        - If you get an error, you may need to sign (again) and reboot (again), i'm not sure why.
       - You can verify module is loaded with `sudo dmesg | grep vboxdrv`
     - Install extension pack
       - Download the latest - change this to match the virtualbox version that is installed:
@@ -783,6 +868,39 @@
     chmod+x shadowfox_linux_x64
     ./shadowfox_linux_x64
     ```
+
+    - Configure firefox
+      - Settings -> General -> Ctrl+Tab cycles through tabs in recently used order -> No
+      - Settings -> Home -> New tabs -> set to open "Blank page"
+      - Settings -> Search -> Default search engine -> DuckDuckGo
+      - Settings -> Privacy & Security -> Enhanced Tracking Protection -> Custom -> Cookies -> block All third-party cookies
+      - Settings -> Privacy & Security -> Enhanced Tracking Protection -> Custom -> Tracking Content -> block in all windows
+      - Settings -> Privacy & Security -> Enhanced Tracking Protection -> Custom -> Crypto miners -> check
+      - Settings -> Privacy & Security -> Enhanced Tracking Protection -> Custom -> Fingerprinters -> check
+      - Settings -> Privacy & Security -> Send websites "Do Not Track" -> Always (TODO: might be better to turn this off, since fingerprinters are just using this as a single bit of personal data)
+      - Settings -> Privacy & Security -> Logins and passwords -> Ask to save logins and passwords for websites -> No
+      - Settings -> Privacy & Security -> Logins and passwords -> Show alerts about passwords for breached websites -> No
+      - Settings -> Privacy & Security -> Forms and autofill -> Autofill addresses -> No
+      - Settings -> Privacy & Security -> Permissions -> Notifications -> Block new requests asking to allow notifications -> Yes
+      - Settings -> Privacy & Security -> Firefox collection and use -> uncheck all
+      - Settings -> Extensions & Themes -> Themes -> "Complete Black Theme for Firefox"
+      - Settings -> Privacy & Security -> Permissions -> Prevent accessibility services from accessing your browser -> Yes (note: must restart firefox after changing this one)
+      - Right-click buttons on top bar -> Customize -> make the following changes:
+        - remove home button
+        - remove sidebar button
+        - move most extensions to overflow menu
+        - remove flexible
+        - select Density -> Compact
+      
+    - Install extensions
+      - [uBlock Origin](https://addons.mozilla.org/en-us/firefox/addon/ublock-origin/)
+      - [HTTPS Everywhere](https://www.eff.org/https-everywhere)
+      - [Privacy Badger](https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17/)
+      - [Dark Reader](https://addons.mozilla.org/en-US/firefox/addon/darkreader/)
+      - [Custom Scrollbars](https://addons.mozilla.org/en-US/firefox/addon/custom-scrollbars/)
+        - Scrollbar width: thin
+        - Scrollbar thumb color: #807e7eff
+        - Scrollbar track color: #282828ff
 
 0. Install barrier (instructions from [here](https://github.com/debauchee/barrier/releases/tag/v2.1.2))
 
@@ -1168,6 +1286,23 @@
     minecraft-launcher
     ```
 
+0. Install and run Ledger Live
+
+    ```bash
+    # TODO: make a launcher for this
+
+    # download latest appimage from the website, then run it like this
+    sudo ./ledger-live-desktop-2.31.1-linux-x86_64.AppImage --no-sandbox -v
+
+    # you may need to run these udev rules to allow USB device access
+    wget -q -O - https://raw.githubusercontent.com/LedgerHQ/udev-rules/master/add_udev_rules.sh > add_udev_rules.sh
+    # NOTE: probably a good idea to inspect before running
+    cat add_udev_rules.sh | sudo bash
+
+    # if launching ledger live via browser does not work (which it likely will not, if running as an appimage) then open the websocket server manually by running this, after ledger live is already running:
+    sudo ./ledger-live-desktop-2.31.1-linux-x86_64.AppImage --no-sandbox "ledgerlive://bridge?appName=Ethereum"
+    ```
+
 0. (INCOMPLETE) (Optional) Install and configure `bumblebee` to allow using nvidia GPU on-demand (saving power when it is not in use). NOTE: If you won't use the GPU and only want the power savings, this may not be necessary; Debian 10 w backports kernel (5.10.0) appears to leave the nvidia GPU off by default. TODO: figure out how to verify this is the case.
 
     - `sudo dpkg --add-architecture i386`
@@ -1239,6 +1374,15 @@
             EndSection
             ```
 
+0. How to build xmobar (info only; xmobar version in apt should be fine)
+
+    ```bash
+    sudo aptitude install cabal-install
+    sudo aptitude install libxpm-dev libasound2-dev libghc-libxml-sax-dev c2hs libiw-dev
+    cabal update
+    cabal install xmobar --flags="all_extensions"
+    ````
+
 0. Firmware update manager [not working yet]
 
     ```bash
@@ -1257,6 +1401,7 @@
 
     ```bash
     sudo usermod -a -G video,audio $USER
+    sudo dpkg --add-architecture i386
     sudo apt install steam
     steam
     ```
@@ -1452,66 +1597,75 @@
     ```
 
 
-#### Favorite Firefox Add-ons
-- [uBlock Origin](https://addons.mozilla.org/en-us/firefox/addon/ublock-origin/)
-- [HTTPS Everywhere](https://www.eff.org/https-everywhere)
-- [Privacy Badger](https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17/)
-
-
 #### TODO:
-- Some of the user services start programs that require an X session. Apparently, if you create the services the naive way, they will usually start before X (even though the user services depend on default.target, the latest-ending built in target). The lack of X causes them to fail to start. Currently, I added RestartSec=5 to those services, which causes them to wait long enough after a failure that X is ususlly running. Should replace this with a more reliable way of starting them like [this](https://unix.stackexchange.com/a/537848) which uses a one-liner in .xsessionrc to trigger a custom target which all the service files are waiting on. Need more research since this shouldn't be this difficult.
-- launching different barrier configurations is complicated. Should switch to a method of saving configurations and laumching a specific config file each time
+- phase out/replace p7zip - it is old and complex
+- replace imagemagick with graphicsmagick and probably install `graphicsmagick-imagemagick-compat` to add convert and the other binaries
+- finish copying info from documents/xps/debian_notes.txt to this repo
+- Screen sleep on idle (after 5 minutes) does not lock the screen
+- add alias support to yeganesh/rofi, this way we can run `pycharm` or `win10vm` via launcher
+  - workaround: could add a binary to launch pycharm in ~/bin
+  - add aliases to yeganesh with [this](https://github.com/8carlosf/dotfiles/blob/master/bin/dmenui) (note: this sources bash aliases, not zsh ones)
+- check out some new/alternative apps
+  - [udiskie](https://github.com/coldfix/udiskie) to auto-mount drives + add a taskbar icon to manage drives (there is also a rofi extension to control this)
+  - fasd (and jetho's repo)
+  - YouCompleteMe (https://github.com/Valloric/YouCompleteMe)
+  - freerdp-x11
+  - nemo - it has a better compact mode than nautilus. After install run `gsettings set org.nemo.desktop show-desktop-icons false` to disable desktop window
+  - Improve rofi functionality
+    - Check out [rofi-lpass](https://github.com/Mange/rofi-lpass)
+    - Check out [rofi-bluetooth](https://github.com/nickclyde/rofi-bluetooth) because blueman-manager is horrible
+    - [This repo](https://github.com/adi1090x/rofi) and [this repo](https://github.com/cjbassi/awesome-rofi) have a lot of useful rofi configs
+  - check out polybar [here](https://github.com/jaagr/polybar)
+    - [screenshot](https://old.reddit.com/r/unixporn/comments/bjq866/bspwm_first_time_posting_i_hope_you_guys_like_it_3/) [dotfiles]( https://raw.githubusercontent.com/jaagr/dots/master/.local/etc/themer/themes/darkpx/polybar)
+    - [screenshot](https://i.imgur.com/A6spiZZ.png)
+    - [screenshot](https://i.imgur.com/xvlw9iH.png)
+- Add notes for apps
+  - veracrypt
+  - steam
+  - mpd
+  - ufw
+  - audacious
+- Migrate to Debian 11 [link](https://www.debian.org/releases/bullseye/amd64/release-notes/ch-whats-new.en.html)<span id="migrate-to-debian-11-todo"></span>
+  - Remove `exfat-fuse` and `exfat-utils` from app_list_minimal.txt, and add `exfatprogs`
+  - Check out driverless printing ([link](https://www.debian.org/releases/bullseye/amd64/release-notes/ch-whats-new.en.html#driverless-operation)) - is it setup automatically when choosing 'print server' in the Debian installer?
+- Some of the user services start programs that require an X session. Apparently, if you create the services the naive way, they will usually start before X (even though the user services depend on default.target, the latest-ending built in target). The lack of X causes them to fail to start. Currently, I added RestartSec=5 to those services, which causes them to wait long enough that on the second try X is running. Should replace this with a more reliable way of starting them like [this](https://unix.stackexchange.com/a/537848) which uses a one-liner in .xsessionrc to trigger a custom target which all the service files are waiting on. Need more research since this shouldn't be this difficult.
+- switching between different barrier configurations is complicated. Should switch to a method of saving configurations and laumching a specific config file each time
 - enable hibernation - it would be better for low battery action. Or hybrid sleep.
 - check macbook dotfiles + copy over any useful preferences (at least .vimrc and tmux.conf)
 - replace middle-click paste with something better. It is too easy to accidentally triple-tap with the touchpad and dump a block of text at the cursor. Step 1 is disable middle click with touchpad, then step 2 is merge the x-selection and the standard clipboard with some kind of app or maybe even a custom shortcut with an intelligent paste (or Ctrl+V for one, Ctrl+Shift+V for another). Should google how others have solved this problem.
 - add sublime text 4 themes and colorscheme. Config is saved already
-- replace DynNetwork plugin in xmobar with a new xmobar_network.py file.
-  - allow minimum units with `--smallestunit K`
-  - option to use shorter units (K instead of K/s) with `--shortunits True`
-- Can't launch pycharm via Mod+p. Need to do one of the following:
-  - add alias support to yeganesh (better)
-  - add a binary to launch pycharm in ~/bin
+  - also add colorscheme customization file (it sets background to pure black)
 - use hostname_colorized in PS1 and remove its TODO in binary section above
 - colorscheme update: dark blue is too dark
-- finish copying info from documents/xps/debian_notes.txt to this repo
-- add aliases to yeganesh with [this](https://github.com/8carlosf/dotfiles/blob/master/bin/dmenui)
-- get something going that will run slock automatically after ~20 mins of inactivity (edit: should be implemented, need to test)
-- add more stuff to left side of xmobar
 - Check hist file after a while to see if zsh's `KEYBOARD_HACK` option is needed
-- Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
 - modify tmux config to not show stats on bottom bar that are already in xmobar
-- check out fasd (and jetho's repo)
-- check out YouCompleteMe (https://github.com/Valloric/YouCompleteMe)
-- check out freerdp-x11
-- check out nemo - it has a better compact mode than nautilus
-  - after install run `gsettings set org.nemo.desktop show-desktop-icons false` to disable desktop window
 - login to firefox to sync maybe? its a pain to re-setup
 - figure out a good way to save some of fstab's contents (NASes etc). maybe have a file that you append to current fstab during setup?
-- figure out where fieryturk comes from (it is used in .xmobarrc)
-- check out polybar [here](https://github.com/jaagr/polybar)
-  - [screenshot](https://old.reddit.com/r/unixporn/comments/bjq866/bspwm_first_time_posting_i_hope_you_guys_like_it_3/) [dotfiles]( https://raw.githubusercontent.com/jaagr/dots/master/.local/etc/themer/themes/darkpx/polybar)
-  - [screenshot](https://i.imgur.com/A6spiZZ.png)
-  - [screenshot](https://i.imgur.com/xvlw9iH.png)
+- potentially remove Fiery Turk font (unless its used somewhere but I dont think so)
 - eventually add gtk theme
   - [Fantome](https://github.com/addy-dclxvi/gtk-theme-collections)
 - maybe make a new games.md for the install instructions for games
   - include lutris since it used to be in app_list_extras.txt
 - Make some kind of automatic color scheme management that reads from a single location
+  - design all programs to use colors stored in .Xdefaults
   - conky can execute a shell script which returns current terminal colors
     - see [this stackoverflow answer](https://stackoverflow.com/a/37285624)
-  - xmobar's configuration could be edited with sed before starting
-    - could be more obvious/explicit, like importing colors.hs from pywal
+  - pystatusbar colors are defined in the pystatusbar config.
+    - could add functionality to pystatusbar to define color scheme in pystatusbar config, and potentially pick where to load it from (like .Xdefaults)
+    - could write a wrapper bash script that dumps colors into a templated pystatusbar config
+- Configure openssh-server and add to this repo (config is `/etc/ssh/sshd_config`)
+  - create a few scripts to make controlling via rofi easy
+    - `openssh-server-enable`
+    - `openssh-server-disable`
+    - `openssh-server-status` - prints "running" or "stopped"
+  - add an icon/warning to pystatusbar config which shows when `openssh-server-status` returns "running"
 
 
 #### BUGS
+- when using a custom charge profile on xps 9550 (ie charge to 85% max), it seems that xfce power manager thinks the system is on battery power when its actually plugged in. This 
 - volume controls do not work on bluetooth (or any non-built-in-speaker) headphones (edit: possibly fixed, need to test)
   - the slider that changes in pavucontrol is named "Built-in Audio Analog Stereo"
 - after boot, volume controls will not work until something tries to use the speakers (edit: possibly fixed, need to test)
-- occasionally tmux prefix hotkey stops working in urxvt. Seems to be a urxvt issue.
-  - workaround for now is close urxvt, open a new one, and reattach with `tmux a`
-- xmobar temperature readout glitches after wake from suspend
-  - happened twice in a row within two days, but hasen't happened in > 2 weeks. will
-    make temperature script if the bug happens again.
 
 
 #### Notes
@@ -1523,10 +1677,10 @@
   - xps9550: wlp2s0
 - Onboard display names (in xrandr):
   - x220: LVDS-1
-  - xps9550: eDP1
+  - xps9550: eDP1 on Debian 8, eDP-1 on Debian 10
 - External display names (in xrandr):
   - x220: HDMI-1 (and probably also VGA-1)
-  - xps9550: HDMI1 and DP1
+  - xps9550: HDMI1 and DP1 on Debian 8, HDMI-1 and DP-1 on Debian 10
 - GithubMarkdown
   - [Relative links in markup files](https://github.blog/2013-01-31-relative-links-in-markup-files/)
   - [Adding Footnotes to GFM With a Return Feature](https://github.com/seamusdemora/seamusdemora.github.io/blob/master/GFM_FootnotesWithReturnFeature.md#f1)

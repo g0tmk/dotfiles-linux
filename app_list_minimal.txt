@@ -51,6 +51,7 @@ libnotify-bin
 linux-headers-amd64
 linux-image-amd64
 lm-sensors
+lnav
 lshw
 lxappearance
 make
@@ -60,11 +61,14 @@ mtr
 ncdu
 nmap
 ntp
+ocrmypdf
 openssh-client
 openssh-server
 p7zip-full
 procps  # includes 'watch' command
 pv
+python3
+python3-pip
 ranger
 rdesktop
 redshift  # nighttime screen-brightness adjustment

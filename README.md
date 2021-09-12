@@ -34,7 +34,7 @@
    - Volume up/down: **Volume keys** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
      - App: [bin/volume](bin/bin/volume) - automatically installed, configuration [xmonad.hs](xmonad/.xmonad/xmonad.hs)
    - Brightness up/down: **Brightness keys** hotkey in [xmonad.hs](xmonad/.xmonad/xmonad.hs)
-     - App: [bin/brightness](bin/bin/brightness) - [❌ setup required](#brightness-install), configuration [xmonad.hs](xmonad/.xmonad/xmonad.hs)
+     - App: `brightnessctl` - automatically installed, default config
  - Apps
    - File manager: `ranger` - automatically installed, configuration [rc.conf](ranger/.config/ranger/rc.conf)
    - File manager (gui): `nautilus` - automatically installed, default config
@@ -71,7 +71,7 @@
 #### Custom commands
  - `barrier` starts barrier to allow control from another computer's keyboard/mouse
  - `battery` shows battery stats
- - `brightness [set | increase | decrease] percent` to set backlight levels
+ - `brightnessctl set +10%` or `brightnessctl set 10%-` to set brightness
  - `clipboard` to handle terminal I/O (`ls | clipboard` or `clipboard > pasted.txt`)
  - `colortable` shows all terminal color text/background combinations and their codes
  - `colortable256` shows all 256 terminal colors
@@ -98,6 +98,7 @@
    - `umount_cifs_lazy` will unmount a cifs mount regardless of its state (ie timed out)
    - `stay_awake` will prevent system sleep for a certain amount of time
  - ~~`start_syncthing` starts the syncthing user service~~ (deprecated, now always running)
+ - ~~`brightness [set | increase | decrease] percent` to set backlight levels~~ (deprecated, switched to brightnessctl)
 
 #### Install steps on a fresh Debian (Stable) machine
 
@@ -405,7 +406,7 @@
     EndSection
     ```
 
-    - Reboot and check if it worked. If not, try the following:
+    - Reboot and check if it worked. (note: worked on debian 10/11) If not, try the following:
     - Run `xinput --list` to see all input devices. On the xps9550 I saw two touchpads,
       "DLL06E4:01 06CB:7A13 Touchpad" and "SynPS/2 Synaptics TouchPad". I just ignored
       the synaptics one. 
@@ -425,16 +426,6 @@
     ```
     open `/usr/share/X11/xorg.conf.d/50-vmmouse.conf`
     add `Option "ButtonMapping" "1 2 3 5 4 6 7 8"` between `Section` and `EndSection`
-    ```
-
-0. Setup brightness control (not needed on x220). Add to /etc/sudoers with `sudo visudo`:<span id="brightness-install"></span>
-
-    - First try brightness controls (Fn+F11 on xps9550). If it works, skip this section.
-
-    ```bash
-    Cmnd_Alias    PLUS = /home/<your_username>/bin/brightness
-    <your_username> ALL = NOPASSWD: PLUS
-    # try brightness controls (Fn+F11 on xps9550)
     ```
 
 0. Allow power commands without sudo password. Add to /etc/sudoers with `sudo visudo`:
@@ -512,7 +503,7 @@
     # you can now run `sudo powertop`
     ```
 
-0. (Optional, skipped on Debian 10 install) Install tlp for decent power management (laptop only) from guide [here](https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#installation)
+0. (Optional, skipped on Debian 10/11 installs) Install tlp for decent power management (laptop only) from guide [here](https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html#installation)
 
     - Option 1: install from backports. This is the easiest way to get a fairly recent
       version - but see option 2 for xps9550.

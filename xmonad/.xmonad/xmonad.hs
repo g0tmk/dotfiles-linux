@@ -66,9 +66,8 @@ myConfig = def
         myKeys = 
                  [ 
                  -- Mod+Shift+Z: Lock screen with slock
-                 -- ((mod4Mask .|. shiftMask, xK_z), spawn "sudo ~/bin/brightness set 0; slock; sudo ~/bin/brightness restore")
-                 -- turn off screen and lock it. bin/brightness is not necessary, but it dims the screen so when unlocking a dim red/blue screen is shown instead of a (potentially) blinding one
-                   ((mod4Mask .|. shiftMask, xK_z), spawn "sleep 0.1; sudo ~/bin/brightness set 0; xset dpms force off; slock; sleep 0.1; sudo ~/bin/brightness restore")
+                 -- turn off screen and lock it. brightness adjustments are not necessary but it prevents potentially blinding screens on unlock
+                   ((mod4Mask .|. shiftMask, xK_z), spawn "brightnessctl --save set 1; sleep 0.1; xset dpms force off; slock; brightnessctl --restore; sleep 0.1")
                  -- Ctrl+Mod+Shift+Z: Suspend to RAM
                  , ((mod4Mask .|. shiftMask .|. controlMask, xK_z), spawn "systemctl suspend")
 
@@ -79,7 +78,7 @@ myConfig = def
 
                  -- Mod+b: toggle fullscreen
                  , ((mod4Mask, xK_b     ), sendMessage ToggleStruts)
-                 -- Mod+p: app search + launchere
+                 -- Mod+p: app search + launcher
                  -- Note: for yeganesh, "$()" syntax will execute the output (yeganesh only outputs the binary's name)
                  -- , ((mod4Mask, xK_p), spawn "dmenu_run -fn 'Terminus::pixelsize=12:antialias=0'")
                  -- , ((mod4Mask, xK_p), spawn "$(~/bin/yeganesh -x -- -nb \"#000000\" -fn \"Terminus::pixelsize=12:antialias=0\")")
@@ -93,9 +92,9 @@ myConfig = def
                  -- Multimedia keys
                  -- XF86MonBrightnessUp
                  -- NOTE: x220 seems to do this automatically so we need a way to disable it there; for now, I did not add brightness.py to the sudoers file... its a workaround but should be fixed asap
-                 , ((0, 0x1008ff02), spawn "sudo ~/bin/brightness increase 10 | show_osd_message")
+                 , ((0, 0x1008ff02), spawn "brightnessctl -n1 set +10% | grep 'Current brightness' | egrep -o '[0-9]+%' | show_osd_message")
                  -- XF86MonBrightnessDown
-                 , ((0, 0x1008ff03), spawn "sudo ~/bin/brightness decrease 10 | show_osd_message")
+                 , ((0, 0x1008ff03), spawn "brightnessctl -n1 set 10%- | grep 'Current brightness' | egrep -o '[0-9]+%' | show_osd_message")
                  -- XF86AudioLowerVolume
                  , ((0, 0x1008ff11), spawn "~/bin/volume decrease 5 | show_osd_message")
                  -- XF86AudioRaiseVolume

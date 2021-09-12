@@ -61,8 +61,9 @@ ask () {
 }
 
 install_apps () {
-    #sudo apt install -y $(< "$1")
-    sudo apt install $(< "$1")
+    # sudo apt install $(< "$1")
+    # sed removes comments from app list files
+    sudo apt install $(sed -E 's/ *#.*//' < "$1")
 }
 
 clone_repo () {

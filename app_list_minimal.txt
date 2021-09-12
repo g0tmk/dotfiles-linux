@@ -18,13 +18,11 @@ coreutils
 curl
 debian-handbook
 dkms
-dmenu
 dos2unix
 dunst
 dzen2
 exfat-fuse
 exfat-utils
-exiftool
 expect
 fcrackzip
 feh
@@ -48,6 +46,7 @@ iftop
 iotop
 less
 libghc-xmonad-dev
+libimage-exiftool-perl  # includes 'exiftool' command
 libnotify-bin
 linux-headers-amd64
 linux-image-amd64
@@ -56,6 +55,7 @@ lshw
 lxappearance
 make
 mercurial
+mpv
 mtr
 ncdu
 nmap
@@ -63,10 +63,12 @@ ntp
 openssh-client
 openssh-server
 p7zip-full
+procps  # includes 'watch' command
 pv
 ranger
 rdesktop
-redshift
+redshift  # nighttime screen-brightness adjustment
+rofi  # application launcher
 rsync
 rxvt-unicode-256color
 screenfetch
@@ -75,16 +77,14 @@ smartmontools
 speedtest-cli
 ssh-askpass
 stow
-suckless-tools
+suckless-tools  # dmenu, slock
 tmux
 trayer
 tree
 ttf-mscorefonts-installer
 unzip
 vim
-watch
 wget
-wicd-curses
 winbind
 xclip
 xfce4-power-manager

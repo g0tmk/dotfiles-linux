@@ -138,6 +138,33 @@
             # now run the above test again, verify the interrupt rate is normal (100 per sec roughly)
             ```
 
+0. Install base software
+
+    ```bash
+    sudo apt update && sudo apt install git
+    # optional: copy ~/.ssh/id_rsa key from somewhere, or generate a new one with `ssh-keygen -t rsa -b 4096`
+
+    # Install apps and link dotfiles. See install.sh for details.
+    git clone git://github.com/g0tmk/dotfiles-linux.git ~/dotfiles
+    cd ~/dotfiles
+    git config user.name YOUR_USERNAME
+    git config user.email YOUR_EMAIL
+    # say yes to everything
+    ./install.sh
+    # reboot, make sure enerything looks OK
+
+    # sensors-detect will probably tell you to add coretemp to /etc/modules - instead do this:
+    # run this command, if you see output then coretemp is enabled already
+    cat /proc/modules | grep coretemp
+    # if you see no output, add coretemp to /etc/modules
+
+    # optional; run this if some hardware does not work and reboot (I did NOT need it for debian 10 on xps9550)
+    sudo apt install firmware-misc-nonfree
+
+    # optional; if default apps are fine with you then skip this
+    sudo update-alternatives --all
+    ```
+
 0. (Optional) If using Gnome 3 as a fallback window manager, change a few settings after booting into it. The majority of these settings will not be used when booting int xmonad, however, some will persist (for example - theme and autologin).
 
    - click "super" key, un-favorite the unused apps on the left (help, rythmbox, etc)
@@ -161,38 +188,41 @@
      - open "Tweaks" app -> Fonts -> Monospace Text -> Terminus Regular (size: 11)
      - open "Tweaks" app -> Fonts -> Legacy Window Titles -> Ubuntu Medium (size: 11)
 
-0. Install base software
-
-    ```bash
-    sudo apt update
-    # optional: copy ~/.ssh/id_rsa key from somewhere, or generate a new one with `ssh-keygen -t rsa -b 4096`
-
-    # Install apps and link dotfiles. See install.sh for details.
-    git clone git://github.com/g0tmk/dotfiles-linux.git ~/dotfiles
-    cd ~/dotfiles
-    git config user.name YOUR_USERNAME
-    git config user.email YOUR_EMAIL
-    # say yes to everything
-    ./install.sh
-    # reboot, make sure enerything looks OK
-
-    # sensors-detect will probably tell you to add coretemp to /etc/modules - instead do this:
-    # run this command, if you see output then coretemp is enabled already
-    cat /proc/modules | grep coretemp
-    # if you see no output, add coretemp to /etc/modules
-
-    # optional; run this if some hardware does not work and reboot (I did not need it for debian 10 on xps9550)
-    sudo apt install firmware-misc-nonfree
-
-    # optional; if default apps are fine with you then skip this
-    sudo update-alternatives --all
-    ```
-
 0. Xmonad
 
-    - reboot. in login screen, select "xmonad" as window manager, login
+    - reboot. in login screen, select "xmonad" as window manager and login (if using autologin in gnome, do a manual logout to get to the login screen)
     - alt+shift+enter to open terminal
     - if xmonad fails to start, you might need to run this (but try not to, it is worse than the built-in xorg driver)`sudo apt install xserver-xorg-video-intel`
+
+0. Wifi configuration
+
+    - if using NetworkManager (default)
+
+    ```bash
+    # list nearby wifi networks
+    nmcli dev wifi list
+    # connect, switch networks, etc (curses ui)
+    nmtui
+    # connect, switch networks, etc (cli)
+    nmcli --ask dev wifi connect ssid-goes-here
+    ```
+
+    - TODO: check out iwd - it looks closer to wicd-curses [link](https://iwd.wiki.kernel.org/gettingstarted)
+      - TODO: enable mac address randomization [link](https://iwd.wiki.kernel.org/addressrandomization)
+      - TODO: might need to do steps here to enable automatic configuration [link](https://writing.kemitchell.com/2021/08/15/Upgrading-Debian-Bullseye.html)
+
+    ```bash
+    sudo apt install iwd
+    sudo systemctl enable iwd
+
+    # list nearby wifi networks
+    station wlp2s0 scan
+    station wlp2s0 get-networks
+    # connect
+    station wlp2s0 connect TestWPA2
+    # (optional, idk if this is needed)
+    sudo dhclient wlan0
+    ```
 
 0. Set up service to run xfce4-power-manager (NOTE: while this would be better run as a system service, xfce4-power-manager appears to required an x-window session, so we run it as a user service. This is good reason to switch to something else... I'm not sure what will happen if the system runs out of battery at the login screen.)<span id="xfce4-power-manager-install"></span>
     - create `~/.config/systemd/user/xfce4-power-manager.service` and fill it with the following contents (TODO: add this file to dotfiles):

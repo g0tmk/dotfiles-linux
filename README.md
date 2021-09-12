@@ -901,29 +901,6 @@
     - Run `barrier` again - this time, the window will not appear but it should
       immediately connect to the server and the icon will show up in the taskbar.
 
-0. (Optional, skipped on Debian 10 install and commented-out of .xsessionrc) Install a compositor (picom, yshui's compton fork [github](https://github.com/yshui/picom))
-
-    - NOTE: This branch of compton is much newer, and actually maintained, but may have
-      bugs. If you are not interested in helping develop compton, simply run
-      `sudo apt install compton` to get the (4+yr old) mainstream version. If you use
-      the mainstream version you will likely need to modify .xsessionrc.
-      Another option is to install a recent release from yshui's github (v6.2 when this
-      was written).
-    - NOTE: during the "ninja -C build" step, I got an error like "FAILED: needed xcb-render ['>=1.12.0'] found 1.12"
-      To fix, edit src/meson.build and change this: "'>=1.12.0'" with this: "'>=1.12'"
-
-    ```bash
-    # from guide in README.md
-    sudo apt install meson ninja-build libx11-dev libx11-xcb-dev libxext-dev x11proto-core-dev xcb libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-xinerama0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libxdg-basedir-dev libpcre2-dev libev-dev uthash-dev
-    cd ~/repos
-    git clone https://github.com/yshui/picom.git
-    cd picom
-    git submodule update --init --recursive
-    meson --buildtype=release . build
-    ninja -C build
-    sudo ninja -C build install
-    ```
-
 0. Install discord
 
     ```bash
@@ -1029,37 +1006,6 @@
     # If using this VPN for privacy, verify this outputs the public IP of the VPN server
     sudo apt install dnsutils
     dig TXT +short o-o.myaddr.l.google.com @ns1.google.com 
-    ```
-
-0. Install pptp client to connect to pptp VPNs
-
-    - [Debian setup guide](http://pptpclient.sourceforge.net/howto-debian.phtml)
-    - [Arch setup guide](https://wiki.archlinux.org/index.php/PPTP_Client)
-    - [troubleshooting tips for pptpclient/pptpsetup](http://pptpclient.sourceforge.net/howto-diagnosis.phtml)
-
-    ```bash
-    # assumes new name:    my_tunnel
-    # assumes server url:  vpn.example.com
-    # assumes username:    alice
-    # assumes password:    foo
-    # assumes vpn network: 192.168.10.0/24
-    sudo apt install pptp-linux
-    sudo pptpsetup --create my_tunnel --server vpn.example.com --username alice --password foo --encrypt
-    # test the new connection - it will not exit. If there are no errors, great! To
-    # fully test, you will also need to run the route command that follows. If there
-    # are errors connecing, you may need to add "refuse-eap" to the top of /etc/ppp/options
-    sudo pon my_tunnel debug dump logfd 2 nodetach
-    # Option 1: If you want to route traffic only to devices on vpn network (not
-    # internet traffic) then add this route (change the network's subnet info to match)
-    sudo ip route add 192.168.10.0/24 dev ppp0
-    # Option 2: Route all traffic over VPN
-    sudo ip route add default dev ppp0
-
-    # start the connection normally
-    sudo pon my_tunnel
-
-    # later, if you want to delete the connection:
-    sudo pptpsetup --delete my_tunnel
     ```
 
 0. Install PyCharm + CLion
@@ -1281,6 +1227,37 @@
     sudo ./ledger-live-desktop-2.31.1-linux-x86_64.AppImage --no-sandbox "ledgerlive://bridge?appName=Ethereum"
     ```
 
+0. Install pptp client to connect to pptp VPNs
+
+    - [Debian setup guide](http://pptpclient.sourceforge.net/howto-debian.phtml)
+    - [Arch setup guide](https://wiki.archlinux.org/index.php/PPTP_Client)
+    - [troubleshooting tips for pptpclient/pptpsetup](http://pptpclient.sourceforge.net/howto-diagnosis.phtml)
+
+    ```bash
+    # assumes new name:    my_tunnel
+    # assumes server url:  vpn.example.com
+    # assumes username:    alice
+    # assumes password:    foo
+    # assumes vpn network: 192.168.10.0/24
+    sudo apt install pptp-linux
+    sudo pptpsetup --create my_tunnel --server vpn.example.com --username alice --password foo --encrypt
+    # test the new connection - it will not exit. If there are no errors, great! To
+    # fully test, you will also need to run the route command that follows. If there
+    # are errors connecing, you may need to add "refuse-eap" to the top of /etc/ppp/options
+    sudo pon my_tunnel debug dump logfd 2 nodetach
+    # Option 1: If you want to route traffic only to devices on vpn network (not
+    # internet traffic) then add this route (change the network's subnet info to match)
+    sudo ip route add 192.168.10.0/24 dev ppp0
+    # Option 2: Route all traffic over VPN
+    sudo ip route add default dev ppp0
+
+    # start the connection normally
+    sudo pon my_tunnel
+
+    # later, if you want to delete the connection:
+    sudo pptpsetup --delete my_tunnel
+    ```
+
 0. Install NTP (DEPRECATED: not necessary on debian 10+)
 
     - run `sudo apt-get install ntp`
@@ -1361,6 +1338,29 @@
                 Device "DiscreteNvidia"
             EndSection
             ```
+
+0. (Optional, skipped on Debian 10 install and commented-out of .xsessionrc) Install a compositor (picom, yshui's compton fork [github](https://github.com/yshui/picom))
+
+    - NOTE: This branch of compton is much newer, and actually maintained, but may have
+      bugs. If you are not interested in helping develop compton, simply run
+      `sudo apt install compton` to get the (4+yr old) mainstream version. If you use
+      the mainstream version you will likely need to modify .xsessionrc.
+      Another option is to install a recent release from yshui's github (v6.2 when this
+      was written).
+    - NOTE: during the "ninja -C build" step, I got an error like "FAILED: needed xcb-render ['>=1.12.0'] found 1.12"
+      To fix, edit src/meson.build and change this: "'>=1.12.0'" with this: "'>=1.12'"
+
+    ```bash
+    # from guide in README.md
+    sudo apt install meson ninja-build libx11-dev libx11-xcb-dev libxext-dev x11proto-core-dev xcb libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-xinerama0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libxdg-basedir-dev libpcre2-dev libev-dev uthash-dev
+    cd ~/repos
+    git clone https://github.com/yshui/picom.git
+    cd picom
+    git submodule update --init --recursive
+    meson --buildtype=release . build
+    ninja -C build
+    sudo ninja -C build install
+    ```
 
 0. How to build xmobar (info only; xmobar version in apt should be fine)
 

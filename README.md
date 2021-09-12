@@ -235,31 +235,31 @@
 
     - if using NetworkManager (default)
 
-    ```bash
-    # list nearby wifi networks
-    nmcli dev wifi list
-    # connect, switch networks, etc (curses ui)
-    nmtui
-    # connect, switch networks, etc (cli)
-    nmcli --ask dev wifi connect ssid-goes-here
-    ```
+        ```bash
+        # list nearby wifi networks
+        nmcli dev wifi list
+        # connect, switch networks, etc (curses ui)
+        nmtui
+        # connect, switch networks, etc (cli)
+        nmcli --ask dev wifi connect ssid-goes-here
+        ```
 
     - TODO: check out iwd - it looks closer to wicd-curses [link](https://iwd.wiki.kernel.org/gettingstarted)
       - TODO: enable mac address randomization [link](https://iwd.wiki.kernel.org/addressrandomization)
       - TODO: might need to do steps here to enable automatic configuration [link](https://writing.kemitchell.com/2021/08/15/Upgrading-Debian-Bullseye.html)
 
-    ```bash
-    sudo apt install iwd
-    sudo systemctl enable iwd
+        ```bash
+        sudo apt install iwd
+        sudo systemctl enable iwd
 
-    # list nearby wifi networks
-    station wlp2s0 scan
-    station wlp2s0 get-networks
-    # connect
-    station wlp2s0 connect TestWPA2
-    # (optional, idk if this is needed)
-    sudo dhclient wlan0
-    ```
+        # list nearby wifi networks
+        station wlp2s0 scan
+        station wlp2s0 get-networks
+        # connect
+        station wlp2s0 connect TestWPA2
+        # (optional, idk if this is needed)
+        sudo dhclient wlan0
+        ```
 
 0. Set up service to run xfce4-power-manager (NOTE: while this would be better run as a system service, xfce4-power-manager appears to required an x-window session, so we run it as a user service. This is good reason to switch to something else... I'm not sure what will happen if the system runs out of battery at the login screen.)<span id="xfce4-power-manager-install"></span>
     - create `~/.config/systemd/user/xfce4-power-manager.service` and fill it with the following contents (TODO: add this file to dotfiles):

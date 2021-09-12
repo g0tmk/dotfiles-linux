@@ -370,16 +370,6 @@
     sudo apt install xserver-xorg-core
     reboot
 
-0. Install NTP
-
-    - run `sudo apt-get install ntp`
-    - add these lines to /etc/ntp.conf (and remove the generic ones)
-
-    server 0.north-america.pool.ntp.org
-    server 1.north-america.pool.ntp.org
-    server 2.north-america.pool.ntp.org
-    server 3.north-america.pool.ntp.org
-
 0. Reverse touchpad scroll direction + enable tap-to-click
 
     - First, check if this is needed for you. Scroll with your touchpad and if the
@@ -1274,6 +1264,16 @@
     # if launching ledger live via browser does not work (which it likely will not, if running as an appimage) then open the websocket server manually by running this, after ledger live is already running:
     sudo ./ledger-live-desktop-2.31.1-linux-x86_64.AppImage --no-sandbox "ledgerlive://bridge?appName=Ethereum"
     ```
+
+0. Install NTP (DEPRECATED: not necessary on debian 10+)
+
+    - run `sudo apt-get install ntp`
+    - add these lines to /etc/ntp.conf (and remove the generic ones)
+
+    server 0.north-america.pool.ntp.org
+    server 1.north-america.pool.ntp.org
+    server 2.north-america.pool.ntp.org
+    server 3.north-america.pool.ntp.org
 
 0. (INCOMPLETE) (Optional) Install and configure `bumblebee` to allow using nvidia GPU on-demand (saving power when it is not in use). NOTE: If you won't use the GPU and only want the power savings, this may not be necessary; Debian 10 w backports kernel (5.10.0) appears to leave the nvidia GPU off by default. TODO: figure out how to verify this is the case.
 

@@ -253,18 +253,20 @@
 0. Set up screen lock on sleep<span id="screen-lock-on-sleep-install"></span>
 
     - xfce4-power-manager is not able to lock screen on sleep, so we have to set it up manually:
-    - Create a new file `/etc/systemd/system/screenlock.service` and fill it with the following:
+    - Create a new file `/etc/systemd/system/screenlock@.service` and fill it with the following:
 
         ```
         # source: https://unix.stackexchange.com/questions/81692/suspend-and-lock-screen-on-closing-lid-in-arch-systemd
         # 
         # automatically run slock whenever computer sleeps
+        # note: this file must be a system service since it waits on a system event (sleep.target)
         #
         [Unit]
-        Description=slock on sleep
+        Description=Lock screen on sleep with slock
+        Before=sleep.target
 
         [Service]
-        User=g0tmk
+        User=%I
         Environment=DISPLAY=:0
         ExecStart=/usr/bin/slock
 
@@ -273,10 +275,10 @@
 
         ```
 
-    - Enable the new service by running `sudo systemctl enable screenlock.service`
+    - Enable the new service by running `systemctl enable screenlock@$USER`
     - Reboot, wait 30 seconds, run `systemctl suspend`
     - Laptop should have slept, and is now locked with `slock`
-    - If you have issues, check the output of `sudo systemctl status screenlock.service` for errors
+    - If you have issues, check the output of `sudo systemctl status screenlock@$USER` for errors
 
 0. Functionality tests
 

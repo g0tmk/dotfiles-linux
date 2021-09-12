@@ -136,7 +136,7 @@
     # optional: copy ~/.ssh/id_rsa key from somewhere, or generate a new one with `ssh-keygen -t rsa -b 4096`
 
     # Install apps and link dotfiles. See install.sh for details.
-    git clone git://github.com/g0tmk/dotfiles-linux.git ~/dotfiles
+    git clone git@github.com:g0tmk/dotfiles-linux.git ~/dotfiles
     cd ~/dotfiles
     git config user.name YOUR_USERNAME
     git config user.email YOUR_EMAIL

@@ -4,6 +4,7 @@
   - firefox: export bookmarks
   - metamask: export any keys
   - sublime text: save all open but unsaved files
+  - duplicati: export backup configs
 - clone entire drive image to a usb hdd with ddrescue
 - verify it works with the guide "guide_how_to_mount_cloned_encrypted_linux_partition.md"
 - while the clone is open, copy a few files out that will help with the new install:
@@ -11,6 +12,7 @@
     ```bash
     # assumes the decrypted backup image partitions are mounted to /mnt/clonedrive_*
     mkdir dest
+    cp /mnt/clonedrive_home/g0tmk/.smbcredentials
     cp /mnt/clonedrive_home/g0tmk/.ssh/id_rsa dest
     cp /mnt/clonedrive_home/g0tmk/.ssh/id_rsa.pub dest
     cp /mnt/clonedrive_home/g0tmk/.zsh_history dest
@@ -18,6 +20,7 @@
     sudo cp /mnt/clonedrive_root/etc/openvpn/client/*.up dest
     sudo cp /mnt/clonedrive_root/etc/fstab dest
     sudo cp /mnt/clonedrive_root/etc/hosts dest
+    sudo cp -r /mnt/clonedrive_root/root/module-signing dest/
 
     # later, on the new install:
     mkdir -p ~/.ssh
@@ -33,6 +36,8 @@
     cat dest/.zsh_history > dest/combined_history
     cat ~/.zsh_history >> dest/combined_history
     mv dest/combined_history ~/.zsh_history
+    cp dest/.smbcredentials ~
+    sudo cp -r dest/module-signing /root
     less dest/fstab
     # look at old fstab and add entries as needed to /etc/fstab
     less dest/hosts

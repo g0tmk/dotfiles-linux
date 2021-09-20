@@ -4,5 +4,6 @@ gimp
 hdparm
 iperf
 mpv
+ocrmypdf
 vlc
 wireshark

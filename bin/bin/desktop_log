@@ -94,9 +94,9 @@ if ! systemctl --user status syncthing@${USER}.service > /dev/null 2>&1; then
     echo "syncthing is not running"
 fi
 
-if ! systemctl --user status redshift.service > /dev/null 2>&1; then
-    echo "redshift is not running"
-fi
+#if ! systemctl --user status redshift.service > /dev/null 2>&1; then
+#    echo "redshift is not running"
+#fi
 
 if ! systemctl status duplicati.service > /dev/null 2>&1; then
     echo "duplicati is not running"

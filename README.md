@@ -83,6 +83,7 @@
  - `ssht` to connect to ssh clients and auto-tmux
  - `time_shell_command` runs a shell command 1000 times and shows its average runtime
  - `volume [set | increase | decrease] percent` or `volume toggle` to set volume
+ - `display-config` (or `arandr`) to set up monitors with a gui
  - some more niche ones
    - `desktop_log` outputs a list of system issues/things that need action. used by conky
    - `dwarf_fortress` to launch dwarf fortress with some basic command line options

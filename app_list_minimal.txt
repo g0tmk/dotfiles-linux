@@ -5,6 +5,7 @@ alsa-utils
 apt-listbugs
 apt-listchanges
 apt-transport-https
+arandr
 aria2
 automake
 bc

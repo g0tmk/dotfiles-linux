@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+nmcli dev wifi list
+ssid=`nmcli --get-values ssid dev wifi list | rofi -dmenu`
+
+if [ -z "$ssid" ]
+then
+    echo "no ssid selected; exiting"
+    exit 0
+else
+    echo "Connecting to ${ssid}"
+    nmcli --ask dev wifi connect "${ssid}"
+fi
+

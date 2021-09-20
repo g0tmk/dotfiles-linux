@@ -38,7 +38,7 @@
  - Apps
    - File manager: `ranger` - automatically installed, configuration [rc.conf](ranger/.config/ranger/rc.conf)
    - File manager (gui): `nautilus` - automatically installed, default config
-   - Configure wifi: `wicd-curses` - automatically installed, default config
+   - Configure wifi: `wifi-connect` - automatically installed, default config (uses nmcli and rofi)
    - Power management: `xfce4-power-manager` - [❌ setup required](#xfce4-power-manager-install)
      - launched at login with service file (see setup)
      - configured with `xfce4-power-manager-settings`
@@ -236,6 +236,8 @@
 0. Wifi configuration
 
     - if using NetworkManager (default)
+
+        - run `wifi-connect` or run these steps to connect manually:
 
         ```bash
         # list nearby wifi networks

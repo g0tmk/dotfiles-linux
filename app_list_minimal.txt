@@ -39,6 +39,7 @@ gcc
 gdb
 gddrescue
 git
+gparted
 grep
 gzip
 html-xml-utils

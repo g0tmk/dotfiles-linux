@@ -7,3 +7,4 @@ mpv
 ocrmypdf
 vlc
 wireshark
+youtube-dl

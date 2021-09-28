@@ -159,7 +159,7 @@ class Battery():
     @property
     def time_left_readable(self):
         val = self.time_left_readable_include_seconds
-        if val is "":
+        if val == "":
             return ""
         else:
             return val[:-3]
@@ -201,7 +201,7 @@ class Battery():
     @property
     def time_left_seconds(self):
         val = self.time_left_readable_include_seconds
-        if val is "":
+        if val == "":
             return ""
         else:
             hours, minutes, seconds = [int(n) for n in val.split(":")]

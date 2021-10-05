@@ -917,7 +917,7 @@
     - If installing the .deb fails because of a missing dependency (libappindicator) do this to fix it:
 
     ```bash
-    dpkg-deb -R discord-0.0.15.deb /tmp/discord-deb && sed -i 's/libappindicator1/libayatana-appindicator1/g' /tmp/discord-deb/DEBIAN/control && dpkg-deb -b /tmp/discord-deb discord-fixed.deb
+    dpkg-deb -R discord-0.0.16.deb /tmp/discord-deb && sed -i 's/libappindicator1/libayatana-appindicator1/g' /tmp/discord-deb/DEBIAN/control && dpkg-deb -b /tmp/discord-deb discord-fixed.deb
     ```
 
 0. Install Parsec

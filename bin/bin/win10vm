@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# start the windows 10 vm
+
+
+VBoxManage startvm "Windows 10"
+
+

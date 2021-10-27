@@ -1678,7 +1678,7 @@
 - replace imagemagick with graphicsmagick and probably install `graphicsmagick-imagemagick-compat` to add convert and the other binaries
 - finish copying info from documents/xps/debian_notes.txt to this repo
 - Screen sleep on idle (after 5 minutes) does not lock the screen
-- add alias support to yeganesh/rofi, this way we can run `pycharm` or `win10vm` via launcher
+- add alias support to yeganesh/rofi, this way we can run `pycharm` via launcher
   - workaround: could add a binary to launch pycharm in ~/bin
   - add aliases to yeganesh with [this](https://github.com/8carlosf/dotfiles/blob/master/bin/dmenui) (note: this sources bash aliases, not zsh ones)
 - check out some new/alternative apps

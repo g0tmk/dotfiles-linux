@@ -47,6 +47,7 @@ html-xml-utils
 htop
 ifstat
 iftop
+inxi  # cli app to show system information. used by 'system-information' script
 iotop
 less
 libghc-xmonad-dev

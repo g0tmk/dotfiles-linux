@@ -28,6 +28,9 @@ alias cd..='cd ..'
 alias ls-la='ls -la'
 alias sl='ls'
 
+# system info
+alias system-information='inxi -Fxz'
+
 if [ -d "$HOME/.zaliases.d" ]; then
     for file in "$HOME/.zaliases.d/"*; do
         source "$file"

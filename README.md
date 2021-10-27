@@ -1643,6 +1643,30 @@
     ```
 
 
+#### TROUBLESHOOTING:
+- Problem: When resuming from sleep, with AC disconnected, system shows DELL logo and reboots.
+- Investigation:
+  - Check logs with `lnav`, the crash corresponded to systemd-modules-load trying to load the 'msr' module:
+
+        │Oct 26 16:39:34 bxpsd systemd[1]: Starting Suspend...
+        └Oct 26 16:40:50 bxpsd systemd-modules-load[466]: Inserted module 'msr'
+        ┌Oct 26 16:40:50 bxpsd kernel: [    0.000000] Command line: BOOT_IMAGE=/vmlinuz-5.10.0-9-amd64 root=/dev/mapper/debian-root ro quiet loglevel=3
+
+  - Verify the file `/usr/lib/modules-load.d/fwupd-msr.conf` exists, it was the one causing msr to be loaded.
+  - Remove `fwupd` (since I have BIOS capsule updates disabled anyways)
+  - Try suspending again and see if the issue goes away. NOTE: interestingly, I recently tried using a custom MSR module. It should not be persistent but still... this is very coincidental.
+  - Issue still occurs. Removing `fwupd` did nothing.
+  - Check logs again with `lnav`, nothing interesting. Simply see boot-up messages instead of resume messages.
+  - Suspend ON ac, resume ON ac, works
+  - Suspend ON ac, resume without ac, fail
+  - Suspend without ac, resume without ac, fail
+  - Suspend without ac, resume ON ac, ???
+  - Revert to an earlier kernel (5.10.0-8) - it works!
+  - Switch back to new kernel (5.10.0-9) and add `init_on_alloc=0` to boot options in /boot/grub/grub.cfg - works!
+  - Keep new kernel (5.10.0-9) and remove `init_on_alloc=0` from /boot/grub/grub.cfg - still works... huh. Well that is unfortunate.
+  - Can't reproduce anymore, and IDK what I could have changed. Maybe it is intermittent. Shelving this until it reoccurs.
+
+
 #### TODO:
 - fix some folders which get stowed automatically during install
   - sublime-text-4 folder gets symlinked in its entirety - maybe not what we want

@@ -43,14 +43,6 @@ xsetroot -cursor_name left_ptr
 
 #wal -R
 
-
-
-
-# start network manager in taskbar
-# can also be handled by running wicd-curses occasionally
-# sleep 4 && nm-applet
-
-
 # open desktop panels (after 4s pause - may need to increase in future)
 conky -p 4 -c ~/.conky/conky_log &
 

@@ -11,6 +11,7 @@ automake
 bc
 binutils
 brightnessctl
+bsdmainutils  # includes 'cal' which shows a cli calendar
 build-essential
 cifs-utils
 cmake
@@ -21,8 +22,8 @@ curl
 debian-handbook
 dkms
 dos2unix
-dunst
-dzen2
+dunst  # notifications
+dzen2  # display text anywhere on screen. shows volume and brightness updates
 exfat-fuse
 exfat-utils
 expect

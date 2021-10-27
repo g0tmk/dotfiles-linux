@@ -130,7 +130,9 @@ if [ "$battery_health" -le $THRESHOLD_BATTERY_HEALTH ]; then
     echo "battery health is ${battery_health}%"
 fi
 
-fan_rpms=$(sensors | egrep -o "[0-9.]+ RPM" | sed -e "s/RPM//g")
+# get fan rpms. dump stderr to null since sensors can print some non-critical errors
+# TODO: switch to sensors -j since it is easier to parse
+fan_rpms=$(sensors 2>/dev/null | egrep -o "[0-9.]+ RPM" | sed -e "s/RPM//g")
 total_rpms=0
 fan_count=0
 while read -r rpm_val; do

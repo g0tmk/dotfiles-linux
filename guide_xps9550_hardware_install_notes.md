@@ -47,6 +47,7 @@
 - BIOS recover from HD & downgrade: both uncheck
 - Fastboot: minimal
 - Disable dell SupportAssist
+- Disable BIOS Firmware capsule updates (prevents windows from auto-updating)
 
 ## Next: Install Windows
 

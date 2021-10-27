@@ -366,6 +366,71 @@
       - Wait until battery is under 90%, system should sleep + lock (run `watch -n 15 sudo /home/$USER/bin/battery` for status)
       - Set System -> Critical battery power level -> 10
 
+0. (Optional) Enable undervolting with secure boot enabled
+    - If using the XPS 9550, BIOS version 1.13.1 is the last that allows undervolting. The next ver (1.14.0) includes a fix for INTEL-SA-00289.
+    - Boot Windows, verify undervolting is possible with Intel XTU. If it isn't then go into BIOS, reset it to default settings, and try again.
+    - How to patch the MSR module to allow MSR writes from user space (Until kernel implements+exposes undervolting interface this will be necessary)
+      - Download a copy of the kernel source code
+
+        ```bash
+        sudo apt install dpkg-dev linux-source
+        mkdir -p ~/Downloads/kernel_source
+        cd ~/Downloads/kernel_source
+        tar xavf /usr/src/linux-source-X.X.X.tar.xz
+        mkdir modifed_msr && cd modified_msr
+        cp ../linux-source-5.10/arch/x86/kernel/msr.c .
+        ```
+
+      - Manually edit the MSR module source code to remove conditions that cause it to return an error
+
+        ```diff
+        -       err = security_locked_down(LOCKDOWN_MSR);
+        -       if (err)
+        -               return err;
+        +       //err = security_locked_down(LOCKDOWN_MSR);
+        +       //if (err)
+        +       //      return err;
+        -               err = security_locked_down(LOCKDOWN_MSR);
+        -               if (err)
+        -                       break;
+        +               //err = security_locked_down(LOCKDOWN_MSR);
+        +               //if (err)
+        +               //      break;
+           
+        ```
+
+      - Add the following to `~/Downloads/kernel_source/modified_msr/Makefile`:
+
+        ```Makefile
+        obj-m += msr.o
+        
+        all:
+        	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+        
+        clean:
+        	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+        ```
+
+      - Build and load it:
+
+        ```bash
+        cd ~/Downloads/kernel_source/modified_msr/
+        make
+        # sign using MOK
+        sign-msr-module
+        # load it 
+        sudo rmmod msr && sudo insmod msr.ko
+        ```
+
+      - Try undervolting
+
+        ```bash
+        # -80mv on all
+        sudo python3 ~/repos/undervolt-georgewhewell/undervolt.py --gpu -80 --core -80 --cache -80 --uncore -80 --analogio -80; sudo python3 ~/repos/undervolt-georgewhewell/undervolt.py --read
+        # -120mv on core, -80mv on others
+        sudo python3 ~/repos/undervolt-georgewhewell/undervolt.py --gpu -80 --core -120 --cache -120 --uncore -80 --analogio -80; sudo python3 ~/repos/undervolt-georgewhewell/undervolt.py --read
+        ```
+
 0. Improve graphics performance (for intel embedded gpus)
 
     sudo apt remove xserver-xorg-video-intel

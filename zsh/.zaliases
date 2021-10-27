@@ -3,7 +3,7 @@
 alias ls='ls --color'
 
 # calculator; pc = Python Calculator
-alias pc='python -i -c "from math import *"'
+alias pc='python3 -i -c "from math import *; import random;"'
 
 # tmux
 alias tmux='tmux -2'

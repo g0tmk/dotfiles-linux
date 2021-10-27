@@ -763,22 +763,19 @@
 
 0. Install virtualbox
 
-    - Original guide [here](https://wiki.debian.org/VirtualBox#Debian_9_.22Stretch.22)
-
-    ```bash
-    # install virtualbox using their apt source:
-    # WARNING: make sure to modify apt name from buster to something else, if needed
-    echo "deb https://download.virtualbox.org/virtualbox/debian buster contrib" | sudo tee /etc/apt/sources.list.d/virtualbox.list
-    wget -q -O- https://www.virtualbox.org/download/oracle_vbox_2016.asc | sudo apt-key add
-    sudo apt update
-    sudo apt search virtualbox | grep ^virtualbox
-    # install the newest available
-    # NOTE: change this value if there is a newer version
-    sudo apt install virtualbox-6.x
-
-    # add yourself to vboxusers group
-    sudo usermod -a -G vboxusers $USER
-    ```
+    - Original guide [here](https://wiki.debian.org/VirtualBox#Debian_10_.22Buster.22_and_Debian_11_.22Bullseye.22)
+    - Install via debian fasttrack
+      - Fasttrack install guide [here](https://fasttrack.debian.net/)
+        - Enable backports by adding this line to /etc/apt/sources.list: `deb http://deb.debian.org/debian buster-backports main`
+        - Install fasttrack:
+          - `sudo apt update`
+          - `sudo apt install fasttrack-archive-keyring`
+          - Add the following lines to /etc/apt/sources.list:
+            - `deb https://fasttrack.debian.net/debian-fasttrack/ bullseye-fasttrack main contrib`
+            - `deb https://fasttrack.debian.net/debian-fasttrack/ bullseye-backports-staging main contrib`
+          - `sudo apt update`
+          - `sudo apt install virtualbox virtualbox-ext-pack`
+          - `sudo adduser $USER vboxusers`
 
     - If secure boot is enabled, the install log probably reported an issue loading vboxdrv. You'll have to self-generate a key, sign the modules yourself, then add the key to your BIOS "machine owner key" store. Here we go! (Module signing notes from guides [here](https://unix.stackexchange.com/questions/327240/virtualbox-not-working-modules-not-working) and [here](https://stegard.net/2016/10/virtualbox-secure-boot-ubuntu-fail/) and [here](https://stegard.net/2016/10/virtualbox-secure-boot-ubuntu-fail/))
       - Generate a key. If you have one (ie from a previous OS install), use it instead.
@@ -806,17 +803,10 @@
         ````
 
       - After reboot verify the key was loaded with `sudo dmesg | grep 'certificate' | grep MOK`
-      - Load kernel module (Note: this taints the kernel) `sudo modprobe vboxdrv`
-        - If you get an error, you may need to sign (again) and reboot (again), i'm not sure why.
       - You can verify module is loaded with `sudo dmesg | grep vboxdrv`
-    - Install extension pack
-      - Download the latest - change this to match the virtualbox version that is installed:
+        - If it isn't, you can load with `sudo modprobe vboxdrv`
+        - If you get an error, you may need to sign (again) and reboot (again), i'm not sure why.
 
-            wget https://download.virtualbox.org/virtualbox/6.1.22/Oracle_VM_VirtualBox_Extension_Pack-6.1.22.vbox-extpack
-
-      - Run `sudo virtualbox` to run it as root
-      - Go to Preferences -> Extensions -> Add new package -> Select .vbox-extpack file
-      - You can close the root virtualbox window after the extension is installed
     - Run `virtualbox` to start it normally
     - (Optional) Configure virtualbox to allow tiling WM hotkeys (see guides [here](https://askubuntu.com/questions/144905/virtualbox-windows-key-pass-through-to-gnome) and [here](http://kissmyarch.blogspot.com/2012/01/hiding-menu-and-statusbar-of-virtualbox.html)
       - in VirtualBox go to File->Preferences->"Input" -> "Auto Capture Keyboard" -> No

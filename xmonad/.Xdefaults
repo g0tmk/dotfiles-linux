@@ -43,30 +43,33 @@ Xcursor.size: 32
 
 
 ! font settings
-! *font: -*-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1
-! *boldFont: -*-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1
-! *italicFont: -*-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1
-! *boldItalicFont: -*-terminus-medium-r-normal--12-120-72-72-c-60-iso8859-1
 
-*font: xft:Terminus:pixelsize=14:style=Regular
+! terminus - easy to read
+!*font: xft:Terminus:pixelsize=14:style=Regular
 !*font: xft:TerminessTTF Nerd Font:style=Regular:pixelsize=14
-*boldFont: xft:Terminus:pixelsize=14:style=Bold
-*italicFont: xft:Terminus:pixelsize=14:style=Bold
-*boldItalicFont: xft:Terminus:pixelsize=14:style=Bold
+!*boldFont: xft:Terminus:pixelsize=14:style=Bold
+!*italicFont: xft:Terminus:pixelsize=14:style=Bold
+!*boldItalicFont: xft:Terminus:pixelsize=14:style=Bold
+!URxvt.letterSpace: 0
+!URxvt.lineSpace: 0
 
-! *font: xft:envypn:pixelsize=13:style=Regular
+! envypn - pretty small
+ *font: xft:envypn:pixelsize=13:style=Regular
 ! *boldFont: xft:envypn:pixelsize=13:style=Bold
 ! *italicFont: xft:envypn:pixelsize=13:style=Bold
 ! *boldItalicFont: xft:envypn:pixelsize=13:style=Bold
+URxvt.letterSpace: 0
+URxvt.lineSpace: 0
+URxvt.internalBorder: 4
 
-! *font: xft:Inconsolata:pixelsize=12:style=Regular
-! *boldFont: xft:Inconsolata:pixelsize=12:style=Bold
-! *italicFont: xft:Inconsolata:pixelsize=12:style=Bold
+! source code pro - good antialiased font
+!*font: xft:Source Code Pro:pixelsize=12:style=Regular
+! *boldFont: xft:Source Code Pro:pixelsize=12:style=Bold
+! *italicFont: xft:Source Code Pro:pixelsize=12:style=Bold
+!URxvt.letterSpace: -1
+!URxvt.lineSpace: 0
 
-! *font: xft:Source Code Pro:pixelsize=11:style=Regular
-! *boldFont: xft:Source Code Pro:pixelsize=11:style=Bold
-! *italicFont: xft:Source Code Pro:pixelsize=11:style=Bold
-
+! not the best looking, but small and readable
 ! *font: xft:DejaVu Sans Mono:pixelsize=11:style=Book:antialias=false
 ! *boldFont: xft:DejaVu Sans Mono:pixelsize=11:style=Bold:antialias=false
 ! *italicFont: xft:DejaVu Sans Mono:pixelsize=11:style=Oblique:antialias=false
@@ -81,23 +84,12 @@ Xcursor.size: 32
 
 ! transparency for urxvt. only psuedo-transparency so no compositing needed
 *transparent: true
-*shading: 5
+*shading: 0
 ! Tint the transparent background with the given colour. Note that a black tint yields a completely black image while a white tint yields the image unchanged.
 *tintColor: white
 
 ! appears to work but uses huge amounts of CPU
 !URxvt*.blurRadius: 11
-
-! terminal padding. with 1080px high screen, 14px characters, and 16px high xmobar:
-!
-!   1080
-!  -1050 (75*14)
-!    -16 (xmobar)
-!     -2 (2x 1px window borders)
-!    ---
-!     12 / 2 = 6
-! 
-URxvt.internalBorder: 6
 
 ! use a black background
 !URxvt*background:  Black

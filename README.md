@@ -426,9 +426,7 @@
 
         ```bash
         # -80mv on all
-        sudo python3 ~/repos/undervolt-georgewhewell/undervolt.py --gpu -80 --core -80 --cache -80 --uncore -80 --analogio -80; sudo python3 ~/repos/undervolt-georgewhewell/undervolt.py --read
-        # -120mv on core, -80mv on others
-        sudo python3 ~/repos/undervolt-georgewhewell/undervolt.py --gpu -80 --core -120 --cache -120 --uncore -80 --analogio -80; sudo python3 ~/repos/undervolt-georgewhewell/undervolt.py --read
+        sudo python3 ~/repos/undervolt-georgewhewell/undervolt.py --gpu -40 --core -100 --cache -100 --uncore -40 --analogio -40; sudo python3 ~/repos/undervolt-georgewhewell/undervolt.py --read
         ```
 
 0. Improve graphics performance (for intel embedded gpus)

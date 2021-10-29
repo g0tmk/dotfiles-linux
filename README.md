@@ -1428,18 +1428,21 @@
     ````
 
 0. Firmware update manager [not working yet]
+    
+    - Note this requires "Firmware capsule updates" enabled in BIOS. If you dual boot
+      Windows, then know this allows Windows to update BIOS when it feels like it.
 
-    ```bash
-    sudo apt install fwupd
-    # show candidate devices
-    fwupdmgr get-devices
-    # pull latest metadata from lvfs
-    fwupdmgr refresh
-    >>> Failed to download
-    sudo apt remove fwupd
+        ```bash
+        sudo apt install fwupd
+        # show candidate devices
+        fwupdmgr get-devices
+        # pull latest metadata from lvfs
+        fwupdmgr refresh
+        >>> Failed to download
+        sudo apt remove fwupd
 
-    # need to try latest version (https://github.com/hughsie/fwupd)
-    ```
+        # need to try latest version (https://github.com/hughsie/fwupd)
+        ```
 
 0. Install Steam (NOT TESTED)
 
@@ -1666,6 +1669,11 @@
 
 
 #### TODO:
+- figure out why this is printed on all terminals after resume from sleep:
+
+        Message from syslogd@hostname at Oct 28 19:19:49 ...
+         kernel:[81882.054948] \__common_interrupt: 5.33 No irq handler for vector
+
 - fix some folders which get stowed automatically during install
   - sublime-text-4 folder gets symlinked in its entirety - maybe not what we want
   - sublime-merge

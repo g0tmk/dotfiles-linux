@@ -7,8 +7,18 @@ if [ -z "$ssid" ]
 then
     echo "no ssid selected; exiting"
     exit 0
+fi
+
+echo "Connecting to ${ssid}"
+
+password=`rofi -password -dmenu -p 'enter password (or enter to use existing)'`
+
+if [ -z "$password" ]
+then
+    echo "no password provided, using existing password"
+    nmcli dev wifi connect "${ssid}"
 else
-    echo "Connecting to ${ssid}"
-    nmcli --ask dev wifi connect "${ssid}"
+    echo "password provided"
+    nmcli dev wifi connect "${ssid}" password "${password}"
 fi
 

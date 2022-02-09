@@ -377,7 +377,7 @@
         mkdir -p ~/Downloads/kernel_source
         cd ~/Downloads/kernel_source
         tar xavf /usr/src/linux-source-X.X.X.tar.xz
-        mkdir modifed_msr && cd modified_msr
+        mkdir modified_msr && cd modified_msr
         cp ../linux-source-5.10/arch/x86/kernel/msr.c .
         ```
 

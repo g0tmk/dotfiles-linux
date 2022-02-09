@@ -919,6 +919,10 @@
         - move most extensions to overflow menu
         - remove flexible spaces on the sides of the url bar
         - select Density -> Compact
+      - Disable Pocket:
+        - enter `about:config` into the URL bar
+        - search for `extensions.pocket.enabled`
+        - set its value to `false`
       
     - Install extensions
       - [uBlock Origin](https://addons.mozilla.org/en-us/firefox/addon/ublock-origin/)

@@ -1042,7 +1042,7 @@
             Default: Adaptive
     ```
 
-0. Install OpenVPN client and configure a VPN
+0. Install OpenVPN client and configure a VPN <span id="openvpn-install"></span>
 
     ```bash
     # For proXPN, Download config files from http://www.proxpn.com/updater/locations.html

@@ -1479,6 +1479,7 @@
     ```bash
     sudo usermod -a -G video,audio $USER
     sudo dpkg --add-architecture i386
+    sudo apt update
     sudo apt install steam
     steam
     ```

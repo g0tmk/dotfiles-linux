@@ -1,0 +1,118 @@
+/* Reduce height of tabs */
+tab-item  tab-item-substance {
+  --tab-size: 28px !important;
+  height: var(--tab-size);
+}
+
+/* Change styling of pending (unloaded) tabs */
+tab-item.discarded tab-item-substance {
+  opacity: 0.7;
+}
+/*
+tab-item.discarded .label-content {
+  color: red;
+}*/
+
+/* As little space before the tab name as possible. The fold/unfold icon is not affected. */
+tab-item:not(.pinned) tab-item-substance {
+  padding-left: 0px !important; /* !important is required when there are enough tabs to cause a scrollbar */
+}
+
+/* show separator space between root level tabs */
+tab-item[data-level="0"] {
+  margin-top: calc(var(--tab-size) / 4); /* please change this as you like */
+}
+/* cancel needless separators on exceptions */
+tab-item[data-level="0"].pinned,
+tab-item[data-level="0"].pinned + tab-item[data-level="0"],
+tab-item[data-level="0"] + tab-item[data-level="0"]:not([data-child-ids]) {
+  margin-top: 0;
+}
+
+/* make raw count of tabs available */
+#tabbar {
+  counter-reset: vtabs atabs tabs;
+  /* vtabs tracks visible tabs, atabs tracks active tabs, tabs tracks all tabs */
+}
+tab-item:not(.collapsed):not(.discarded) {
+  counter-increment: vtabs atabs tabs;
+}
+tab-item:not(.collapsed) {
+  counter-increment: vtabs tabs;
+}
+tab-item:not(.discarded) {
+  counter-increment: atabs tabs;
+}
+tab-item {
+  counter-increment: tabs;
+}
+
+/* allows for code below which positions text on the new tab button */
+.newtab-button::after {
+  content: var(--tab-count-text);
+  pointer-events: none;
+    
+  width: 100%;
+
+  /* TST 2.4.0 - Fix for Issue #1664 */
+  background: transparent !important;
+  mask: none !important;
+}
+
+/* show active and total tab count for the new tab button */
+.newtab-button {
+  --tab-count-text: counter(atabs) "/" counter(tabs) " tabs";
+}
+
+
+/* change closebutton style */
+tab-closebox::after {
+  /*
+    There are some possible characters for this purpose:
+    https://en.wikipedia.org/wiki/X_mark
+    - X: upper case X
+      * Too narrow
+    - ×: U+00D7 MULTIPLICATION SIGN (z notation Cartesian product)
+      * Too small on macOSX
+    - ╳: U+2573 BOX DRAWINGS LIGHT DIAGONAL CROSS
+      * Too large on Ubuntu
+    - ☓ : U+2613 SALTIRE (St Andrew's Cross)
+      * Narrow a little on Windows and macOS
+    - ✕: U+2715 MULTIPLICATION X
+      * Too small on macOSX
+    - ✖: U+2716 HEAVY MULTIPLICATION X
+      * Too small on macOSX
+    - ❌ : U+274C CROSS MARK
+      * Colored on macOS
+    - ❎ : U+274E NEGATIVE SQUARED CROSS MARK
+      * Colored on macOS
+      * Box around the mark is unnecessary
+    - ⨉ : U+2A09 N-ARY TIMES OPERATOR
+    - ⨯: U+2A2F VECTOR OR CROSS PRODUCT
+      * Too small on macOSX
+    - 🗙: U+1F5D9 CANCELLATION X
+      * Unavailable on macOSX
+    - 🗴 : U+1F5F4 BALLOT SCRIPT X
+      * Unavailable on macOSX
+    - 🞩: U+1F7A9 LIGHT SALTIRE
+      * Unavailable on macOSX
+    So ⨉ (U+2A09) looks good for me on Windows, macOS, and Linux (tested on Ubuntu).
+  */
+  content: "⨉";
+
+  background: none;
+  line-height: 1;
+  mask: none;
+  text-align: center;
+  width: 1.25em;
+}
+
+/* only show close button on hover */
+/* "#tabbar" is required for TST 3.4.0 and later! */
+#tabbar tab-item tab-item-substance:not(:hover) tab-closebox {
+  display: none;
+}
+
+/* hide the scrollbar */
+#tabbar { scrollbar-width: none; }
+

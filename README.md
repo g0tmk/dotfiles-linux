@@ -923,16 +923,42 @@
         - enter `about:config` into the URL bar
         - search for `extensions.pocket.enabled`
         - set its value to `false`
+      - Disable Outlook's ability to ask every time to be a mailto: handler
+        - enter `about:config` into the URL bar
+        - search for `network.protocol-handler.external.mailto`
+        - set its value to `false`
       
     - Install extensions
       - [uBlock Origin](https://addons.mozilla.org/en-us/firefox/addon/ublock-origin/)
-      - [HTTPS Everywhere](https://www.eff.org/https-everywhere)
-      - [Privacy Badger](https://addons.mozilla.org/en-US/firefox/addon/privacy-badger17/)
       - [Dark Reader](https://addons.mozilla.org/en-US/firefox/addon/darkreader/)
       - [Custom Scrollbars](https://addons.mozilla.org/en-US/firefox/addon/custom-scrollbars/)
         - Scrollbar width: thin
         - Scrollbar thumb color: #807e7eff
         - Scrollbar track color: #282828ff
+      - [Tree Style tabs](https://addons.mozilla.org/en-US/firefox/addon/tree-style-tab/)
+        - Preferences -> Appearance -> Enable animation effects -> no
+        - Preferences -> Appearance -> Theme -> Proton: yes
+        - Preferences -> Advanced -> Extra style rules for contents: fill with the contents of tree_style_tabs_style.css  # TODO: move this file to a better place
+        - To disable top tab bar:
+          - Click menu, help, more troubleshooting information, then next to "Profile Directory" click "Open"
+            - Create file chrome/userChrome.css and add these contents:
+
+                #TabsToolbar { visibility: collapse !important; }
+
+            - Open `about:config` and set "toolkit.legacyUserProfileCustomizations.stylesheets" to "True"
+            - restart firefox
+      - [Auto Tab Discard](https://addons.mozilla.org/en-US/firefox/addon/auto-tab-discard/)
+        - Open extension Preferences and configure:
+          - Discard inactive tabs after: 20 minutes
+          - Discard all unpinned tabs on a browser or extension startup: yes
+          - Do not discard tabs if there is no internet connection and tab is not cached: yes
+          - Store YouTube's timestamp before discarding: yes
+      - [TST Indent Line](https://addons.mozilla.org/en-US/firefox/addon/tst-indent-line/)
+      - [Decentraleyes](https://addons.mozilla.org/en-US/firefox/addon/decentraleyes/)
+      - [Single File](https://addons.mozilla.org/en-US/firefox/addon/single-file/)
+        - Preferences -> User interface -> add entry in the context menu of the webpage: No
+        - 
+
 
 0. Install barrier (instructions from [here](https://github.com/debauchee/barrier/releases/tag/v2.1.2))
 

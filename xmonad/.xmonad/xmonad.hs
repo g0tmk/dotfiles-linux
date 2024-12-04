@@ -56,7 +56,8 @@ myConfig = def
 --                        }
         , workspaces = myWorkspaces
         , modMask = mod4Mask     -- Rebind Mod to the Windows key
-        , normalBorderColor = "#444444"
+        ---, normalBorderColor = "#444444"
+        , normalBorderColor = "#222222"
         -- , focusedBorderColor = "#0000dd"
         -- , focusedBorderColor = "#22bb99"
         , focusedBorderColor = "#4887aa"

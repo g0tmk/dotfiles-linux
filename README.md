@@ -792,6 +792,9 @@
         ```bash
         # reboot into a new kernel before running this
         sign-virtualbox-modules
+        # sometimes needs to be run:
+        sudo modprobe vboxdrv
+        sudo modprobe vboxnetflt
         ````
 
       - Register the new key in BIOS MOK store (do this once per machine). After this, reboot, and when it asks select "Enroll MOK" and enter the password. Choose something simple because it is temporary (you only need it the one time)
@@ -959,6 +962,17 @@
         - Preferences -> User interface -> add entry in the context menu of the webpage: No
         - 
 
+0. Install insect (CLI scientific calculator with unit support)
+
+        # set up a prefix directory and to allow calling npm install as a user
+        mkdir "${HOME}/.npm-packages"
+        npm config set prefix "${HOME}/.npm-packages"
+
+        # install it
+        npm install -g insect
+
+        # run it
+        insect
 
 0. Install barrier (instructions from [here](https://github.com/debauchee/barrier/releases/tag/v2.1.2))
 
@@ -986,6 +1000,11 @@
       - Save and exit
     - Run `barrier` again - this time, the window will not appear but it should
       immediately connect to the server and the icon will show up in the taskbar.
+    - NOTE: if server errors out with this message in the log: `ERROR: ssl certificate doesn't exist: /home/user/.var/app/...` then run the following to generate a key, assuming the server is linux:
+
+        mkdir -p ~/.var/app/com.github.debauchee.barrier/data/barrier/SSL/Fingerprints
+        openssl req -x509 -nodes -days 365 -subj /CN=Barrier -newkey rsa:4096 -keyout ~/.var/app/com.github.debauchee.barrier/data/barrier/SSL/Barrier.pem -out ~/.var/app/com.github.debauchee.barrier/data/barrier/SSL/Barrier.pem
+        openssl x509 -fingerprint -sha1 -noout -in ~/.var/app/com.github.debauchee.barrier/data/barrier/SSL/Barrier.pem > ~/.var/app/com.github.debauchee.barrier/data/barrier/SSL/Fingerprints/Local.txt
 
 0. Install discord
 
@@ -1082,6 +1101,33 @@
     sudo cp myconfigfile.ovpn /etc/openvpn/client/ 
     sudo chmod go-rwx /etc/openvpn/client/myconfigfile.ovpn
     sudo openvpn --client --config /etc/openvpn/client/myconfigfile.ovpn 
+    # should output a lot of text ending with "Initialization Sequence Completed"
+
+    # test connectivity by pinging the VPN server's gateway IP
+    ping 10.8.0.1
+    # verify route through VPN server exists (something like "10.8.0.1 dev tun0")
+    # "default via IP_ADDRESS" tells you where your "default" (aka internet) traffic is going
+    ip route
+    # If using this VPN for privacy, verify this outputs the public IP of the VPN server
+    sudo apt install dnsutils
+    dig TXT +short o-o.myaddr.l.google.com @ns1.google.com 
+    ```
+
+0. Install OpenVPN client and configure a VPN (for example, NordVPN) <span id="openvpn-install"></span>
+
+    ```bash
+    # For NordVPN:
+    cd ~/Downloads
+    wget https://downloads.nordcdn.com/configs/archives/servers/ovpn.zip
+    unzip ovpn.zip
+    rm ovpn.zip
+
+    # check connectivity to server first, if desired
+    nc -vu <public_ip_address> 443
+    sudo apt install openvpn
+    sudo cp ovpn_udp/us9494.nordvpn.com.udp.ovpn /etc/openvpn/client/nordvpn_us9494.ovpn
+    sudo chmod go-rwx /etc/openvpn/client/nordvpn_us9494.ovpn
+    sudo openvpn --client --config /etc/openvpn/client/nordvpn_us9494.ovpn
     # should output a lot of text ending with "Initialization Sequence Completed"
 
     # test connectivity by pinging the VPN server's gateway IP

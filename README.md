@@ -1279,6 +1279,13 @@
     # wait for the rumble - done!
     ```
 
+0. Install find alternative `fd`
+
+    ```bash
+    sudo apt install fd-find
+    ln -s $(which fdfind) ~/.local/bin/fd
+    ```
+
 0. Install ImageMagick 7.0.8+ from source
 
     ```bash
